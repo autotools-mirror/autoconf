@@ -517,7 +517,6 @@ Portable Shell Programming
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
-* Slashes::                     Slashes in shell scripts
 * Special Shell Variables::     Variables you should not change
 * Shell Functions::             What to look out for if you use them
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
@@ -1617,9 +1616,8 @@ are substituted, use:
 @example
 @group
 $ @kbd{autoconf -t AC_SUBST}
-configure.ac:2:AC_SUBST:ECHO_C
-configure.ac:2:AC_SUBST:ECHO_N
-configure.ac:2:AC_SUBST:ECHO_T
+configure.ac:28:AC_SUBST:SHELL
+configure.ac:28:AC_SUBST:PATH_SEPARATOR
 @i{More traces deleted}
 @end group
 @end example
@@ -1650,9 +1648,8 @@ The @var{format} gives you a lot of freedom:
 @example
 @group
 $ @kbd{autoconf -t 'AC_SUBST:$$ac_subst@{"$1"@} = "$f:$l";'}
-$ac_subst@{"ECHO_C"@} = "configure.ac:2";
-$ac_subst@{"ECHO_N"@} = "configure.ac:2";
-$ac_subst@{"ECHO_T"@} = "configure.ac:2";
+$ac_subst@{"SHELL"@} = "configure.ac:28";
+$ac_subst@{"PATH_SEPARATOR"@} = "configure.ac:28";
 @i{More traces deleted}
 @end group
 @end example
@@ -2090,15 +2087,15 @@ The @var{copyright-notice} shows up in both the head of
 Copy revision stamp @var{revision-info} into the @command{configure}
 script, with any dollar signs or double-quotes removed.  This macro lets
 you put a revision stamp from @file{configure.ac} into @command{configure}
-without RCS or CVS changing it when you check in
+that the traditional version control systems RCS and CVS can update,
+without these systems changing it again when you check in the resulting
 @command{configure}.  That way, you can determine easily which revision of
 @file{configure.ac} a particular @command{configure} corresponds to.
 
 For example, this line in @file{configure.ac}:
 
-@c The @w prevents RCS from changing the example in the manual.
 @example
-AC_REVISION([@w{$}Revision: 1.30 $])
+AC_REVISION([$Revision: 1.30 $])
 @end example
 
 @noindent
@@ -2706,19 +2703,9 @@ how to check the results of previous tests.
 @ovindex ECHO_C
 @ovindex ECHO_N
 @ovindex ECHO_T
-How does one suppress the trailing newline from @command{echo} for
-question-answer message pairs?  These variables provide a way:
-
-@example
-echo $ECHO_N "And the winner is... $ECHO_C"
-sleep 100000000000
-echo "$@{ECHO_T@}dead."
-@end example
-
-@noindent
-Some old and uncommon @command{echo} implementations offer no means to
-achieve this, in which case @code{ECHO_T} is set to tab.  You might not
-want to use it.
+These obsolescent variables let you suppress the trailing newline from
+@command{echo} for question-answer message pairs.
+Nowadays it is better to use @code{AS_ECHO_N}.
 @end defvar
 
 @defvar ERLCFLAGS
@@ -3303,8 +3290,7 @@ package's distribution, so that @command{make} considers
 @file{config.h.in} up to date.  Don't use @command{touch}
 (@pxref{touch, , Limitations of Usual Tools}); instead, use
 @command{echo} (using
-@command{date} would cause needless differences, hence CVS
-conflicts, etc.).
+@command{date} would cause needless output differences).
 
 @example
 @group
@@ -3731,13 +3717,13 @@ Here is an unrealistic example:
 @example
 fubar=42
 AC_CONFIG_COMMANDS([fubar],
-                   [echo this is extra $fubar, and so on.],
-                   [fubar=$fubar])
+  [AS_ECHO(["this is extra $fubar, and so on."])],
+  [fubar=$fubar])
 @end example
 
 Here is a better one:
 @example
-AC_CONFIG_COMMANDS([timestamp], [date >timestamp])
+AC_CONFIG_COMMANDS([timestamp], [echo >timestamp])
 @end example
 @end defmac
 
@@ -4647,8 +4633,7 @@ run.  Also, on failure, any action can be performed, whereas
 @code{AC_CHECK_PROGS} only performs
 @code{@var{variable}=@var{value-if-not-found}}.
 
-Here is an example, similar to what Autoconf uses in its own configure
-script.  It will search for an implementation of @command{m4} that
+Here is an example that searches for an implementation of @command{m4} that
 supports the @code{indir} builtin, even if it goes by the name
 @command{gm4} or is not the first implementation on @env{PATH}.
 
@@ -9093,8 +9078,8 @@ example, to check if library @code{stdlib} is installed:
 
 @example
 AC_ERLANG_CHECK_LIB([stdlib],
-  [echo "stdlib version \"$ERLANG_LIB_VER_stdlib\""
-   echo "is installed in \"$ERLANG_LIB_DIR_stdlib\""],
+  [AS_ECHO(["stdlib version \"$ERLANG_LIB_VER_stdlib\""])
+   AS_ECHO(["is installed in \"$ERLANG_LIB_DIR_stdlib\""])],
   [AC_MSG_ERROR([stdlib was not found!])])
 @end example
 
@@ -9977,7 +9962,7 @@ AC_RUN_IFELSE(
   [AC_LANG_PROGRAM([], [dnl
     file:write_file("conftest.out", code:lib_dir()),
     halt(0)])],
-  [echo "code:lib_dir() returned: `cat conftest.out`"],
+  [AS_ECHO(["code:lib_dir() returned: `cat conftest.out`"])],
   [AC_MSG_FAILURE([test Erlang program execution failed])])
 @end example
 
@@ -10604,10 +10589,10 @@ for each kind.  The arguments to all of them get enclosed in shell
 double quotes, so the shell performs variable and back-quote
 substitution on them.
 
-These macros are all wrappers around the @command{echo} shell command.
+These macros are all wrappers around the @command{printf} shell command.
 They direct output to the appropriate file descriptor (@pxref{File
 Descriptor Macros}).
-@command{configure} scripts should rarely need to run @command{echo} directly
+@command{configure} scripts should rarely need to run @command{printf} directly
 to print messages for the user.  Using these macros makes it easy to
 change how and when each kind of message is printed; such changes need
 only be made to the macro definitions and all the callers change
@@ -11250,7 +11235,7 @@ statement:
 @example
 AC_DEFUN([my_case],
 [case $file_name in
-  *.c) echo "C source code";;
+  *.c) file_type='C source code';;
 esac])
 AS_IF(:, my_case)
 @end example
@@ -11266,7 +11251,7 @@ if :
 then :
   case $file_name in
   *.c
-fi echo "C source code";;
+fi file_type='C source code';;
 esac)
 @end example
 
@@ -11280,7 +11265,7 @@ without proper quoting, each with some benefits and some drawbacks.
 @example
 AC_DEFUN([my_case],
 [case $file_name in
-  (*.c) echo "C source code";;
+  (*.c) file_type='C source code';;
 esac])
 @end example
 @noindent
@@ -11293,7 +11278,7 @@ available somewhere so this approach typically suffices nowadays.
 @example
 AC_DEFUN([my_case],
 [case $file_name in #(
-  *.c) echo "C source code";;
+  *.c) file_type='C source code';;
 esac])
 @end example
 @noindent
@@ -11306,7 +11291,7 @@ that masks the normal properties of @samp{(}.
 @example
 AC_DEFUN([my_case],
 [case $file_name in @@%:@@(
-  *.c) echo "C source code";;
+  *.c) file_type='C source code';;
 esac])
 @end example
 @noindent
@@ -11319,7 +11304,7 @@ use of the quadrigraph @samp{@@%:@@} for @samp{#} reduces readability.
 @example
 AC_DEFUN([my_case],
 [case $file_name in
-  *.c[)] echo "C source code";;
+  *.c[)] file_type='C source code';;
 esac])
 @end example
 @noindent
@@ -11333,7 +11318,7 @@ terminal.
 @example
 AC_DEFUN([my_case],
 [[case $file_name in #(
-  *.c) echo "C source code";;
+  *.c) file_type='C source code';;
 esac]])
 @end example
 @noindent
@@ -11348,7 +11333,7 @@ problems.
 @example
 AC_DEFUN([my_case],
 [AS_CASE([$file_name],
-  [*.c], [echo "C source code"])])
+  [*.c], [file_type='C source code'])])
 @end example
 @noindent
 This version avoids the balancing issue altogether, by relying on
@@ -14018,21 +14003,30 @@ trailing newlines.
 
 @defmac AS_ECHO (@var{word})
 @asindex{ECHO}
-Emits @var{word} to the standard output, followed by a newline.  @var{word}
-must be a single shell word (typically a quoted string).  The bytes of
-@var{word} are output as-is, even if it starts with "-" or contains "\".
-Redirections can be placed outside the macro invocation.  This is much
-more portable than using @command{echo} (@pxref{echo, , Limitations of
-Shell Builtins}).
+Emit @var{word} to the standard output, followed by a newline.
+The @var{word} must be a single shell word (typically a quoted string).
+Output the shell expansion of @var{word} as-is,
+even if it starts with @samp{-} or contains @samp{\}.
+Redirections can be placed outside the macro invocation.
+
+If the shell variable @var{foo} could contain @samp{\} or leading @samp{-}.
+@code{AS_ECHO(["$foo"])} is more portable than @command{echo "$foo"}.
+@xref{echo, , Limitations of Shell Builtins}.
+
+Also, @code{AS_ECHO(["$foo"])} is often easier to read than the
+@samp{printf '%s\n' "$foo"} that it stands for.
+However, because it employs @samp{'} characters,
+in contexts where @samp{'} is not allowed
+it is better to use @command{printf} directly.
+For example, @samp{`eval 'foo=$@{'AS_ESCAPE([[$1]], [`\])'@};printf
+"%s\\n" "$foo")'`} would not work if @command{printf} were replaced
+with @code{AS_ECHO}.
+
 @end defmac
 
 @defmac AS_ECHO_N (@var{word})
 @asindex{ECHO_N}
-Emits @var{word} to the standard output, without a following newline.
-@var{word} must be a single shell word (typically a quoted string) and,
-for portability, should not include more than one newline.  The bytes of
-@var{word} are output as-is, even if it starts with "-" or contains "\".
-Redirections can be placed outside the macro invocation.
+Act like @code{AS_ECHO(@var{word})}, except do not output a following newline.
 @end defmac
 
 @c We cannot use @dvar because the macro expansion mistreats backslashes.
@@ -14253,11 +14247,11 @@ results in a script that will output the line @samp{hello} three times.
 @example
 AC_DEFUN([MY_ACTION],
 [AS_LITERAL_IF([$1],
-  [echo "$$1"],
+  [AS_ECHO(["$$1"])],
 @c $$
   [AS_VAR_COPY([var], [$1])
-   echo "$var"],
-  [eval 'echo "$'"$1"\"])])
+   AS_ECHO(["$var"])],
+  [AS_ECHO(["$'"$1"\"])])])
 foo=bar bar=hello
 MY_ACTION([bar])
 MY_ACTION([`echo bar`])
@@ -14575,9 +14569,9 @@ The following macros define file descriptors used to output messages
 For example:
 
 @example
-echo "$wombats found" >&AS_MESSAGE_LOG_FD
-echo 'Enter desired kangaroo count:' >&AS_MESSAGE_FD
-read kangaroos <&AS_ORIGINAL_STDIN_FD`
+AS_ECHO(["$wombats found"]) >&AS_MESSAGE_LOG_FD
+AS_ECHO_N(['Enter desired kangaroo count: ']) >&AS_MESSAGE_FD
+read kangaroos <&AS_ORIGINAL_STDIN_FD
 @end example
 
 @noindent
@@ -15487,7 +15481,6 @@ subset described above, is fairly portable nowadays.  Also please see
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
-* Slashes::                     Slashes in shell scripts
 * Special Shell Variables::     Variables you should not change
 * Shell Functions::             What to look out for if you use them
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
@@ -16384,7 +16377,7 @@ For instance, the following code:
 
 @example
 case "$given_srcdir" in
-.)  top_srcdir="`echo "$dots" | sed 's|/$||'`" ;;
+.)  top_srcdir="`printf '%s\n' "$dots" | sed 's|/$||'`" ;;
 *)  top_srcdir="$dots$given_srcdir" ;;
 esac
 @end example
@@ -16394,7 +16387,7 @@ is more readable when written as:
 
 @example
 case $given_srcdir in
-.)  top_srcdir=`echo "$dots" | sed 's|/$||'` ;;
+.)  top_srcdir=`printf '%s\n' "$dots" | sed 's|/$||'` ;;
 *)  top_srcdir=$dots$given_srcdir ;;
 esac
 @end example
@@ -16748,16 +16741,18 @@ a  b
 Finally, Posix states that when mixing @samp{$@{a=b@}} with regular
 commands, it is unspecified whether the assignments affect the parent
 shell environment.  It is best to perform assignments independently from
-commands, to avoid the problems demonstrated in this example:
+commands, to avoid the problems demonstrated in this example running on
+Solaris 10:
 
 @example
-$ @kbd{bash -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
+$ @kbd{cmd='x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";printf "%s\\n" -$x-'}
+$ @kbd{bash -c "$cmd"}
 +b+b+
 -b-
-$ @kbd{/bin/sh -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
+$ @kbd{/bin/sh -c "$cmd"}
 ++b+
 --
-$ @kbd{ksh -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
+$ @kbd{ksh -c "$cmd"}
 +b+b+
 --
 @end example
@@ -16791,67 +16786,25 @@ problematic string.
 
 @item $@{@var{var}=@var{expanded-value}@}
 @cindex @code{$@{@var{var}=@var{expanded-value}@}}
-On Ultrix,
-running
+On shells so old that they are no longer relevant, the command
 
 @example
-default="yu,yaa"
+# Set the shell variable to a default value
+# if it is not already set.
 : $@{var="$default"@}
 @end example
 
 @noindent
-sets @var{var} to @samp{M-yM-uM-,M-yM-aM-a}, i.e., the 8th bit of
-each char is set.  You don't observe the phenomenon using a simple
-@samp{echo $var} since apparently the shell resets the 8th bit when it
-expands $var.  Here are two means to make this shell confess its sins:
+misbehaved badly in some cases.  Older scripts worked around the bugs by
+using one of following two lines, the latter of which was more portable:
 
 @example
-$ @kbd{cat -v <<EOF
-$var
-EOF}
+var=$@{var="$default"@}
+test $@{var+y@} || var=$default
 @end example
 
 @noindent
-and
-
-@example
-$ @kbd{set | grep '^var=' | cat -v}
-@end example
-
-One classic incarnation of this bug is:
-
-@example
-default="a b c"
-: $@{list="$default"@}
-for c in $list; do
-  echo $c
-done
-@end example
-
-@noindent
-You'll get @samp{a b c} on a single line.  Why?  Because there are no
-spaces in @samp{$list}: there are @samp{M- }, i.e., spaces with the 8th
-bit set, hence no IFS splitting is performed!!!
-
-One piece of good news is that Ultrix works fine with @samp{:
-$@{list=$default@}}; i.e., if you @emph{don't} quote.  The bad news is
-then that QNX 4.25 then sets @var{list} to the @emph{last} item of
-@var{default}!
-
-The portable way out consists in using a double assignment, to switch
-the 8th bit twice on Ultrix:
-
-@example
-list=$@{list="$default"@}
-@end example
-
-@noindent
-@dots{}but beware of the @samp{@}} bug from Solaris 10 (see above).
-For safety, use:
-
-@example
-test $@{var+y@} || var=@var{@{value@}}
-@end example
+However, these workarounds are no longer needed.
 
 @item $@{#@var{var}@}
 @itemx $@{@var{var}%@var{word}@}
@@ -16877,13 +16830,12 @@ yields the empty string.
 @cindex Command Substitution
 Posix requires shells to trim all trailing newlines from command
 output before substituting it, so assignments like
-@samp{dir=`echo "$file" | tr a A`} do not work as expected if
+@samp{dir=`printf '%s\n' "$file" | tr a A`} do not work as expected if
 @samp{$file} ends in a newline.
 
 While in general it makes no sense, do not substitute a single builtin
 with side effects, because Ash 0.2, trying to optimize, does not fork a
 subshell to perform the command.
-
 For instance, if you wanted to check that @command{cd} is silent, do not
 use @samp{test -z "`cd /`"} because the following can happen:
 
@@ -16944,15 +16896,6 @@ $ @kbd{showrev -c /bin/sh | grep version}
 Command version: SunOS 5.10 Generic 142251-02 Sep 2010
 $ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
-@end example
-
-@noindent
-nor does IRIX 6.5's Bourne shell:
-@example
-$ @kbd{uname -a}
-IRIX firebird-image 6.5 07151432 IP22
-$ @kbd{echo $(echo blah)}
-$(echo blah)
 @end example
 
 If you do use @samp{$(@var{commands})}, make sure that the commands
@@ -17134,40 +17077,6 @@ fi
 To work around this problem, insert a space between the two opening
 parentheses.  There is a similar problem and workaround with
 @samp{$((}; see @ref{Shell Substitutions}.
-
-@node Slashes
-@section Slashes in Shell Scripts
-@cindex Shell slashes
-
-Unpatched Tru64 5.1 @command{sh} omits the last slash of command-line
-arguments that contain two trailing slashes:
-
-@example
-$ @kbd{echo / // /// //// .// //.}
-/ / // /// ./ //.
-$ @kbd{x=//}
-$ @kbd{eval "echo \$x"}
-/
-$ @kbd{set -x}
-$ @kbd{echo abc | tr -t ab //}
-+ echo abc
-+ tr -t ab /
-/bc
-@end example
-
-Unpatched Tru64 4.0 @command{sh} adds a slash after @samp{"$var"} if the
-variable is empty and the second double-quote is followed by a word that
-begins and ends with slash:
-
-@example
-$ @kbd{sh -xc 'p=; echo "$p"/ouch/'}
-p=
-+ echo //ouch/
-//ouch/
-@end example
-
-However, our understanding is that patches are available, so perhaps
-it's not worth worrying about working around these horrendous bugs.
 
 @node Special Shell Variables
 @section Special Shell Variables
@@ -17712,9 +17621,8 @@ No, no, we are serious: some shells do have limitations!  :)
 You should always keep in mind that any builtin or command may support
 options, and therefore differ in behavior with arguments
 starting with a dash.  For instance, even the innocent @samp{echo "$word"}
-can give unexpected results when @code{word} starts with a dash.  It is
-often possible to avoid this problem using @samp{echo "x$word"}, taking
-the @samp{x} into account later in the pipe.  Many of these limitations
+can give unexpected results when @code{word} starts with a dash.  To avoid
+this problem, use @samp{printf '%s\n' "$word"}.  Many of these limitations
 can be worked around using M4sh (@pxref{Programming in M4sh}).
 
 @c This table includes things like '@command{test} (files)', so we can't
@@ -18060,8 +17968,13 @@ Also please see the discussion of the @command{pwd} command.
 @prindex @command{echo}
 The simple @command{echo} is probably the most surprising source of
 portability troubles.  It is not possible to use @samp{echo} portably
-unless both options and escape sequences are omitted.  Don't expect any
-option.
+unless both options and escape sequences are omitted.
+
+Do not use options, as some shells support them and others do not.
+For example, Posix says that the behavior of @samp{echo -n foo} is
+implementation-defined.  On some platforms the output is @samp{foo}
+without a trailing newline, on others it is @samp{-n foo} with a
+trailing newline, and Posix allows even other behavior.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  For @samp{echo '\n' | wc -l}, the @command{sh} of
@@ -18069,10 +17982,7 @@ Solaris 10 outputs 2,
 but Bash and Zsh (in @command{sh} emulation mode) output 1.
 The problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
-@samp{n}.  Within a command substitution, @samp{echo 'string\c'} will
-mess up the internal state of ksh88 on AIX 6.1 so that it will print
-the first character @samp{s} only, followed by a newline, and then
-entirely drop the output of the next echo in a command substitution.
+@samp{n}.
 
 Because of these problems, do not pass a string containing arbitrary
 characters to @command{echo}.  For example, @samp{echo "$foo"} is safe
@@ -18093,6 +18003,10 @@ cat <<EOF
 $foo
 EOF
 @end example
+
+@noindent
+However, this usage is problematic, as even some modern shells have
+hard-to-reproduce bugs when dealing with here-documents.
 
 
 @item @command{eval}
@@ -18137,12 +18051,13 @@ then execute the command @command{.c}.  To avoid this problem, use
 
 However, suppose that you want to output the text of the evaluated
 command just before executing it.  Assuming the previous example,
-@samp{echo "Executing: $cmd"} outputs @samp{Executing: cat test?.c}, but
-this output doesn't show the user that @samp{test;.c} is the actual name
-of the copied file.  Conversely, @samp{eval "echo Executing: $cmd"}
+@samp{printf '%s\n' "Executing: $cmd"} outputs @samp{Executing: cat test?.c},
+but this output doesn't show the user that @samp{test;.c} is the actual
+name of the copied file.
+Conversely, @samp{printf 'Executing:'; eval "printf ' %s' $cmd"; printf '\n'}
 works on this example, but it fails with @samp{cmd='cat foo >bar'},
 since it mistakenly replaces the contents of @file{bar} by the
-string @samp{cat foo}.  No simple, general, and portable solution to
+string @samp{ cat foo}.  No simple, general, and portable solution to
 this problem is known.
 
 @item @command{exec}
@@ -18319,7 +18234,7 @@ To loop over positional arguments, use:
 @example
 for arg
 do
-  echo "$arg"
+  printf '%s\n' "$arg"
 done
 @end example
 
@@ -18329,7 +18244,7 @@ since some shells improperly grok:
 
 @example
 for arg; do
-  echo "$arg"
+  printf '%s\n' "$arg"
 done
 @end example
 
@@ -18337,7 +18252,7 @@ If you want to explicitly refer to the positional arguments, use:
 
 @example
 for arg in "$@@"; do
-  echo "$arg"
+  printf '%s\n' "$arg"
 done
 @end example
 
@@ -18363,9 +18278,14 @@ variable rather than a make variable as the source of the list.
 $ @kbd{cat Makefile}
 list =
 bad:
-	@@for arg in $(list); do echo $$arg; done
+	@@for arg in $(list); do \
+	  printf '%s\n' $$arg; \
+	done
 good:
-	@@list='$(list)'; for arg in $$list; do echo $$arg; done
+	@@list='$(list)'; \
+	for arg in $$list; do \
+	  printf '%s\n' $$arg; \
+	done
 $ @kbd{make bad 2&>1 | head -n1}
 sh: syntax error at line 1: `;' unexpected
 $ @kbd{make bad list='a b'}
@@ -19499,7 +19419,7 @@ Unfortunately this behaves exactly as the original expression; see the
 Some ancient @command{expr} implementations (e.g.,
 Solaris 10 @command{/usr/ucb/expr}) have a silly length limit that causes
 @command{expr} to fail if the matched substring is longer than 120
-bytes.  In this case, you might want to fall back on @samp{echo|sed} if
+bytes.  In this case, you might want to fall back on @samp{printf|sed} if
 @command{expr} fails.  Nowadays this is of practical importance only for
 the rare installer who mistakenly puts @file{/usr/ucb} before
 @file{/usr/bin} in @env{PATH} on Solaris 10.
@@ -20589,10 +20509,10 @@ implementations do not pass the substitution along to submakes.
 $ @kbd{cat Makefile}
 foo = foo
 one:
-        @@echo $(foo)
+        @@printf '%s\n' $(foo)
         $(MAKE) two
 two:
-        @@echo $(foo)
+        @@printf '%s\n' $(foo)
 $ @kbd{make foo=bar}            # GNU make 3.79.1
 bar
 make two
@@ -20637,10 +20557,10 @@ you can propagate them to submakes manually, from your makefile:
 @example
 foo = foo
 one:
-        @@echo $(foo)
+        @@printf '%s\n' $(foo)
         $(MAKE) foo=$(foo) two
 two:
-        @@echo $(foo)
+        @@printf '%s\n' $(foo)
 @end example
 
 Another way to propagate a variable to submakes in a portable way is to
@@ -20650,10 +20570,10 @@ your makefile:
 @example
 foo = foo
 one:
-        @@echo $(foo)
+        @@printf '%s\n' $(foo)
         $(MAKE) $(SUBMAKEFLAGS) two
 two:
-        @@echo $(foo)
+        @@printf '%s\n' $(foo)
 @end example
 
 Users must be aware that this technique is in use to take advantage of
@@ -20681,7 +20601,7 @@ GNU @command{make} it is either @option{--unix} or
 @example
 $ @kbd{cat Makefile}
 all:
-        @@echo MAKEFLAGS = $(MAKEFLAGS)
+        @@printf 'MAKEFLAGS = %s\n' '$(MAKEFLAGS)'
 $ @kbd{make}
 MAKEFLAGS = --unix
 $ @kbd{make -k}
@@ -20739,8 +20659,8 @@ $ @kbd{cat Makefile}
 SHELL = /bin/sh
 FOO = foo
 all:
-        @@echo $(SHELL)
-        @@echo $(FOO)
+        @@printf '%s\n' '$(SHELL)'
+        @@printf '%s\n' '$(FOO)'
 $ @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # Tru64 Make
 /bin/tcsh
 bar
@@ -20756,7 +20676,7 @@ break this rule:
 @example
 $ @kbd{cat Makefile}
 all:
-        @@echo $(SHELL)
+        @@printf '%s\n' '$(SHELL)'
         @@printenv SHELL
 $ @kbd{env SHELL=sh make -e SHELL=/bin/ksh}   # BSD Make, GNU make 3.80
 /bin/ksh
@@ -20961,17 +20881,12 @@ together with the backslash that precedes it, by a space in GNU
 @command{make} 3.80 and older.  So, how can a newline be used in a string
 literal?
 
-The trick is to set up a shell variable that contains a newline:
-
-@example
-nlinit=`echo 'nl="'; echo '"'`; eval "$$nlinit"
-@end example
-
+The trick is to set up a shell variable that contains a newline.
 For example, in order to create a multi-line @samp{sed} expression that
-inserts a blank line after every line of a file, this code can be used:
+inserts an empty line after every line of a file, this code can be used:
 
 @example
-nlinit=`echo 'nl="'; echo '"'`; eval "$$nlinit"; \
+eval $$(printf 'nl="\n"\n'); \
 sed -e "s/\$$/\\$$@{nl@}/" < input > output
 @end example
 
@@ -21688,7 +21603,7 @@ problem, you can use a timestamp file, e.g.:
 @example
 dest-stamp: src
         cp -p src dest
-        date >dest-stamp
+        echo >dest-stamp
 @end example
 
 Apart from timestamp resolution, there are also differences in handling
@@ -24324,10 +24239,12 @@ Here is an unrealistic example:
 
 @example
 fubar=27
-AC_OUTPUT_COMMANDS([echo this is extra $fubar, and so on.],
-                   [fubar=$fubar])
-AC_OUTPUT_COMMANDS([echo this is another, extra, bit],
-                   [echo init bit])
+AC_OUTPUT_COMMANDS(
+  [AS_ECHO(["this is extra $fubar, and so on."])],
+  [fubar=$fubar])
+AC_OUTPUT_COMMANDS(
+  [AS_ECHO(["this is another, extra, bit"])],
+  [AS_ECHO(["init bit"])])
 @end example
 
 Aside from the fact that @code{AC_CONFIG_COMMANDS} requires an
@@ -26299,23 +26216,15 @@ Next, add the following lines to your @file{tests/Makefile.am}, in order
 to link @samp{make check} with a validation suite.
 
 @example
-# The ':;' works around a Bash 3.2 bug when the output is not writable.
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
-        :;@{ \
-          echo '# Signature of the current package.' && \
-          echo 'm4_define([AT_PACKAGE_NAME],' && \
-          echo '  [$(PACKAGE_NAME)])' && \
-          echo 'm4_define([AT_PACKAGE_TARNAME],' && \
-          echo '  [$(PACKAGE_TARNAME)])' && \
-          echo 'm4_define([AT_PACKAGE_VERSION],' && \
-          echo '  [$(PACKAGE_VERSION)])' && \
-          echo 'm4_define([AT_PACKAGE_STRING],' && \
-          echo '  [$(PACKAGE_STRING)])' && \
-          echo 'm4_define([AT_PACKAGE_BUGREPORT],' && \
-          echo '  [$(PACKAGE_BUGREPORT)])'; \
-          echo 'm4_define([AT_PACKAGE_URL],' && \
-          echo '  [$(PACKAGE_URL)])'; \
-        @} >'$(srcdir)/package.m4'
+        printf >'$@@' '%s\n' \
+          '# Signature of the current package.' \
+          'm4_define([AT_PACKAGE_NAME], [$(PACKAGE_NAME)])' \
+          'm4_define([AT_PACKAGE_TARNAME], [$(PACKAGE_TARNAME)])' \
+          'm4_define([AT_PACKAGE_VERSION], [$(PACKAGE_VERSION)])' \
+          'm4_define([AT_PACKAGE_STRING], [$(PACKAGE_STRING)])' \
+          'm4_define([AT_PACKAGE_URL], [$(PACKAGE_URL)])' \
+          'm4_define([AT_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'
 
 EXTRA_DIST = testsuite.at $(srcdir)/package.m4 $(TESTSUITE) atlocal.in
 TESTSUITE = $(srcdir)/testsuite
@@ -26639,7 +26548,7 @@ Alternatively, create a dedicated header file:
 @example
 DISTCLEANFILES = myprog-paths.h
 myprog-paths.h: Makefile
-        echo '#define DATADIR "$(datadir)"' >$@@
+        printf '%s\n' '#define DATADIR "$(datadir)"' >$@@
 @end example
 
 @noindent
