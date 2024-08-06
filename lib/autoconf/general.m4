@@ -419,6 +419,7 @@ ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
 # Initializations.
 #
 ac_default_prefix=/usr/local
+ac_clean_CONFIG_STATUS=
 ac_clean_files=
 ac_config_libobj_dir=.
 LIB@&t@OBJS=
@@ -1363,7 +1364,7 @@ trap 'exit_status=$?
       AS_ECHO(["$as_me: caught signal $ac_signal"])
     AS_ECHO(["$as_me: exit $exit_status"])
   } >&AS_MESSAGE_LOG_FD
-  rm -f core *.core core.conftest.* &&
+  eval "rm -f $ac_clean_CONFIG_STATUS core *.core core.conftest.*" &&
     rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
 ' 0

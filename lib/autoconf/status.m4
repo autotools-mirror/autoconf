@@ -322,7 +322,7 @@ m4_define([_AC_AWK_LITERAL_LIMIT],
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 #
 m4_define([_AC_OUTPUT_FILES_PREPARE],
 [# Set up the scripts for CONFIG_FILES section.
@@ -385,7 +385,7 @@ _ACEOF
 m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
-  echo "cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1" &&
+  echo 'cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1' &&
   echo 'cat >>"\$ac_tmp/subs1.awk" <<\\_ACAWK &&' &&
   echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/' &&
   echo "_ACAWK" &&
@@ -446,7 +446,7 @@ dnl   https://www.gnu.org/software/gawk/manual/html_node/Gory-Details.html
 dnl - Writing '$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
-[cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+[cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 cat >>"\$ac_tmp/subs1.awk" <<\\_ACAWK &&
 _ACEOF
 sed -n '
@@ -491,9 +491,9 @@ t delim
   N
   s/\n//
 }
-' >>$CONFIG_STATUS || ac_write_fail=1
+' >>"$CONFIG_STATUS" || ac_write_fail=1
 rm -f conf$$subs.awk
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 _ACAWK
 cat >>"\$ac_tmp/subs1.awk" <<_ACAWK &&
   for (key in S) S_is_set[key] = 1
@@ -542,7 +542,7 @@ dnl The original aim was that users should be able to substitute any
 dnl characters they like (except for \0).  And the above is not so
 dnl unlikely if the configure script itself happens to be converted
 dnl to w32 text mode.
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 if sed "s/$ac_cr//" < /dev/null > /dev/null 2>&1; then
   sed "s/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g"
 else
@@ -574,7 +574,7 @@ s/^[^=]*=[	 ]*$//
 }']
 fi
 
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 fi # test -n "$CONFIG_FILES"
 
 ])# _AC_OUTPUT_FILES_PREPARE
@@ -593,7 +593,7 @@ m4_define([_AC_OUTPUT_FILE_ADJUST_DIR],
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 #
 m4_define([_AC_OUTPUT_FILE],
 [
@@ -617,7 +617,7 @@ AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
 _ACEOF
 
 m4_ifndef([AC_DATAROOTDIR_CHECKED],
-[cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+[cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 # If the template does not know about datarootdir, expand it.
 # FIXME: This hack should be removed a few years after 2.60.
 ac_datarootdir_hack=; ac_datarootdir_seen=
@@ -636,7 +636,7 @@ case `eval "sed -n \"\$ac_sed_dataroot\" $ac_file_inputs"` in
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
   AC_MSG_WARN([$ac_file_inputs seems to ignore the --datarootdir setting])
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
   ac_datarootdir_hack='
 m4_map_args_sep([_AC_datarootdir_subst(], [)], [
 ], _AC_datarootdir_vars)
@@ -648,11 +648,11 @@ _ACEOF
 # Neutralize VPATH when '$srcdir' = '.'.
 # Shell code in configure.ac might set extrasub.
 # FIXME: do we really want to maintain this feature?
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 ac_sed_extra="$ac_vpsub
 $extrasub
 _ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 :t
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
@@ -692,7 +692,7 @@ which seems to be undefined.  Please make sure it is defined])
   || AC_MSG_ERROR([could not create $ac_file])
 dnl This would break Makefile dependencies:
 dnl  if diff "$ac_file" "$ac_tmp/out" >/dev/null 2>&1; then
-dnl    echo "$ac_file is unchanged"
+dnl     AS_ECHO(["$ac_file is unchanged"])
 dnl  else
 dnl     rm -f "$ac_file"; mv "$ac_tmp/out" "$ac_file"
 dnl  fi
@@ -726,7 +726,7 @@ AU_ALIAS([AC_CONFIG_HEADER], [AC_CONFIG_HEADERS])
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 #
 m4_define([_AC_OUTPUT_HEADERS_PREPARE],
 [# Set up the scripts for CONFIG_HEADERS section.
@@ -818,9 +818,9 @@ s/["\\]/\\&/g; s/^/"/; s/$/\\\\\\n"\\/p
 b cont
 ' <confdefs.h | sed '
 s/'"$ac_delim"'/"\\\
-"/g' >>$CONFIG_STATUS || ac_write_fail=1
+"/g' >>"$CONFIG_STATUS" || ac_write_fail=1
 
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
   for (key in D) D_is_set[key] = 1
   FS = ""
 }
@@ -855,7 +855,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 ]dnl End of double-quoted section
 _ACAWK
 _ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 dnl finish '||' list indicating write error:
   AC_MSG_ERROR([could not setup config headers machinery])
 fi # test -n "$CONFIG_HEADERS"
@@ -871,7 +871,7 @@ fi # test -n "$CONFIG_HEADERS"
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 #
 m4_define([_AC_OUTPUT_HEADER],
 [
@@ -957,7 +957,7 @@ update, you should probably tune the result yourself.])# AC_LINK_FILES
 # ---------------
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 m4_define([_AC_OUTPUT_LINK],
 [
   #
@@ -1034,7 +1034,7 @@ AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 # ------------------
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 m4_define([_AC_OUTPUT_COMMAND],
 [  AC_MSG_NOTICE([executing $ac_file commands])
 ])
@@ -1270,11 +1270,15 @@ dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
 : "${CONFIG_STATUS=./config.status}"
+AS_CASE([$CONFIG_STATUS],
+  [-*], [CONFIG_STATUS=./$CONFIG_STATUS],
+  [*/*], [],
+  [CONFIG_STATUS=./$CONFIG_STATUS])
+
 ac_write_fail=0
-ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files $CONFIG_STATUS"
+ac_clean_CONFIG_STATUS='"$CONFIG_STATUS"'
 _AC_OUTPUT_CONFIG_STATUS()dnl
-ac_clean_files=$ac_clean_files_save
+ac_clean_CONFIG_STATUS=
 
 test $ac_write_fail = 0 ||
   AC_MSG_ERROR([write failure creating $CONFIG_STATUS])
@@ -1292,11 +1296,15 @@ AC_OUTPUT_COMMANDS_POST()dnl
 # need to make the FD available again.
 if test "$no_create" != yes; then
   ac_cs_success=:
+  AS_CASE([$CONFIG_STATUS],
+    [-*], [ac_no_opts=--],
+    [ac_no_opts=])
   ac_config_status_args=
   test "$silent" = yes &&
     ac_config_status_args="$ac_config_status_args --quiet"
   exec AS_MESSAGE_LOG_FD>/dev/null
-  $SHELL $CONFIG_STATUS $ac_config_status_args || ac_cs_success=false
+  $SHELL $ac_no_opts "$CONFIG_STATUS" $ac_config_status_args ||
+    ac_cs_success=false
   exec AS_MESSAGE_LOG_FD>>config.log
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
@@ -1325,7 +1333,7 @@ m4_define([_AC_OUTPUT_CONFIG_STATUS],
 [AC_MSG_NOTICE([creating $CONFIG_STATUS])
 dnl AS_MESSAGE_LOG_FD is not available yet:
 m4_pushdef([AS_MESSAGE_LOG_FD])]dnl
-[AS_INIT_GENERATED([$CONFIG_STATUS],
+[AS_INIT_GENERATED(["$CONFIG_STATUS"],
 [# Run this file to recreate the current configuration.
 # Compiler output produced by configure, useful for debugging
 # configure, is in config.log if it exists.
@@ -1335,7 +1343,7 @@ ac_cs_recheck=false
 ac_cs_silent=false
 ]) || ac_write_fail=1
 
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 [#] Save the log message, to keep $[0] and so on meaningful, and to
 # report actual input values of CONFIG_FILES etc. instead of their
 # values after options handling.
@@ -1367,7 +1375,7 @@ m4_ifdef([_AC_SEEN_CONFIG(HEADERS)],
 esac
 ])
 
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 # Files that config.status was made for.
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],
 [config_files="$ac_config_files"
@@ -1384,7 +1392,7 @@ m4_ifdef([_AC_SEEN_CONFIG(COMMANDS)],
 
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 ac_cs_usage="\
 '$as_me' instantiates files and other configuration actions
 from templates according to the current configuration.  Unless the files
@@ -1438,7 +1446,7 @@ General help using GNU software: <https://www.gnu.org/gethelp/>.])])"
 _ACEOF
 ac_cs_config=`AS_ECHO(["$ac_configure_args"]) | sed "$ac_safe_unquote"`
 ac_cs_config_escaped=`AS_ECHO(["$ac_cs_config"]) | sed "s/^ //; s/'/'\\\\\\\\''/g"`
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 ac_cs_config='$ac_cs_config_escaped'
 ac_cs_version="\\
 m4_ifset([AC_PACKAGE_NAME], [AC_PACKAGE_NAME ])config.status[]dnl
@@ -1464,7 +1472,7 @@ AC_PROVIDE_IFELSE([AC_PROG_AWK],
 test -n "\$AWK" || AWK=awk
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
 while test $[#] != 0
@@ -1545,7 +1553,7 @@ if $ac_cs_silent; then
 fi
 
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 dnl Check this before opening the log, to avoid a bug on MinGW,
 dnl which prohibits the recursive instance from truncating an open log.
 if \$ac_cs_recheck; then
@@ -1558,7 +1566,7 @@ if \$ac_cs_recheck; then
 fi
 
 _ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 dnl Open the log:
 m4_popdef([AS_MESSAGE_LOG_FD])dnl
 exec AS_MESSAGE_LOG_FD>>config.log
@@ -1569,7 +1577,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 } >&AS_MESSAGE_LOG_FD
 
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
 m4_ifdef([_AC_OUTPUT_COMMANDS_INIT],
 [#
 # INIT-COMMANDS
@@ -1578,7 +1586,7 @@ _AC_OUTPUT_COMMANDS_INIT
 ])dnl
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
 
 # Handling of arguments.
 for ac_config_target in $ac_config_targets
@@ -1601,7 +1609,7 @@ _ACEOF
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
-# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
+# 'cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1'.
 #
 AC_DEFUN([_AC_OUTPUT_MAIN_LOOP],
 [
