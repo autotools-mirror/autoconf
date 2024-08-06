@@ -1547,7 +1547,7 @@ for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
 done
 ])
 ac_save_IFS=$IFS; IFS=','
-set dummy `echo "$ac_cv_func_select_args" | sed 's/\*/\*/g'`
+set x $ac_cv_func_select_args
 IFS=$ac_save_IFS
 shift
 AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, $[1],
