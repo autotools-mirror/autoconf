@@ -530,7 +530,6 @@ Portable Make Programming
 * Special Chars in Names::      Special characters in macro names
 * Backslash-Newline-Empty::     Empty lines after backslash-newline
 * Backslash-Newline Comments::  Spanning comments across line boundaries
-* Long Lines in Makefiles::     Line length limitations
 * Macros and Submakes::         @code{make macro=value} and submakes
 * The Make Macro MAKEFLAGS::    @code{$(MAKEFLAGS)} portability issues
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
@@ -552,7 +551,6 @@ Portable Make Programming
 * VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
 * $< in Explicit Rules::        @code{$<} does not work in ordinary rules
 * Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
-* Tru64 Directory Magic::       @command{mkdir} goes wild on Tru64
 * Make Target Lookup::          More details about @code{VPATH} lookup
 
 Portable C and C++ Programming
@@ -5008,12 +5006,10 @@ portability.
 @c @fuindex va_list
 @prindex @code{va_list}
 @code{va_list} is not necessarily just a pointer.  It can be a
-@code{struct} (e.g., @command{gcc} on Alpha), which means @code{NULL} is
-not portable.  Or it can be an array (e.g., @command{gcc} in some
-PowerPC configurations), which means as a function parameter it can be
+@code{struct}, which means @code{NULL} is not portable.
+Or it can be an array, which means as a function parameter it can be
 effectively call-by-reference and library routines might modify the
-value back in the caller (e.g., @code{vsnprintf} in the GNU C Library
-2.1).
+value back in the caller.
 
 @item Signed @code{>>}
 Normally the C @code{>>} right shift of a signed type replicates the
@@ -7200,7 +7196,7 @@ AC_CHECK_SIZEOF([int *])
 @end example
 
 @noindent
-defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
+defines @code{SIZEOF_INT_P} to be 8 on x86-64 systems.
 
 This macro caches its result in the @code{ac_cv_sizeof_@var{type-or-expr}}
 variable, with @samp{*} mapped to @samp{p} and other characters not
@@ -7648,11 +7644,6 @@ your code.  However, given that the compiler does not support
 @code{volatile}, you are at its mercy anyway.  At least your
 program compiles, when it wouldn't before.
 @xref{Volatile Objects}, for more about @code{volatile}.
-
-In general, the @code{volatile} keyword is a standard C feature, so
-you might expect that @code{volatile} is available only when
-@code{__STDC__} is defined.  However, Ultrix 4.3's native compiler does
-support volatile, but does not define @code{__STDC__}.
 
 This macro is obsolescent, as current C compilers support @code{volatile}.
 New programs need not use this macro.
@@ -15650,11 +15641,6 @@ packages.  There is no extra charge for these packages, but they are
 not part of a minimal OS install and therefore some installations may
 not have it.
 
-Starting with Tru64 Version 4.0, the Korn shell @command{/usr/bin/ksh}
-is also available as @command{/usr/bin/posix/sh}.  If the environment
-variable @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
-the standard shell conform to Posix.
-
 @item Pdksh
 @prindex @samp{pdksh}
 A public-domain clone of the Korn shell called @command{pdksh} is widely
@@ -15921,25 +15907,6 @@ $ @kbd{ksh -c 'foo=0; @{ foo=1; @} 2>/dev/null; echo $foo'}
 $ @kbd{bash -c 'foo=0; @{ foo=1; @} 2>/dev/null; echo $foo'}
 1
 @end example
-
-When catering to old systems, don't redirect the same file descriptor
-several times, as you are doomed to failure under Ultrix.
-
-@example
-ULTRIX V4.4 (Rev. 69) System #31: Thu Aug 10 19:42:23 GMT 1995
-UWS V4.4 (Rev. 11)
-$ @kbd{eval 'echo matter >fullness' >void}
-illegal io
-$ @kbd{eval '(echo matter >fullness)' >void}
-illegal io
-$ @kbd{(eval '(echo matter >fullness)') >void}
-Ambiguous output redirect.
-@end example
-
-@noindent
-In each case the expected result is of course @file{fullness} containing
-@samp{matter} and @file{void} being empty.  However, this bug is
-probably not of practical concern to modern platforms.
 
 Solaris 10 @command{sh} will try to optimize away a @command{:} command
 (even if it is redirected) in a loop after the first iteration, or in a
@@ -16554,25 +16521,6 @@ $ @kbd{dash -c 'set a b c d e f g h i j; echo $10 $@{1@}0'}
 j a0
 @end example
 
-@item $@{@var{var}:-@var{value}@}
-@itemx $@{@var{var}:=@var{value}@}
-@itemx $@{@var{var}:?@var{value}@}
-@itemx $@{@var{var}:+@var{value}@}
-@c Info cannot handle ':' in index entries.
-@ifnotinfo
-@cindex @code{$@{@var{var}:-@var{value}@}}
-@cindex @code{$@{@var{var}:=@var{value}@}}
-@cindex @code{$@{@var{var}:?@var{value}@}}
-@cindex @code{$@{@var{var}:+@var{value}@}}
-@end ifnotinfo
-Old BSD shells, including the Ultrix @code{sh}, don't accept the
-colon for any shell substitution, and complain and die.
-Similarly for @code{$@{@var{var}:=@var{value}@}},
-@code{$@{@var{var}:?@var{value}@}}, etc.
-However, all shells that support functions allow the use of colon in
-shell substitution, and since m4sh requires functions, you can portably
-use null variable substitution patterns in configure scripts.
-
 @item $@{@var{var}-@var{value}@}
 @itemx $@{@var{var}:-@var{value}@}
 @itemx $@{@var{var}=@var{value}@}
@@ -17121,11 +17069,6 @@ $ @kbd{zsh -c 'false; $empty; echo $?'}
 @evindex _
 Many shells reserve @samp{$_} for various purposes, e.g., the name of
 the last command executed.
-
-@item BIN_SH
-@evindex BIN_SH
-In Tru64, if @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
-the standard shell conform to Posix.
 
 @item CDPATH
 @evindex CDPATH
@@ -17896,16 +17839,6 @@ Even with this, Solaris @command{ksh} matches a backslash if the set
 contains any
 of the characters @samp{|}, @samp{&}, @samp{(}, or @samp{)}.
 
-Conversely, Tru64 @command{ksh} (circa 2003) erroneously always matches
-a closing parenthesis if not specified in a character class:
-
-@example
-$ @kbd{case foo in *\)*) echo fail ;; esac}
-fail
-$ @kbd{case foo in *')'*) echo fail ;; esac}
-fail
-@end example
-
 Some shells, such as Ash 0.3.8, are confused by an empty
 @code{case}/@code{esac}:
 
@@ -18438,9 +18371,7 @@ Also please see the discussion of the @command{cd} command.
 @c -----------------
 @prindex @command{read}
 No options are portable, not even support @option{-r} (Solaris 10
-@command{/bin/sh} for example).  Tru64/OSF 5.1 @command{sh} treats
-@command{read} as a special built-in, so it may exit if input is
-redirected from a non-existent or unreadable file.
+@command{/bin/sh} for example).
 
 
 @anchor{set}
@@ -18558,23 +18489,6 @@ ok
 $ @kbd{sh -c 'set -e; false `true` && echo notreached; echo ok'}
 $
 @end example
-
-Portable scripts should not use @samp{set -e} if @command{trap} is used
-to install an exit handler.  This is because Tru64/OSF 5.1 @command{sh}
-sometimes enters the trap handler with the exit status of the command
-prior to the one that triggered the errexit handler:
-
-@example
-$ @kbd{sh -ec 'trap '\''echo $?'\'' 0; false'}
-0
-$ @kbd{sh -c 'set -e; trap '\''echo $?'\'' 0; false'}
-1
-@end example
-
-@noindent
-Thus, when writing a script in M4sh, rather than trying to rely on
-@samp{set -e}, it is better to use @samp{AS_EXIT}
-where it is desirable to abort on failure.
 
 @cindex @command{set -b}
 @cindex @command{set -m}
@@ -19087,9 +19001,9 @@ In code portable to both traditional and modern Awk, @code{FS} must be a
 string containing just one ordinary character, and similarly for the
 field-separator argument to @code{split}.
 
-Traditional Awk has a limit of 99 fields in a record.  Since some Awk
-implementations, like Tru64's, split the input even if you don't refer
-to any field in the script, to circumvent this problem, set @samp{FS}
+Traditional Awk has a limit of 99 fields in a record
+and splits the input even if you don't refer to any field in the script.
+To circumvent this problem, set @samp{FS}
 to an unusual character and use @code{split}.
 
 Traditional Awk has a limit of at most 99 bytes in a number formatted by
@@ -19261,25 +19175,19 @@ you can't use the name of the kernel as an indicator of the behavior.
 @item @command{date}
 @c -----------------
 @prindex @command{date}
-Some versions of @command{date} do not recognize special @samp{%} directives,
-and unfortunately, instead of complaining, they just pass them through,
+When most versions of @command{date} do not recognize a @samp{%}
+conversion specification, they quietly pass it through,
 and exit with success:
 
 @example
-$ @kbd{uname -a}
-OSF1 medusa.sis.pasteur.fr V5.1 732 alpha
-$ @kbd{date "+%s"}
-%s
+$ @kbd{date --version | head -n 1}
+date (GNU coreutils) 9.5
+$ @kbd{date +'%H:%M %Q'}
+17:25 %Q
 @end example
 
-
-@item @command{diff}
-@c -----------------
-@prindex @command{diff}
-Option @option{-u} is nonportable.
-
-Some implementations, such as Tru64's, fail when comparing to
-@file{/dev/null}.  Use an empty file instead.
+@noindent
+However, this behavior is not required by Posix.
 
 
 @item @command{dirname}
@@ -19467,15 +19375,7 @@ outputs @samp{a} on most hosts, but @samp{aa} on QNX 4.25.  A
 simple workaround consists of testing @command{expr} and using a variable
 set to @command{expr} or to @command{false} according to the result.
 
-Tru64 @command{expr} incorrectly treats the result as a number, if it
-can be interpreted that way:
-
-@example
-$ @kbd{expr 00001 : '.*\(...\)'}
-1
-@end example
-
-On HP-UX 11, @command{expr} only supports a single
+On HP-UX 11, @command{expr} supports only a single
 sub-expression.
 
 @example
@@ -19492,8 +19392,6 @@ a few traditional hosts (notably Solaris 10) do not support the Posix
 replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
-
-Tru64/OSF 5.1 @command{fgrep} does not match an empty pattern.
 
 
 @item @command{find}
@@ -19933,10 +19831,7 @@ x
 @end example
 
 The @option{-e} option is mostly portable.
-However, its argument
-cannot start with @samp{a}, @samp{c}, or @samp{i},
-as this runs afoul of a Tru64 5.1 bug.
-Also, its argument cannot be empty, as this fails on AIX 5.3.
+However, its argument cannot be empty, as this fails on AIX 7.3.
 Some people prefer to use @samp{-e}:
 
 @example
@@ -20328,7 +20223,6 @@ itself.
 * Special Chars in Names::      Special characters in macro names
 * Backslash-Newline-Empty::     Empty lines after backslash-newline
 * Backslash-Newline Comments::  Spanning comments across line boundaries
-* Long Lines in Makefiles::     Line length limitations
 * Macros and Submakes::         @code{make macro=value} and submakes
 * The Make Macro MAKEFLAGS::    @code{$(MAKEFLAGS)} portability issues
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
@@ -20489,13 +20383,6 @@ line with @code{#}, not only the first.
 #     baz
 @end example
 
-@node Long Lines in Makefiles
-@section Long Lines in Makefiles
-
-Tru64 5.1's @command{make} has been reported to crash when given a
-makefile with lines longer than around 20 kB.  Earlier versions are
-reported to exit with @code{Line too long} diagnostics.
-
 @node Macros and Submakes
 @section @code{make macro=value} and Submakes
 
@@ -20613,16 +20500,22 @@ MAKEFLAGS = --unix -k
 @cindex @code{SHELL} and @command{make}
 @cindex @command{make} and @code{SHELL}
 
-Posix-compliant @command{make} internally uses the @code{$(SHELL)}
+Many @command{make} implementations use the the @code{$(SHELL)}
 macro to spawn shell processes and execute Make rules.  This
-is a builtin macro supplied by @command{make}, but it can be modified
-by a makefile or by a command-line argument.
+is a builtin macro with a default value upplied by @command{make};
+the default can be overridden by a makefile or by a command-line argument,
+though not by the environment.
 
-Not all @command{make} implementations define this @code{SHELL} macro.
-Tru64
-@command{make} is an example; this implementation always uses
-@code{/bin/sh}.  So it's a good idea to always define @code{SHELL} in
-your makefiles.  If you use Autoconf, do
+Other @command{make} implementations use other ways to spawn shell
+processes, and the Posix standard for @command{make} says that portable
+makefiles should neither define nor use the @code{$(SHELL)} macro.
+
+Despite this prohibition, in practice it does not hurt to define and
+then possibly use @code{SHELL} in your makefiles and in some cases it
+can help your builds use a better shell to spawn shell processes.
+So it's a good idea to define @code{SHELL} in
+your makefiles.  If you use Autoconf, you can use
+its standard output variable @code{SHELL} as follows:
 
 @example
 SHELL = @@SHELL@@
@@ -20632,8 +20525,8 @@ SHELL = @@SHELL@@
 If you use Automake, this is done for you.
 
 Do not force @code{SHELL = /bin/sh} because that is not correct
-everywhere.  Remember, @file{/bin/sh} is not Posix compliant on many
-systems, such as FreeBSD 4, NetBSD 3, AIX 3, Solaris 10, or Tru64.
+everywhere.  Remember, @file{/bin/sh} is not Posix compliant on some
+systems, such as Solaris 10.
 Additionally, DJGPP lacks @code{/bin/sh}, and when its
 GNU @command{make} port sees such a setting it enters a
 special emulation mode where features like pipes and redirections are
@@ -20645,43 +20538,18 @@ benefit from the same improved shell, such as @command{bash} or
 you aren't fighting two different sets of shell bugs between the two
 contexts.
 
-Posix-compliant @command{make} should never acquire the value of
-$(SHELL) from the environment, even when @code{make -e} is used
-(otherwise, think about what would happen to your rules if
-@code{SHELL=/bin/tcsh}).
-
-However not all @command{make} implementations have this exception.
-For instance it's not surprising that Tru64 @command{make} doesn't
-protect @code{SHELL}, since it doesn't use it.
-
-@example
-$ @kbd{cat Makefile}
-SHELL = /bin/sh
-FOO = foo
-all:
-        @@printf '%s\n' '$(SHELL)'
-        @@printf '%s\n' '$(FOO)'
-$ @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # Tru64 Make
-/bin/tcsh
-bar
-$ @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
-/bin/sh
-bar
-@end example
-
-Conversely, @command{make} is not supposed to export any changes to the
-macro @code{SHELL} to child processes.  Again, many implementations
-break this rule:
+Do not rely on whether @command{make}'s @code{SHELL} settings are
+exported to subprocesses, as implementations differ:
 
 @example
 $ @kbd{cat Makefile}
 all:
         @@printf '%s\n' '$(SHELL)'
         @@printenv SHELL
-$ @kbd{env SHELL=sh make -e SHELL=/bin/ksh}   # BSD Make, GNU make 3.80
+$ @kbd{env SHELL=/bin/sh make -e SHELL=/bin/ksh}  # BSD make, AIX make
 /bin/ksh
 /bin/ksh
-$ @kbd{env SHELL=sh gmake -e SHELL=/bin/ksh}  # GNU make 3.81
+$ @kbd{env SHELL=/bin/sh make -e SHELL=/bin/ksh}  # GNU make
 /bin/ksh
 sh
 @end example
@@ -20832,36 +20700,20 @@ standard output, and may remove leading whitespace from output lines.
 @cindex Comments in @file{Makefile} rules
 @cindex @file{Makefile} rules and comments
 
-Never put comments in a rule.
+Do not try to put comments (lines beginning with @samp{#}) in a rule, as
+they end the rule.  It is OK for a rule line to start with a tab
+followed by @samp{#}, as a comment passed to a shell that does nothing.
 
-Some @command{make} treat anything starting with a tab as a command for
-the current rule, even if the tab is immediately followed by a @code{#}.
-The @command{make} from Tru64 Unix V5.1 is one of them.  The following
-makefile runs @code{# foo} through the shell.
-
-@example
-all:
-        # foo
-@end example
-
-As a workaround, you can use the @command{:} no-op command with a string
-argument that gets ignored:
-
-@example
-all:
-        : "foo"
-@end example
-
-Conversely, if you want to use the @samp{#} character in some command,
-you can only do so by expanding it inside a rule (@pxref{Comments in
-Make Macros}).  So for example, if @samp{COMMENT_CHAR} is substituted by
-@command{config.status} as @samp{#}, then the following substitutes
-@samp{@@COMMENT_CHAR@@} in a generated header:
+To use the @samp{#} character in a command, put it in a rule not a
+macro, as the character cannot portably appear in macros
+(@pxref{Comments in Make Macros}).  So for example, assuming the output
+variable @code{COMMENT_CHAR} stands for @samp{#}, the following replaces
+@samp{@@COMMENT_CHAR@@} by @samp{#} in a generated header:
 
 @example
 foo.h: foo.h.in
         sed -e 's|@@''COMMENT_CHAR''@@|@@COMMENT_CHAR@@|g' \
-            $(srcdir)/foo.h.in > $@@
+          '$(srcdir)/foo.h.in' > $@@
 @end example
 
 The funny shell quoting avoids a substitution at @command{config.status}
@@ -20874,20 +20726,18 @@ run time of the left-hand side of the @command{sed} @samp{s} command.
 
 In shell scripts, newlines can be used inside string literals.  But in
 the shell statements of @file{Makefile} rules, this is not possible:
-A newline not preceded by a backslash is a separator between shell
-statements.  Whereas a newline that is preceded by a backslash becomes
-part of the shell statement according to POSIX, but gets replaced,
-together with the backslash that precedes it, by a space in GNU
-@command{make} 3.80 and older.  So, how can a newline be used in a string
-literal?
+a newline not preceded by a backslash separates commands, whereas a
+newline preceded by a backslash becomes part of the shell statement.
+So, how can a newline be used in a string literal?
 
-The trick is to set up a shell variable that contains a newline.
-For example, in order to create a multi-line @samp{sed} expression that
-inserts an empty line after every line of a file, this code can be used:
+The trick is to set up a shell variable @code{nl} that contains a newline.
+For example, the following uses a multi-line @samp{sed} expression that
+appends an empty line after every line of a file:
 
 @example
-eval $$(printf 'nl="\n"\n'); \
-sed -e "s/\$$/\\$$@{nl@}/" < input > output
+output: input
+        eval "$$(printf 'nl="\n"\n')"; \
+        sed "a\\$$nl" input >$@@
 @end example
 
 @node Comments in Make Macros
@@ -20895,23 +20745,20 @@ sed -e "s/\$$/\\$$@{nl@}/" < input > output
 @cindex Comments in @file{Makefile} macros
 @cindex @file{Makefile} macros and comments
 
-Avoid putting comments in macro values as far as possible.  Posix
-specifies that the text starting from the @samp{#} sign until the end of
-the line is to be ignored, which has the unfortunate effect of
-disallowing them even within quotes.  Thus, the following might lead to
-a syntax error at compile time:
+In macro definitions, text from @samp{#} until line end is ignored,
+which has the unfortunate effect of disallowing @samp{#} even in quotes.
+Thus, the following does not work:
 
 @example
 CPPFLAGS = "-DCOMMENT_CHAR='#'"
 @end example
 
 @noindent
-as @samp{CPPFLAGS} may be expanded to @samp{"-DCOMMENT_CHAR='}.
+as @samp{CPPFLAGS} is expanded to @samp{"-DCOMMENT_CHAR='}.
 
-Most @command{make} implementations disregard this and treat single and
-double quotes specially here.  Also, GNU @command{make} lets you put
+GNU @command{make}, when not in Posix mode, lets you put
 @samp{#} into a macro value by escaping it with a backslash, i.e.,
-@samp{\#}.  However, neither of these usages are portable.
+@samp{\#}.  However, this usage is not portable.
 @xref{Comments in Make Rules}, for a portable alternative.
 
 Even without quoting involved, comments can have surprising effects,
@@ -20971,7 +20818,7 @@ environment variables:
 $ @kbd{echo 'print: ; @@echo "x$(foo)x$(bar)x"' |
   foo=' f f ' make -f - bar=' b b '}
 x f f xb b x  # AIX, BSD, GNU make
-xf f xb b x   # HP-UX, IRIX, Tru64/OSF make
+xf f xb b x   # HP-UX
 x f f xb bx   # Solaris make
 @end example
 
@@ -21051,7 +20898,6 @@ implementations.
 * VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
 * $< in Explicit Rules::        @code{$<} does not work in ordinary rules
 * Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
-* Tru64 Directory Magic::       @command{mkdir} goes wild on Tru64
 * Make Target Lookup::          More details about @code{VPATH} lookup
 @end menu
 
@@ -21100,7 +20946,7 @@ whole thing manually.  @xref{Build Directories}.
 @cindex @code{VPATH} and automatic rule rewriting
 @cindex automatic rule rewriting and @code{VPATH}
 
-Some @command{make} implementations, such as Solaris and Tru64,
+Some @command{make} implementations, such as Solaris,
 search for prerequisites in @code{VPATH} and
 then rewrite each occurrence as a plain word in the rule.
 For instance:
@@ -21162,8 +21008,8 @@ f.c: if.c
 
 @noindent
 However, the ``prerequisite rewriting'' still applies here.  So if
-@file{if.c} is in @file{../pkg/src}, Solaris and Tru64 @command{make}
-execute
+@file{if.c} is in @file{../pkg/src}, Solaris @command{make}
+executes
 
 @smallexample
 cp `test -f ../pkg/src/if.c || echo ../pkg/src/`if.c f.c
@@ -21298,69 +21144,8 @@ install-HEADERS: $(HEADERS)
         done
 @end example
 
-Automake does something similar.  However the above hack works only if
-the files listed in @code{HEADERS} are in the current directory or a
-subdirectory; they should not be in an enclosing directory.  If we had
-@code{HEADERS = ../f.h}, the above fragment would fail in a VPATH
-build with Tru64 @command{make}.  The reason is that not only does
-Tru64 @command{make} rewrite dependencies, but it also simplifies
-them.  Hence @code{../f.h} becomes @code{../pkg/f.h} instead of
-@code{../pkg/src/../f.h}.  This obviously defeats any attempt to strip
-a leading @file{../pkg/src/} component.
-
-The following example makes the behavior of Tru64 @command{make}
-more apparent.
-
-@example
-$ @kbd{cat Makefile}
-VPATH = sub
-all: ../foo
-        echo ../foo
-$ @kbd{ls}
-Makefile foo
-$ @kbd{make}
-echo foo
-foo
-@end example
-
 @noindent
-Dependency @file{../foo} was found in @file{sub/../foo}, but Tru64
-@command{make} simplified it as @file{foo}.  (Note that the @file{sub/}
-directory does not even exist, this just means that the simplification
-occurred before the file was checked for.)
-
-
-@node Tru64 Directory Magic
-@subsection Tru64 @command{make} Creates Prerequisite Directories Magically
-@cindex @code{VPATH} and prerequisite directories
-@cindex prerequisite directories and @code{VPATH}
-
-When a prerequisite is a subdirectory of @code{VPATH}, Tru64
-@command{make} creates it in the current directory.
-
-@example
-$ @kbd{mkdir -p foo/bar build}
-$ @kbd{cd build}
-$ @kbd{cat >Makefile <<END
-VPATH = ..
-all: foo/bar
-END}
-$ @kbd{make}
-mkdir foo
-mkdir foo/bar
-@end example
-
-This can yield unexpected results if a rule uses a manual @code{VPATH}
-search as presented before.
-
-@example
-VPATH = ..
-all : foo/bar
-        command `test -d foo/bar || echo ../`foo/bar
-@end example
-
-The above @command{command} is run on the empty @file{foo/bar}
-directory that was created in the current directory.
+Automake does something similar.
 
 @node Make Target Lookup
 @subsection Make Target Lookup
@@ -21412,10 +21197,6 @@ Building ../bar.x
 $ @kbd{fmake}       # FreeBSD make, OpenBSD make
 Building foo.x
 Building bar.x
-$ @kbd{tmake}       # Tru64 make
-Building foo.x
-Building bar.x
-$ @kbd{touch ../bar.x}
 $ @kbd{make}        # GNU make
 Building foo.x
 $ @kbd{pmake}       # NetBSD make
@@ -21423,13 +21204,10 @@ Building foo.x
 $ @kbd{fmake}       # FreeBSD make, OpenBSD make
 Building foo.x
 Building bar.x
-$ @kbd{tmake}       # Tru64 make
-Building foo.x
-Building bar.x
 @end example
 
 Note how NetBSD @command{make} updates @file{../bar.x} in its
-VPATH location, and how FreeBSD, OpenBSD, and Tru64
+VPATH location, and how FreeBSD and OpenBSD
 @command{make} always
 update @file{bar.x}, even when @file{../bar.x} is up to date.
 
@@ -21468,18 +21246,13 @@ echo Building bar.x
 cp bar.x bar.y
 cp: cannot stat 'bar.x': No such file or directory
 *** Error code 1
-$ @kbd{tmake}       # Tru64 make
-Building bar.x
-cp: bar.x: No such file or directory
-*** Exit 1
 @end example
 
 Note that if you drop away the command from the @code{bar.x: newer.x}
 rule, GNU @command{make} magically starts to work: it
 knows that @code{bar.x} hasn't been updated, therefore it doesn't
 discard the result from @code{VPATH} (@file{../bar.x}) in succeeding
-uses.  Tru64 also works, but FreeBSD and OpenBSD
-still don't.
+uses.  FreeBSD and OpenBSD still don't work, though.
 
 @example
 $ @kbd{cat Makefile}
@@ -21501,8 +21274,6 @@ $ @kbd{fmake}       # FreeBSD make, OpenBSD make
 cp bar.x bar.y
 cp: cannot stat 'bar.x': No such file or directory
 *** Error code 1
-$ @kbd{tmake}       # Tru64 make
-cp ../bar.x bar.y
 @end example
 
 It seems the sole solution that would please every @command{make}
@@ -22381,9 +22152,9 @@ avoids any confusion.  Avoiding the warning is as simple as creating the
 correct symlinks naming the cross tools.
 
 @cindex @command{config.sub}
-@command{configure} recognizes short aliases for many system types; for
-example, @samp{decstation} can be used instead of
-@samp{mips-dec-ultrix4.2}.  @command{configure} runs a script called
+@command{configure} recognizes short aliases for some system types; for
+example, @samp{mingw64} can be used instead of
+@samp{x86_64-pc-mingw64}.  @command{configure} runs a script called
 @command{config.sub} to canonicalize system type aliases.
 
 This section deliberately omits the description of the obsolete
@@ -22476,8 +22247,8 @@ program or library.
 
 @example
 AS_CASE([$host],
-  [alpha*-*-*], [CYCLE_OBJ=rpcc.o],
-  [i?86-*-*],   [CYCLE_OBJ=rdtsc.o],
+  [aarch64*-*-*], [CYCLE_OBJ=pmccntr.o],
+  [i?86-*-*],     [CYCLE_OBJ=rdtsc.o],
   [CYCLE_OBJ=""])
 AC_SUBST([CYCLE_OBJ])
 @end example
@@ -22489,7 +22260,7 @@ so some runtime capability checks may be necessary too.
 
 @example
 AS_CASE([$host],
-  [alpha*-*-*],   [AC_CONFIG_LINKS([dither.c:alpha/dither.c])],
+  [aarch64*-*-*], [AC_CONFIG_LINKS([dither.c:aarch64/dither.c])],
   [powerpc*-*-*], [AC_CONFIG_LINKS([dither.c:powerpc/dither.c])],
   [AC_CONFIG_LINKS([dither.c:generic/dither.c])])
 @end example
@@ -25126,11 +24897,11 @@ For backward compatibility, @command{configure} accepts a system
 type as an option by itself.  Such an option overrides the
 defaults for build, host, and target system types.  The following
 configure statement configures a cross toolchain that runs on
-NetBSD/alpha but generates code for GNU Hurd/sparc,
+NetBSD/aarch64 but generates code for GNU Hurd/riscv64,
 which is also the build platform.
 
 @example
-./configure --host=alpha-netbsd sparc-gnu
+./configure --host=aarch64-netbsd riscv64-gnu
 @end example
 
 @sp 1
@@ -27355,7 +27126,7 @@ introduced in this document.
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
 @c  LocalWords:  fooXXXXXX Unicos utimes hpux hppa unescaped SUBST'ed
 @c  LocalWords:  pmake DOS's gmake ifoo DESTDIR autoconfiscated pc coff mips gg
-@c  LocalWords:  dec ultrix cpu wildcards rpcc rdtsc powerpc readline
+@c  LocalWords:  cpu wildcards rpcc rdtsc powerpc readline
 @c  LocalWords:  withval vxworks gless localcache usr LOFF loff CYGWIN Cygwin
 @c  LocalWords:  cygwin SIGLIST siglist SYSNDIR SYSDIR ptx lseq rusage elif MSC
 @c  LocalWords:  lfoo POUNDBANG lsun NIS getpwnam SYSCALLS RSH INTL lintl aix
@@ -27404,7 +27175,7 @@ introduced in this document.
 @c  LocalWords:  TESTA TESTB TESTC hoc xpg xxyzzyz dtksh nosuch fifos
 @c  LocalWords:  fifo Stardent sig WIF WIFSIGNALED SIGQUIT tty perl ret
 @c  LocalWords:  SIGINT NUL SFN PRN aeiou MSYS SIGTERM xhi arith UWIN
-@c  LocalWords:  CLICOLOR FPATH POSIXLY Shellshock CVE OSF doit ec ci
+@c  LocalWords:  CLICOLOR FPATH POSIXLY Shellshock CVE doit ec ci
 @c  LocalWords:  notreached cim nc ACL faccessat Alexandre getline sqrt
 @c  LocalWords:  CONVFMT FS OFMT CDS chgrp futimens utimensat oo esc od
 @c  LocalWords:  ownerships mape readdir mkfifo mknod testsuites XSI rf
