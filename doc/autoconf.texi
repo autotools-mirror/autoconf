@@ -4822,62 +4822,6 @@ declared, due to C++ problems of some sort or another.  For this reason
 we suggest that test programs not invoke @code{exit}, but return from
 @code{main} instead.
 
-@item @code{isinf}
-@itemx @code{isnan}
-@c @fuindex isinf
-@c @fuindex isnan
-@prindex @code{isinf}
-@prindex @code{isnan}
-In C99 and later, @code{isinf} and @code{isnan} are
-macros.  On some systems just macros are available
-(e.g., HP-UX and Solaris 10), on
-some systems both macros and functions (e.g., glibc 2.3.2), and on some
-systems only functions (e.g., IRIX 6).  In some cases
-these functions are declared in nonstandard headers like
-@code{<sunmath.h>} and defined in non-default libraries like
-@option{-lm} or @option{-lsunmath}.
-
-In C99 and later, @code{isinf} and @code{isnan} macros work correctly with
-@code{long double} arguments, but pre-C99 systems that use functions
-typically assume @code{double} arguments.  On such a system,
-@code{isinf} incorrectly returns true for a finite @code{long double}
-argument that is outside the range of @code{double}.
-
-The best workaround for these issues is to use Gnulib modules
-@code{isinf} and @code{isnan} (@pxref{Gnulib}).  But a lighter weight
-solution involves code like the following.
-
-@smallexample
-#include <math.h>
-
-#ifndef isnan
-# define isnan(x) \
-    (sizeof (x) == sizeof (long double) ? isnan_ld (x) \
-     : sizeof (x) == sizeof (double) ? isnan_d (x) \
-     : isnan_f (x))
-static int isnan_f  (float       x) @{ return x != x; @}
-static int isnan_d  (double      x) @{ return x != x; @}
-static int isnan_ld (long double x) @{ return x != x; @}
-#endif
-
-#ifndef isinf
-# define isinf(x) \
-    (sizeof (x) == sizeof (long double) ? isinf_ld (x) \
-     : sizeof (x) == sizeof (double) ? isinf_d (x) \
-     : isinf_f (x))
-static int isinf_f  (float       x)
-@{ return !isnan (x) && isnan (x - x); @}
-static int isinf_d  (double      x)
-@{ return !isnan (x) && isnan (x - x); @}
-static int isinf_ld (long double x)
-@{ return !isnan (x) && isnan (x - x); @}
-#endif
-@end smallexample
-
-Some optimizing compilers mishandle these definitions, but systems with that bug
-typically have many other floating point corner-case compliance problems
-anyway, so it's probably not worth worrying about.
-
 @item @code{malloc}
 @c @fuindex malloc
 @prindex @code{malloc}
@@ -4934,9 +4878,15 @@ available, rather than @code{signal}.
 In C99 and later, if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
-been produced.  Some ancient systems returned the truncated length (e.g.,
-GNU C Library 2.0.x or IRIX 6.5), and some a negative value
-(e.g., earlier GNU C Library versions).
+been produced.  Some older systems, notably Microsoft Windows before
+Visual Studio 2015 and Windows 10, do not null-terminate the output
+and return @minus{}1 instead.
+
+Portable code can check the return value of @code{snprintf (buf, sizeof
+buf, ...)}: if the value is negative or is not less than @code{sizeof
+buf}, an error occurred and the contents of @code{buf} can be ignored.
+Alternatively, one of the Gnulib modules related to @code{snprintf} can
+be used.  @xref{Gnulib}.
 
 @item @code{strerror_r}
 @c @fuindex strerror_r
@@ -5335,8 +5285,7 @@ use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @prindex @code{getmntent}
 @caindex search_getmntent
 Check for @code{getmntent} in the standard C library, and then in the
-@file{sun}, @file{seq}, and @file{gen} libraries, for UNICOS,
-IRIX 4, PTX, and UnixWare, respectively.  Then, if
+@file{sun}, @file{seq}, and @file{gen} libraries.  Then, if
 @code{getmntent} is available, define @code{HAVE_GETMNTENT} and set
 @code{ac_cv_func_getmntent} to @code{yes}.  Otherwise set
 @code{ac_cv_func_getmntent} to @code{no}.
@@ -7365,15 +7314,6 @@ This can cause problems if you observe the output of the compiler to
 detect failures.  Invoking @samp{cc -c a.c && cc -c b.c && cc -o c a.o
 b.o} solves the issue.
 
-@item Don't rely on @code{#error} failing
-The IRIX C compiler does not fail when #error is preprocessed; it
-simply emits a diagnostic and continues, exiting successfully.  So,
-instead of an error directive like @code{#error "Unsupported word size"}
-it is more portable to use an invalid directive like @code{#Unsupported
-word size} in Autoconf tests.  In ordinary source code, @code{#error} is
-OK, since installers with inadequate compilers like IRIX can simply
-examine these compilers' diagnostic output.
-
 @item Don't rely on correct @code{#line} support
 On Solaris, @command{c89} (at least through Oracle Developer Studio 12.6)
 diagnoses @code{#line} directives whose line
@@ -8803,9 +8743,6 @@ defined before the first system header is included;
 therefore, when using this macro in concert with
 @code{AC_CONFIG_HEADERS}, make sure that @file{config.h} is included
 before any system headers.
-
-On obsolete IRIX systems, also change the output variable @code{CC} to
-add compiler options needed for wide @code{off_t}.
 
 Large-file support can be disabled by configuring with the
 @option{--disable-largefile} option, and year-2038 support can
@@ -17444,9 +17381,7 @@ points to the wrong directory.  Use @samp{`pwd`} rather than
 @item RANDOM
 @evindex RANDOM
 Many shells provide @code{RANDOM}, a variable that returns a different
-integer each time it is used.  Most of the time, its value does not
-change when it is not used, but on IRIX 6.5 the value changes all
-the time.  This can be observed by using @command{set}.  It is common
+integer each time it is used.  It is common
 practice to use @code{$RANDOM} as part of a file name, but code
 shouldn't rely on @code{$RANDOM} expanding to a nonempty string.
 
@@ -17525,8 +17460,7 @@ uses the prefix @samp{as_fn_} for its functions.
 
 Handling of positional parameters and shell options varies among shells.
 For example, Korn shells reset and restore trace output (@samp{set -x})
-and other options upon function entry and exit.  Inside a function,
-IRIX sh sets @samp{$0} to the function name.
+and other options upon function entry and exit.
 
 It is not portable to pass temporary environment variables to shell
 functions.  Solaris 10 @command{/bin/sh} does not see the variable.
@@ -18081,9 +18015,7 @@ of the environment variables.  Conversely, each environment variable
 received by the shell when it is launched should be imported as a shell
 variable marked as exported.
 
-Alas, many shells, such as Solaris 10 @command{/bin/sh},
-IRIX 6.3, IRIX 5.2,
-AIX 4.1.5, and Digital Unix 4.0, forget to
+Alas, some older shells, such as Solaris 10 @command{/bin/sh}, forget to
 @command{export} the environment variables they receive.  As a result,
 two variables coexist: the environment variable and the shell
 variable.  The following code demonstrates this failure:
@@ -19015,7 +18947,7 @@ The original version of Awk had a limit of at most 99 bytes per
 per run of non-special characters in a @code{printf} format, but these
 bugs have been fixed on all practical hosts that we know of.
 
-HP-UX 11.00 and IRIX 6.5 Awk require that input files have a line length
+HP-UX 11.00 Awk requires that input files have a line length
 of at most 3070 bytes.
 
 @item @command{basename}
@@ -19426,9 +19358,8 @@ Posix allows either behavior.
 @prindex @command{grep}
 Portable scripts can rely on the @command{grep} options @option{-c},
 @option{-l}, @option{-n}, and @option{-v}, but should avoid other
-options.  For example, don't use @option{-w}, as Posix does not require
-it and Irix 6.5.16m's @command{grep} does not support it.  Also,
-portable scripts should not combine @option{-c} with @option{-l},
+options.  For example, don't use @option{-w}, as Posix does not require it.
+Also, portable scripts should not combine @option{-c} with @option{-l},
 as Posix does not allow this.
 
 Some of the options required by Posix are not portable in practice.
@@ -19450,11 +19381,8 @@ Some traditional @command{grep} implementations do not work on long
 input lines.  On AIX the default @code{grep} silently truncates long
 lines on the input before matching.
 
-Also, traditional implementations do not support multiple regexps
-with @option{-e}: they either reject @option{-e} entirely (e.g., Solaris 10)
-or honor only the last pattern (e.g., IRIX 6.5 and NeXT).  To
-work around these problems, invoke @code{AC_PROG_GREP} and then use
-@code{$GREP}.
+Also, Solaris 10 @command{grep} does not support @option{-e}.
+To work around this, invoke @code{AC_PROG_GREP} and then use @code{$GREP}.
 
 Another possible workaround for the multiple @option{-e} problem is to
 separate the patterns by newlines, for example:
@@ -19573,8 +19501,8 @@ through @code{uniq}.
 Combining the @option{-m} and @option{-p} options, as in @samp{mkdir -m
 go-w -p @var{dir}}, often leads to trouble.  FreeBSD
 @command{mkdir} incorrectly attempts to change the permissions of
-@var{dir} even if it already exists.  HP-UX 11.23 and
-IRIX 6.5 @command{mkdir} often assign the wrong permissions to
+@var{dir} even if it already exists.  HP-UX 11.23
+@command{mkdir} often assigns the wrong permissions to
 any newly-created parents of @var{dir}.
 
 Posix does not clearly specify whether @samp{mkdir -p foo}
@@ -19981,68 +19909,17 @@ busybox         yes     yes     error
 @item @command{sed} (@samp{t})
 @c ---------------------------
 @prindex @command{sed} (@samp{t})
-Some old systems have @command{sed} that ``forget'' to reset their
-@samp{t} flag when starting a new cycle.  For instance on MIPS
-RISC/OS, and on IRIX 5.3, if you run the following @command{sed}
-script (the line numbers are not actual part of the texts):
-
-@example
-s/keep me/kept/g  # a
-t end             # b
-s/.*/deleted/g    # c
-:end              # d
-@end example
-
-@noindent
-on
-
-@example
-delete me         # 1
-delete me         # 2
-keep me           # 3
-delete me         # 4
-@end example
-
-@noindent
-you get
-
-@example
-deleted
-delete me
-kept
-deleted
-@end example
-
-@noindent
-instead of
-
-@example
-deleted
-deleted
-kept
-deleted
-@end example
-
-Why?  When processing line 1, (c) matches, therefore sets the @samp{t}
-flag, and the output is produced.  When processing
-line 2, the @samp{t} flag is still set (this is the bug).  Command (a)
-fails to match, but @command{sed} is not supposed to clear the @samp{t}
-flag when a substitution fails.  Command (b) sees that the flag is set,
-therefore it clears it, and jumps to (d), hence you get @samp{delete me}
-instead of @samp{deleted}.  When processing line (3), @samp{t} is clear,
-(a) matches, so the flag is set, hence (b) clears the flags and jumps.
-Finally, since the flag is clear, line 4 is processed properly.
-
 There are two things one should remember about @samp{t} in @command{sed}.
-Firstly, always remember that @samp{t} jumps if @emph{some} substitution
+First, @samp{t} jumps if @emph{some} substitution
 succeeded, not only the immediately preceding substitution.  Therefore,
 always use a fake @samp{t clear} followed by a @samp{:clear} on the next
 line, to reset the @samp{t} flag where needed.
 
-Secondly, you cannot rely on @command{sed} to clear the flag at each new
-cycle.
+Second, do not rely on @command{sed} to clear the flag at each new cycle.
 
-One portable implementation of the script above is:
+For example, the following script replaces all instances of ``keep me''
+with ``kept'', and replaces the contents of all lines that did not
+contain ``keep me'' with ``deleted''.
 
 @example
 t clear
