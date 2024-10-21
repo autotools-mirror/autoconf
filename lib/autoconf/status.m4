@@ -387,8 +387,8 @@ m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
   echo 'cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1' &&
-  echo 'cat >>"\$ac_tmp/subs1.awk" <<\\_ACAWK &&' &&
-  echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/' &&
+  AS_ECHO(['cat >>"\$ac_tmp/subs1.awk" <<\\_ACAWK &&']) &&
+  AS_ECHO(["$ac_subst_files"]) | sed 's/.*/F@<:@"&"@:>@="$&"/' &&
   echo "_ACAWK" &&
   echo "_ACEOF"
 } >conf$$files.sh &&

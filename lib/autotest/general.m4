@@ -519,7 +519,7 @@ do
 	no | never | none) at_color=never ;;
 	auto | tty | if-tty) at_color=auto ;;
 	always | yes | force) at_color=always ;;
-	*) at_optname=`echo " $at_option" | sed 's/^ //; s/=.*//'`
+	*) at_optname=`AS_ECHO([" $at_option"]) | sed 's/^ //; s/=.*//'`
 	   AS_ERROR([unrecognized argument to $at_optname: $at_optarg]) ;;
 	esac
 	;;
@@ -607,7 +607,7 @@ do
 	  at_jobs=`expr X$at_option : 'X-j\(.*\)'`
 	fi
 	case $at_jobs in *[[!0-9]]*)
-	  at_optname=`echo " $at_option" | sed 's/^ //; s/[[0-9=]].*//'`
+	  at_optname=`AS_ECHO([" $at_option"]) | sed 's/^ //; s/[[0-9=]].*//'`
 	  AS_ERROR([non-numeric argument to $at_optname: $at_jobs]) ;;
 	esac
 	;;

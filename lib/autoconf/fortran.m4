@@ -522,9 +522,9 @@ rm -rf conftest*
 # On HP/UX there is a line like: "LPATH is: /foo:/bar:/baz" where
 # /foo, /bar, and /baz are search directories for the Fortran linker.
 # Here, we change these into -L/foo -L/bar -L/baz (and put it first):
-ac_[]_AC_LANG_ABBREV[]_v_output="`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
+ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"])|
 	grep 'LPATH is:' |
-	sed 's|.*LPATH is\(: *[[^ ]]*\).*|\1|;s|: */| -L/|g'` $ac_[]_AC_LANG_ABBREV[]_v_output"
+	sed 's|.*LPATH is\(: *[[^ ]]*\).*|\1|;s|: */| -L/|g'`" $ac_[]_AC_LANG_ABBREV[]_v_output"
 
 # FIXME: we keep getting bitten by quoted arguments; a more general fix
 #        that detects unbalanced quotes in FLIBS should be implemented
@@ -533,7 +533,7 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
   # With xlf replace commas with spaces,
   # and remove "-link" and closing parenthesis.
   *xlfentry*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
+    ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) |
       sed '
         s/,/ /g
         s/ -link / /g
@@ -544,20 +544,20 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
   # With Intel ifc, ignore the quoted -mGLOB_options_string stuff (quoted
   # $LIBS confuse us, and the libraries appear later in the output anyway).
   *mGLOB_options_string*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/"-mGLOB[[^"]]*"/ /g'` ;;
+    ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) | sed 's/"-mGLOB[[^"]]*"/ /g'` ;;
 
   # Portland Group compiler has singly- or doubly-quoted -cmdline argument
   # Singly-quoted arguments were reported for versions 5.2-4 and 6.0-4.
   # Doubly-quoted arguments were reported for "PGF90/x86 Linux/x86 5.0-2".
   *-cmdline\ * | *-ignore\ * | *-def\ *)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "\
+    ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO([$ac_[]_AC_LANG_ABBREV[]_v_output]) | sed "\
 	s/-cmdline  *'[[^']]*'/ /g; s/-cmdline  *\"[[^\"]]*\"/ /g
 	s/-ignore  *'[[^']]*'/ /g; s/-ignore  *\"[[^\"]]*\"/ /g
 	s/-def  *'[[^']]*'/ /g; s/-def  *\"[[^\"]]*\"/ /g"` ;;
 
   # If we are using fort77 (the f2c wrapper) then filter output and delete quotes.
   *fort77*f2c*gcc*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo "$ac_[]_AC_LANG_ABBREV[]_v_output" | sed -n '
+    ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) | sed -n '
         /:[[	 ]]\+Running[[	 ]]\{1,\}"gcc"/{
           /"-c"/d
           /[[.]]c"*/d
@@ -567,7 +567,7 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
 
   # If we are using Cray Fortran then delete quotes.
   *cft90*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/"//g'` ;;
+    ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO("$ac_[]_AC_LANG_ABBREV[]_v_output") | sed 's/"//g'` ;;
 esac
 
 ])# _AC_PROG_FC_V_OUTPUT

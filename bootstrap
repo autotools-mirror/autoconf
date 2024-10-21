@@ -158,19 +158,22 @@ PACKAGE_BUGREPORT=$(sed -n < configure.ac \
    -e 's/^m4_define(\[autoconf_PACKAGE_BUGREPORT], \[\([^]]*\)])$/\1/p')
 
 if [ -z "$RELEASE_YEAR" ]; then
-    echo "$me: error: could not extract RELEASE_YEAR from configure.ac" >&2
+    printf >&2 '%s\n' \
+      "$me: error: could not extract RELEASE_YEAR from configure.ac"
     exit 1
 fi
 if [ -z "$VERSION" ]; then
-    echo "$me: error: could not compute VERSION" >&2
+    printf >&2 '%s\n' "$me: error: could not compute VERSION"
     exit 1
 fi
 if [ -z "$PACKAGE_NAME" ]; then
-    echo "$me: error: could not extract PACKAGE_NAME from configure.ac" >&2
+    printf >&2 '%s\n' \
+      "$me: error: could not extract PACKAGE_NAME from configure.ac"
     exit 1
 fi
 if [ -z "$PACKAGE_BUGREPORT" ]; then
-    echo "$me: error: could not extract PACKAGE_BUGREPORT from configure.ac" >&2
+    printf >&2 '%s\n' \
+      "$me: error: could not extract PACKAGE_BUGREPORT from configure.ac"
     exit 1
 fi
 

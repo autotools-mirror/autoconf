@@ -14257,7 +14257,7 @@ copy the contents into a temporary literal shell variable.
 @smallexample
 for header in stdint_h inttypes_h ; do
   AS_VAR_COPY([var], [ac_cv_header_$header])
-  echo "$header detected: $var"
+  AS_ECHO(["$header detected: $var"])
 done
 @end smallexample
 @end defmac

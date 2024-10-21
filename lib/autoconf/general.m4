@@ -2049,7 +2049,7 @@ shift; shift
 # except with old shells:
 $1_os=$[*]
 IFS=$ac_save_IFS
-case $$1_os in *\ *) $1_os=`echo "$$1_os" | sed 's/ /-/g'`;; esac
+case $$1_os in *\ *) $1_os=`AS_ECHO(["$$1_os"]) | sed 's/ /-/g'`;; esac
 AC_SUBST([$1_os])dnl
 ])# _AC_CANONICAL_SPLIT
 
