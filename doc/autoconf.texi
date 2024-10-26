@@ -4859,8 +4859,7 @@ The C standard says @code{realloc (NULL, 0)} is equivalent to
 has succeeded if it returns a null pointer.  If @code{ptr} is non-null,
 the C standard says @code{realloc (ptr, 0)} has undefined behavior.
 
-The @code{AC_FUNC_REALLOC} macro avoids some of these portability issues,
-and the Gnulib module @code{realloc-gnu} avoids more of them.
+The @code{AC_FUNC_REALLOC} macro avoids some of these portability issues.
 @xref{Particular Functions}.
 
 @item @code{signal} handler
@@ -5489,9 +5488,8 @@ Gnulib's @code{obstack} module.  @xref{Gnulib}.
 @c @fuindex realloc
 @prindex @code{realloc}
 @caindex func_realloc_0_nonnull
-If the @code{realloc} function is compatible with the GNU C
-library @code{realloc} (i.e., @samp{realloc (NULL, 0)} returns a
-valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
+If a successful call to @samp{realloc (NULL, 0)} returns a
+non-null pointer, define @code{HAVE_REALLOC} to 1.  Otherwise define
 @code{HAVE_REALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
 @samp{realloc}, and define @code{realloc} to @code{rpl_realloc} so that
 the native @code{realloc} is not used in the main project.  See
@@ -5500,8 +5498,9 @@ the native @code{realloc} is not used in the main project.  See
 The result of this macro is cached in the
 @code{ac_cv_func_realloc_0_nonnull} variable.
 
-If you don't want to maintain a @code{realloc.c} file in your package
-manually, you can instead use the Gnulib module @code{realloc-gnu}.
+This macro does not check compatibility with glibc @code{realloc (@var{p}, 0)}
+when @var{p} is non-null, as glibc 1--2.1 behaves differently from glibc
+2.1.1--2.40 (at least), and the C standard says behavior is undefined.
 @end defmac
 
 @defmac AC_FUNC_SELECT_ARGTYPES
