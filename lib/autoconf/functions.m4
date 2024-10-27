@@ -558,7 +558,7 @@ AC_DEFUN([_AC_FUNC_FNMATCH_IF],
 [AC_CACHE_CHECK(
    [for working $1 fnmatch],
    [$2],
-  [# Some versions of Solaris, SCO, and the GNU C Library
+  [# Some versions of Solaris and the GNU C Library
    # have a broken or incompatible fnmatch.
    # So we run a test program.  If we are cross-compiling, take no chance.
    # Thanks to John Oleynick, François Pinard, and Paul Eggert for this test.
@@ -669,7 +669,7 @@ m4_define([_AC_FUNC_FSEEKO_TEST_PROGRAM],
 # Check for correctly prototyped declarations of fseeko and ftello;
 # define HAVE_FSEEKO if they are available.  If it is necessary to
 # define _LARGEFILE_SOURCE=1 to make these declarations available,
-# do that (this is needed on 32-bit HP/UX).  We used to try defining
+# do that (this is needed on 32-bit HP-UX).  We used to try defining
 # _XOPEN_SOURCE=500 too, to work around a bug in glibc 2.1.3, but that
 # breaks too many other things.  If you want fseeko and ftello with
 # glibc, upgrade to a fixed glibc.

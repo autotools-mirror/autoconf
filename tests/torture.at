@@ -812,7 +812,7 @@ AT_CLEANUP
 ## Substitute a 2000-byte string.  ##
 ## ------------------------------- ##
 
-# Solaris 9 /usr/ucb/sed that rejects commands longer than 4000 bytes.  HP/UX
+# Solaris 9 /usr/ucb/sed that rejects commands longer than 4000 bytes.  HP-UX
 # sed dumps core around 8 KiB.  However, POSIX says that sed need not
 # handle lines longer than 2048 bytes (including the trailing newline).
 # So we'll just test a 2000-byte value, and for awk, we test a line with

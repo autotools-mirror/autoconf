@@ -519,7 +519,7 @@ _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
 
 rm -rf conftest*
 
-# On HP/UX there is a line like: "LPATH is: /foo:/bar:/baz" where
+# On HP-UX there is a line like: "LPATH is: /foo:/bar:/baz" where
 # /foo, /bar, and /baz are search directories for the Fortran linker.
 # Here, we change these into -L/foo -L/bar -L/baz (and put it first):
 ac_[]_AC_LANG_ABBREV[]_v_output=`AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"])|

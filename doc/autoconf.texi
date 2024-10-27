@@ -5620,7 +5620,7 @@ portability problems of this function.
 @cvindex HAVE_STRFTIME
 @c @fuindex strftime
 @prindex @code{strftime}
-Check for @code{strftime} in the @file{intl} library, for SCO Unix.
+Check for @code{strftime} in the @file{intl} library.
 Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
 
 This macro is obsolescent, as no current systems require the @file{intl}
@@ -6102,7 +6102,7 @@ of type @code{struct dirent}, not @code{struct direct}, and would access
 the length of a directory entry name by passing a pointer to a
 @code{struct dirent} to the @code{NAMLEN} macro.
 
-This macro also checks for the SCO Xenix @file{dir} and @file{x} libraries.
+This macro also checks for the obsolete @file{dir} and @file{x} libraries.
 
 This macro is obsolescent, as all current systems with directory
 libraries have @code{<dirent.h>}.  New programs need not use this macro.
@@ -7203,7 +7203,7 @@ etc.).
 @caindex prog_cxx_openmp
 @caindex prog_f77_openmp
 @caindex prog_fc_openmp
-@uref{http://@/www.openmp.org/, OpenMP} specifies extensions of C, C++,
+@uref{https://@/www.openmp.org/, OpenMP} specifies extensions of C, C++,
 and Fortran that simplify optimization of shared memory parallelism,
 which is a common problem on multi-core CPUs.
 
@@ -8844,12 +8844,12 @@ compiler.  Also, when using this macro in concert with
 @code{AC_CONFIG_HEADERS}, be sure that @file{config.h} is included
 before any system header.
 
-The following preprocessor macros are defined unconditionally:
+Define the following preprocessor macros unconditionally:
 
 @table @code
 @item _ALL_SOURCE
 @cvindex _ALL_SOURCE
-Enable extensions on AIX 3 and Interix.
+Enable extensions on AIX and z/OS.
 @item _DARWIN_C_SOURCE
 @cvindex _DARWIN_C_SOURCE
 Enable extensions on macOS.
@@ -8922,7 +8922,7 @@ Programs that need to recognize Minix should use @code{AC_CANONICAL_HOST}.
 @item _XOPEN_SOURCE
 @cvindex _XOPEN_SOURCE
 Defined (with value 500) only if needed to make @file{wchar.h} declare
-@code{mbstate_t}.  This is known to be necessary on some versions of HP/UX.
+@code{mbstate_t}.  This is known to be necessary on some versions of HP-UX.
 @end table
 
 @cvindex __STDC_WANT_DEC_FP__
@@ -8932,7 +8932,7 @@ ISO/IEC TR 24732:2009 was superseded by ISO/IEC TS 18661-2:2015.
 @cvindex __STDC_WANT_LIB_EXT1__
 The C preprocessor macro @code{__STDC_WANT_LIB_EXT1__} is not defined,
 as the C standard's Annex K is problematic.  See: O'Donell C, Sebor M.
-@uref{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1967.htm, Field
+@uref{https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1967.htm, Field
 Experience With Annex K---Bounds Checking Interfaces}.
 
 The Autoconf macro @code{AC_USE_SYSTEM_EXTENSIONS} was introduced in
@@ -15427,13 +15427,13 @@ by users.
 systems} are derived from the
 @uref{https://@/en.wikipedia.org/@/wiki/@/Unix, Unix operating system}.
 
-The @uref{http://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
+The @uref{https://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
 contains a table correlating the features of various Posix-conforming
 systems.  @uref{https://@/www.levenez.com/@/unix/, Unix History} is a
 simplified diagram of how many Unix systems were derived from each
 other.
 
-@uref{http://@/heirloom.sourceforge.net/, The Heirloom Project}
+@uref{https://@/heirloom.sourceforge.net/, The Heirloom Project}
 provides some variants of traditional implementations of Unix utilities.
 
 @table @asis
@@ -17155,11 +17155,6 @@ configuration code assumes the C locale and Posix requires that locale
 environment variables be set to @samp{C} if the C locale is desired;
 @file{configure} scripts and M4sh do that for you.
 Export these variables after setting them.
-
-@c  However, some older, nonstandard
-@c  systems (notably SCO) break if locale environment variables
-@c  are set to @samp{C}, so when running on these systems
-@c  Autoconf-generated scripts unset the variables instead.
 
 @item LANGUAGE
 @evindex LANGUAGE
@@ -21879,7 +21874,7 @@ alleviates some symptoms of a bug while not fixing the bug in general.
 Almost all modern systems use IEEE-754 floating point, and it is safe to
 assume IEEE-754 in most portable code these days.  For more information,
 please see David Goldberg's classic paper
-@uref{http://@/www.validlab.com/@/goldberg/@/paper.pdf, What Every Computer
+@uref{https://@/www.validlab.com/@/goldberg/@/paper.pdf, What Every Computer
 Scientist Should Know About Floating-Point Arithmetic}.
 
 @node Exiting Portably
@@ -24008,15 +24003,8 @@ Removed because of limited usefulness.
 @defmac AC_SCO_INTL
 @acindex{SCO_INTL}
 @ovindex LIBS
-If on SCO Unix, add @option{-lintl} to output variable @code{LIBS}.  This
-macro used to do this:
-
-@example
-AC_CHECK_LIB([intl], [strftime], [LIBS="-lintl $LIBS"])
-@end example
-
-@noindent
-Now it just calls @code{AC_FUNC_STRFTIME} instead (@pxref{AC_FUNC_STRFTIME}).
+Equivalent to the obsolescent macro @code{AC_FUNC_STRFTIME}.
+@xref{AC_FUNC_STRFTIME}.
 @end defmac
 
 @defmac AC_SETVBUF_REVERSED
@@ -24359,22 +24347,8 @@ Replaced by @code{AC_C_BIGENDIAN} (@pxref{AC_C_BIGENDIAN}).
 @defmac AC_XENIX_DIR
 @acindex{XENIX_DIR}
 @ovindex LIBS
-This macro used to add @option{-lx} to output variable @code{LIBS} if on
-Xenix.  Also, if @file{dirent.h} is being checked for, added
-@option{-ldir} to @code{LIBS}.  Now it is merely an alias of
-@code{AC_HEADER_DIRENT} instead, plus some code to detect whether
-running XENIX on which you should not depend:
-
-@example
-AC_MSG_CHECKING([for Xenix])
-AC_EGREP_CPP([yes],
-[#if defined M_XENIX && !defined M_UNIX
-  yes
-#endif],
-             [AC_MSG_RESULT([yes]); XENIX=yes],
-             [AC_MSG_RESULT([no]); XENIX=])
-@end example
-@noindent
+This macro is equivalent to the obsolescent @code{AC_HEADER_DIRENT}
+macro, plus it also sets the shell variable @code{XENIX}.
 Don't use this macro, the dignified means to check the nature of the
 host is using @code{AC_CANONICAL_HOST} (@pxref{Canonicalizing}).
 @end defmac
@@ -26538,7 +26512,7 @@ search for markers like @samp{checking for} a particular test in the
 
 @item
 Alternatively, you might use a shell with debugging capabilities like
-@uref{http://bashdb.sourceforge.net/, bashdb}.
+@uref{https://bashdb.sourceforge.net/, bashdb}.
 
 @item
 When @command{configure} tests produce invalid results for your system,
@@ -26968,7 +26942,7 @@ introduced in this document.
 @c  LocalWords:  lstat rpl MEMCMP memcmp OpenStep MBRTOWC mbrtowc MKTIME mktime
 @c  LocalWords:  localtime MMAP mmap OBSTACK obstack obstacks ARGTYPES timeval
 @c  LocalWords:  SETPGRP setpgrp defmacx Hurd SETVBUF setvbuf STRCOLL strcoll
-@c  LocalWords:  STRTOD strtod DECL STRFTIME strftime SCO UTIME utime VPRINTF
+@c  LocalWords:  STRTOD strtod DECL STRFTIME strftime UTIME utime VPRINTF
 @c  LocalWords:  DOPRNT vprintf doprnt sp unfixable LIBSOURCE LIBSOURCES Eggert
 @c  LocalWords:  linux netinet ia Tru XFree DIRENT NDIR dirent ndir multitable
 @c  LocalWords:  NAMLEN strlen namlen MKDEV SYSMACROS makedev RESOLV resolv DNS
@@ -27029,7 +27003,7 @@ introduced in this document.
 @c  LocalWords:  yywrap xflex lexyy YFLAGS yacc divnum libs fuindex ffs
 @c  LocalWords:  environ sigaction extern ftello nonnull STRTOLD LLONG
 @c  LocalWords:  strtold vfprintf ULLONG strcasecmp strncasecmp MSVC th
-@c  LocalWords:  NDEBUG Xenix INO libc ISDIR ISREG Tektronix Amdahl ino
+@c  LocalWords:  NDEBUG INO libc ISDIR ISREG Tektronix Amdahl ino
 @c  LocalWords:  typedef pxref fileblocks submembers INTMAX intmax UINT
 @c  LocalWords:  INTPTR intptr SSIZE ssize uint UINTPTR uintptr OPENMP
 @c  LocalWords:  openmp OpenMP omp Alignas Alignof Noreturn UTF vals gl

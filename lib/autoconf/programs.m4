@@ -586,8 +586,8 @@ case $as_dir in @%:@((
   ?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
   /usr/ucb/* ) ;;
   *)]
-    # OSF1 and SCO ODT 3.0 have their own names for install.
-    # Don't use installbsd from OSF since it installs stuff as root
+    # OSF/1 and SCO ODT 3.0 have their own names for install.
+    # Don't use installbsd from OSF/1 since it installs stuff as root
     # by default.
     for ac_prog in ginstall scoinst install; do
       for ac_exec_ext in '' $ac_executable_extensions; do

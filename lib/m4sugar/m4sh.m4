@@ -192,9 +192,6 @@ m4_define([_AS_DETECT_SUGGESTED_PRUNE],
 # and on HP-UX 11.11, see the failure of test 120 in
 # <https://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00003.html>
 #
-# FIXME: The code should test for the OSF bug described in
-# <https://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
-#
 # This code is run outside any trap 0 context, hence we can simplify AS_EXIT.
 m4_defun([_AS_DETECT_BETTER_SHELL],
 dnl
