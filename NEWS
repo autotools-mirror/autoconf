@@ -1432,8 +1432,8 @@ GNU Autoconf NEWS - User visible changes.
 
   Released 2006-06-23, by Ralf Wildenhues.
 
-** Autoconf no longer depends on whether m4wrap is FIFO (as Posix requires)
-  or LIFO (as in GNU M4 1.4.x).  GNU M4 2.0 is expected to conform to Posix
+** Autoconf no longer depends on whether m4wrap is FIFO (as POSIX requires)
+  or LIFO (as in GNU M4 1.4.x).  GNU M4 2.0 is expected to conform to POSIX
   here, so m4wrap/m4_wrap users should no longer depend on LIFO behavior.
 
 ** Provide a way to turn off warnings about the changed directory variables.
@@ -1601,7 +1601,7 @@ GNU Autoconf NEWS - User visible changes.
   New macros to check for C99 and POSIX types.
 
 ** AC_USE_SYSTEM_EXTENSIONS
-  New macro to enable extensions to Posix.
+  New macro to enable extensions to POSIX.
 
 ** AH_HEADER
   New macro which is defined to the name of the first declared config header

@@ -651,7 +651,7 @@ fi
 #   - ARGC [zsh]
 #   - BASH_ARGC [bash]
 #   - BASH_ARGV [bash]
-#   - LINENO [Posix]
+#   - LINENO [POSIX]
 #   - _AST_FEATURES [ksh93]
 # - Optionally, variables that are expected to vary in a particular test.
 #   This is controlled by the EXTRA-VARIANCE argument, which is a

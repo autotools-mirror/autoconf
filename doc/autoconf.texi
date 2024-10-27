@@ -365,7 +365,7 @@ Existing Tests
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
-* C and Posix Variants::        Kludges for C and Posix variants
+* C and POSIX Variants::        Kludges for C and POSIX variants
 * Erlang Libraries::            Checking for the existence of Erlang libraries
 
 Common Behavior
@@ -702,7 +702,7 @@ shouted: ``And the Chaos, where do you think it was coming from, hmm?''
 
 Autoconf is a tool for producing shell scripts that automatically
 configure software source code packages to adapt to many kinds of
-Posix-like systems.  The configuration scripts produced by Autoconf
+POSIX-like systems.  The configuration scripts produced by Autoconf
 are independent of Autoconf when they are run, so their users do not
 need to have Autoconf.
 
@@ -713,9 +713,9 @@ presence of each feature that the software package they are for might need.
 (Before each check, they print a one-line message stating what they are
 checking for, so the user doesn't get too bored while waiting for the
 script to finish.)  As a result, they deal well with systems that are
-hybrids or customized from the more common Posix variants.  There is
+hybrids or customized from the more common POSIX variants.  There is
 no need to maintain files that list the features supported by each
-release of each variant of Posix.
+release of each variant of POSIX.
 
 For each software package that Autoconf is used with, it creates a
 configuration script from a template file that lists the system features
@@ -3057,7 +3057,7 @@ Some details are noteworthy:
 The brackets prevent @command{configure} from replacing
 @samp{@@bindir@@} in the Sed expression itself.
 Brackets are preferable to a backslash here, since
-Posix says @samp{\@@} is not portable.
+POSIX says @samp{\@@} is not portable.
 
 @item @samp{$(bindir)}
 Don't use @samp{@@bindir@@}!  Use the matching makefile variable
@@ -3950,7 +3950,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
-* C and Posix Variants::        Kludges for C and Posix variants
+* C and POSIX Variants::        Kludges for C and POSIX variants
 * Erlang Libraries::            Checking for the existence of Erlang libraries
 @end menu
 
@@ -4428,7 +4428,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @ovindex SED
 @caindex path_SED
 Set output variable @code{SED} to a Sed implementation that conforms to
-Posix and does not have arbitrary length limits.  Report an error if no
+POSIX and does not have arbitrary length limits.  Report an error if no
 acceptable Sed is found.  @xref{sed, , Limitations of Usual Tools}, for more
 information about portability problems with Sed.
 
@@ -4804,7 +4804,7 @@ on some architectures.  This section tries to make an inventory of these
 portability issues.  By definition, this list always requires
 additions.  A much more complete list is maintained by the Gnulib
 project (@pxref{Gnulib}), covering @ref{Function Substitutes, ,
-Current Posix Functions, gnulib, Gnulib}, @ref{Legacy Function
+Current POSIX Functions, gnulib, Gnulib}, @ref{Legacy Function
 Substitutes, , Legacy Functions, gnulib, Gnulib}, and @ref{Glibc
 Function Substitutes, , Glibc Functions, gnulib, Gnulib}.  Please
 help us keep the Gnulib list as complete as possible.
@@ -4834,11 +4834,11 @@ can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
 @item @code{putenv}
 @c @fuindex putenv
 @prindex @code{putenv}
-Posix prefers @code{setenv} to @code{putenv}; among other things,
-@code{putenv} is not required of all Posix implementations, but
+POSIX prefers @code{setenv} to @code{putenv}; among other things,
+@code{putenv} is not required of all POSIX implementations, but
 @code{setenv} is.
 
-Posix specifies that @code{putenv} puts the given string directly in
+POSIX specifies that @code{putenv} puts the given string directly in
 @code{environ}, but some systems make a copy of it instead (e.g.,
 glibc 2.0, or BSD).  And when a copy is made, @code{unsetenv} might
 not free it, causing a memory leak (e.g., FreeBSD 4).
@@ -4890,7 +4890,7 @@ be used.  @xref{Gnulib}.
 @item @code{strerror_r}
 @c @fuindex strerror_r
 @prindex @code{strerror_r}
-Posix specifies that @code{strerror_r} returns an @code{int}, but many
+POSIX specifies that @code{strerror_r} returns an @code{int}, but many
 systems (e.g., GNU C Library version 2.36) provide a
 different version returning a @code{char *}.  @code{AC_FUNC_STRERROR_R}
 can detect which is in use (@pxref{Particular Functions}).
@@ -4929,9 +4929,9 @@ strnlen ("foobar", 9) = 6
 @item @code{unlink}
 @c @fuindex unlink
 @prindex @code{unlink}
-The Posix spec says that @code{unlink} causes the given file to be
+The POSIX spec says that @code{unlink} causes the given file to be
 removed only after there are no more open file handles for it.  Some
-non-Posix hosts have trouble with this requirement, though,
+non-POSIX hosts have trouble with this requirement, though,
 and some DOS variants even corrupt the file system.
 
 @item @code{unsetenv}
@@ -5094,7 +5094,7 @@ should use Gnulib's @code{error} module.  @xref{Gnulib}.
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
 @caindex func_fnmatch_works
-If the @code{fnmatch} function conforms to Posix, define
+If the @code{fnmatch} function conforms to POSIX, define
 @code{HAVE_FNMATCH}.
 
 Unlike the other specific
@@ -5305,9 +5305,9 @@ use Gnulib's @code{mountlist} module.  @xref{Gnulib}.
 @prindex @code{getpgrp}
 @caindex func_getpgrp_void
 Define @code{GETPGRP_VOID} if it is an error to pass 0 to
-@code{getpgrp}; this is the Posix behavior.  On older BSD
+@code{getpgrp}; this is the POSIX behavior.  On older BSD
 systems, you must pass 0 to @code{getpgrp}, as it takes an argument and
-behaves like Posix's @code{getpgid}.
+behaves like POSIX's @code{getpgid}.
 
 @example
 #ifdef GETPGRP_VOID
@@ -5325,7 +5325,7 @@ The result of this macro is cached in the @code{ac_cv_func_getpgrp_void}
 variable.
 
 This macro is obsolescent, as current systems have a @code{getpgrp}
-whose signature conforms to Posix.  New programs need not use this macro.
+whose signature conforms to POSIX.  New programs need not use this macro.
 @end defmac
 
 @defmac AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
@@ -5437,7 +5437,7 @@ This macro is obsolescent, as current systems have a working
 If the @code{mktime} function is not available, or does not work
 correctly, require an @code{AC_LIBOBJ} replacement for @samp{mktime}.
 For the purposes of this test, @code{mktime} should conform to the
-Posix standard and should be the inverse of
+POSIX standard and should be the inverse of
 @code{localtime}.
 
 The result of this macro is cached in the
@@ -5519,7 +5519,7 @@ to @samp{int}, @code{SELECT_TYPE_ARG234} defaults to @samp{int *},
 and @code{SELECT_TYPE_ARG5} defaults to @samp{struct timeval *}.
 
 This macro is obsolescent, as current systems have a @code{select} whose
-signature conforms to Posix.  New programs need not use this macro.
+signature conforms to POSIX.  New programs need not use this macro.
 @end defmac
 
 @defmac AC_FUNC_SETPGRP
@@ -5528,7 +5528,7 @@ signature conforms to Posix.  New programs need not use this macro.
 @c @fuindex setpgrp
 @prindex @code{setpgrp}
 @caindex func_setpgrp_void
-If @code{setpgrp} takes no argument (the Posix version), define
+If @code{setpgrp} takes no argument (the POSIX version), define
 @code{SETPGRP_VOID}.  Otherwise, it is the BSD version, which takes
 two process IDs as arguments.  This macro does not check whether
 @code{setpgrp} exists at all; if you need to work in that situation,
@@ -5541,7 +5541,7 @@ The result of this macro is cached in the @code{ac_cv_func_setpgrp_void}
 variable.
 
 This macro is obsolescent, as all forms of @code{setpgrp} are also
-obsolescent.  New programs should use the Posix function @code{setpgid},
+obsolescent.  New programs should use the POSIX function @code{setpgid},
 which takes two process IDs as arguments (like the BSD @code{setpgrp}).
 @end defmac
 
@@ -5601,7 +5601,7 @@ If @code{strerror_r} is available, define @code{HAVE_STRERROR_R}, and if
 it is declared, define @code{HAVE_DECL_STRERROR_R}.  If it returns a
 @code{char *} message, define @code{STRERROR_R_CHAR_P}; otherwise it
 returns an @code{int} error number.  The Thread-Safe Functions option of
-Posix requires @code{strerror_r} to return @code{int}, but
+POSIX requires @code{strerror_r} to return @code{int}, but
 many systems (including, for example, version 2.2.4 of the GNU C
 Library) return a @code{char *} value that is not necessarily equal to
 the buffer argument.
@@ -5610,7 +5610,7 @@ The result of this macro is cached in the
 @code{ac_cv_func_strerror_r_char_p} variable.
 
 The Gnulib module @code{strerror_r} not only ensures that the function
-has the return type specified by Posix, but also works around other
+has the return type specified by POSIX, but also works around other
 portability problems of this function.
 @end defmac
 
@@ -5718,7 +5718,7 @@ New programs need not use this macro.
 @prindex @code{fnmatch}
 @hdrindex{fnmatch.h}
 @caindex func_fnmatch_works
-If the @code{fnmatch} function does not conform to Posix (see
+If the @code{fnmatch} function does not conform to POSIX (see
 @code{AC_FUNC_FNMATCH}), ask for its @code{AC_LIBOBJ} replacement.
 
 The files @file{fnmatch.c}, @file{fnmatch_loop.c}, and @file{fnmatch_.h}
@@ -5796,7 +5796,7 @@ early during the @command{configure} run.
 
 Autoconf follows a philosophy that was formed over the years by those
 who have struggled for portability: isolate the portability issues in
-specific files, and then program as if you were in a Posix
+specific files, and then program as if you were in a POSIX
 environment.  Some functions may be missing or unfixable, and your
 package must be ready to replace them.
 
@@ -5915,7 +5915,7 @@ This section documents some collected knowledge about common headers,
 and the problems they cause.  By definition, this list always requires
 additions.  A much more complete list is maintained by the Gnulib
 project (@pxref{Gnulib}), covering @ref{Header File Substitutes, ,
-Posix Headers, gnulib, Gnulib} and @ref{Glibc Header File
+POSIX Headers, gnulib, Gnulib} and @ref{Glibc Header File
 Substitutes, , Glibc Headers, gnulib, Gnulib}.  Please help us keep
 the Gnulib list as complete as possible.
 
@@ -6234,12 +6234,12 @@ provide all of the headers specified in C89 (as amended in 1995).
 @cvindex HAVE_SYS_WAIT_H
 @hdrindex{sys/wait.h}
 @caindex header_sys_wait_h
-If @file{sys/wait.h} exists and is compatible with Posix, define
+If @file{sys/wait.h} exists and is compatible with POSIX, define
 @code{HAVE_SYS_WAIT_H}.  Incompatibility can occur if @file{sys/wait.h}
 does not exist, or if it uses the old BSD @code{union wait} instead
 of @code{int} to store a status value.  If @file{sys/wait.h} is not
-Posix compatible, then instead of including it, define the
-Posix macros with their usual interpretations.  Here is an
+POSIX compatible, then instead of including it, define the
+POSIX macros with their usual interpretations.  Here is an
 example:
 
 @example
@@ -6261,18 +6261,18 @@ example:
 This macro caches its result in the @code{ac_cv_header_sys_wait_h}
 variable.
 
-This macro is obsolescent, as current systems are compatible with Posix.
+This macro is obsolescent, as current systems are compatible with POSIX.
 New programs need not use this macro.
 @end defmac
 
 @cvindex _POSIX_VERSION
 @hdrindex{unistd.h}
 @code{_POSIX_VERSION} is defined when @file{unistd.h} is included on
-Posix systems.  If there is no @file{unistd.h}, it is definitely
-not a Posix system.  However, some non-Posix systems do
+POSIX systems.  If there is no @file{unistd.h}, it is definitely
+not a POSIX system.  However, some non-POSIX systems do
 have @file{unistd.h}.
 
-The way to check whether the system supports Posix is:
+The way to check whether the system supports POSIX is:
 
 @example
 @group
@@ -6282,7 +6282,7 @@ The way to check whether the system supports Posix is:
 #endif
 
 #ifdef _POSIX_VERSION
-/* Code for Posix systems.  */
+/* Code for POSIX systems.  */
 #endif
 @end group
 @end example
@@ -7064,12 +7064,12 @@ implemented.  In case of doubt, read the documentation of the former
 All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 @code{AC_PROG_F77}) define the output variable @code{EXEEXT} based on
 the output of the compiler, typically to the empty string if
-Posix and @samp{.exe} if a DOS variant.
+POSIX and @samp{.exe} if a DOS variant.
 
 @ovindex OBJEXT
 They also define the output variable @code{OBJEXT} based on the
 output of the compiler, after @file{.c} files have been excluded, typically
-to @samp{o} if Posix, @samp{obj} if a DOS variant.
+to @samp{o} if POSIX, @samp{obj} if a DOS variant.
 
 If the compiler being used does not produce executables, the tests fail.  If
 the executables can't be run, and cross-compilation is not enabled, they
@@ -7316,7 +7316,7 @@ b.o} solves the issue.
 @item Don't rely on correct @code{#line} support
 On Solaris, @command{c89} (at least through Oracle Developer Studio 12.6)
 diagnoses @code{#line} directives whose line
-numbers are greater than 32767.  Nothing in Posix
+numbers are greater than 32767.  Nothing in POSIX
 makes this invalid.  That is why Autoconf stopped issuing
 @code{#line} directives.
 @end table
@@ -8764,7 +8764,7 @@ For example, it is not portable to print an arbitrary @code{off_t} or
 The standard C library functions @code{fseek} and @code{ftell}
 do not use @code{off_t}.  If you need to use either of these functions,
 you should use @code{AC_FUNC_FSEEKO} as well as @code{AC_SYS_LARGEFILE},
-and then use their Posix replacements @code{fseeko} and @code{ftello}.
+and then use their POSIX replacements @code{fseeko} and @code{ftello}.
 @xref{AC_FUNC_FSEEKO}.
 
 When using @code{AC_SYS_LARGEFILE} in different packages that are linked
@@ -8797,10 +8797,10 @@ If the system supports file names longer than 14 characters, define
 
 @defmac AC_SYS_POSIX_TERMIOS
 @acindex{SYS_POSIX_TERMIOS}
-@cindex Posix termios headers
-@cindex termios Posix headers
+@cindex POSIX termios headers
+@cindex termios POSIX headers
 @caindex sys_posix_termios
-Check to see if the Posix termios headers and functions are available on the
+Check to see if the POSIX termios headers and functions are available on the
 system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
 @end defmac
@@ -8827,17 +8827,17 @@ Year-2038 support for applications and libraries should be configured
 compatibly.  @xref{AC_SYS_YEAR2038}.
 @end defmac
 
-@node C and Posix Variants
-@section C and Posix Variants
+@node C and POSIX Variants
+@section C and POSIX Variants
 
 The following macro makes it possible to use C language and library
-extensions defined by the C standards committee, features of Posix that
-are extensions to C, and platform extensions not defined by Posix.
+extensions defined by the C standards committee, features of POSIX that
+are extensions to C, and platform extensions not defined by POSIX.
 
 @anchor{AC_USE_SYSTEM_EXTENSIONS}
 @defmac AC_USE_SYSTEM_EXTENSIONS
 @acindex{USE_SYSTEM_EXTENSIONS}
-If possible, enable extensions to C or Posix on hosts that normally
+If possible, enable extensions to C or POSIX on hosts that normally
 disable the extensions, typically due to standards-conformance namespace
 issues.  This should be called before any macros that run the C
 compiler.  Also, when using this macro in concert with
@@ -8866,7 +8866,7 @@ Enable OpenBSD compatibility extensions on NetBSD.
 Oddly enough, this does nothing on OpenBSD.
 @item _POSIX_PTHREAD_SEMANTICS
 @cvindex _POSIX_PTHREAD_SEMANTICS
-Enable Posix-compatible threading on Solaris.
+Enable POSIX-compatible threading on Solaris.
 @item __STDC_WANT_IEC_60559_ATTRIBS_EXT__
 @cvindex __STDC_WANT_IEC_60559_ATTRIBS_EXT__
 Enable extensions specified by ISO/IEC TS 18661-5:2014.
@@ -10830,7 +10830,7 @@ bar
 @result{}a double-quoted $1 definition
 @end example
 
-Posix states that M4 implementations are free to provide implementation
+POSIX states that M4 implementations are free to provide implementation
 extensions when @samp{$@{} is encountered in a macro definition.
 Autoconf reserves the longer sequence @samp{$@{@{} for use with planned
 extensions that will be available in the future GNU M4 2.0,
@@ -10843,7 +10843,7 @@ define([first], [$@{1@}])first
 @result{}$@{1@}
 @end example
 
-Posix also states that @samp{$11} should expand to the first parameter
+POSIX also states that @samp{$11} should expand to the first parameter
 concatenated with a literal @samp{1}, although some versions of
 GNU M4 expand the eleventh parameter instead.  For
 portability, you should only use single-digit M4 parameter expansion.
@@ -11981,10 +11981,10 @@ Like the M4 builtins, but warn against multiple inclusions of @var{file}.
 @defmacx m4_maketemp (@var{template})
 @msindex{maketemp}
 @msindex{mkstemp}
-Posix requires @code{maketemp} to replace the trailing @samp{X}
+POSIX requires @code{maketemp} to replace the trailing @samp{X}
 characters in @var{template} with the process id, without regards to the
 existence of a file by that name, but this a security hole.  When this
-was pointed out to the Posix folks, they agreed to invent a new macro
+was pointed out to the POSIX folks, they agreed to invent a new macro
 @code{mkstemp} that always creates a uniquely named file, but not all
 versions of GNU M4 support the new macro.  In M4sugar,
 @code{m4_maketemp} and @code{m4_mkstemp} are synonyms for each other,
@@ -12026,7 +12026,7 @@ to syntactically invalid scripts.
 @defmacx m4_wrap_lifo (@var{text})
 @msindex{wrap}
 @msindex{wrap_lifo}
-These macros correspond to @code{m4wrap}.  Posix requires arguments of
+These macros correspond to @code{m4wrap}.  POSIX requires arguments of
 multiple wrap calls to be reprocessed at EOF in the same order
 as the original calls (first-in, first-out).  GNU M4 versions
 through 1.4.10, however, reprocess them in reverse order (last-in,
@@ -14358,7 +14358,7 @@ the polymorphic shell variable @code{var} is set.
 @defmac AS_BOURNE_COMPATIBLE
 @asindex{BOURNE_COMPATIBLE}
 Set up the shell to be more compatible with the Bourne shell as
-standardized by Posix, if possible.  This may involve setting
+standardized by POSIX, if possible.  This may involve setting
 environment variables, or setting options, or similar
 implementation-specific actions.  This macro is deprecated, since
 @code{AS_INIT} already invokes it.
@@ -14712,7 +14712,7 @@ Declarations of C variables in header files.
 @item FUNC
 Functions in libraries.
 @item GROUP
-Posix group owners of files.
+POSIX group owners of files.
 @item HEADER
 Header files.
 @item LIB
@@ -15343,10 +15343,10 @@ Russ Allbery:
 The GNU assumption that @command{/bin/sh} is the one and only shell
 leads to a permanent deadlock.  Vendors don't want to break users'
 existing shell scripts, and there are some corner cases in the Bourne
-shell that are not completely compatible with a Posix shell.  Thus,
+shell that are not completely compatible with a POSIX shell.  Thus,
 vendors who have taken this route will @emph{never} (OK@dots{}``never say
 never'') replace the Bourne shell (as @command{/bin/sh}) with a
-Posix shell.
+POSIX shell.
 @end quotation
 
 @noindent
@@ -15355,10 +15355,10 @@ Robert Lipe:
 @quotation
 This is exactly the problem.  While most (at least most System V's) do
 have a Bourne shell that accepts shell functions most vendor
-@command{/bin/sh} programs are not the Posix shell.
+@command{/bin/sh} programs are not the POSIX shell.
 
 So while most modern systems do have a shell @emph{somewhere} that meets the
-Posix standard, the challenge is to find it.
+POSIX standard, the challenge is to find it.
 @end quotation
 
 For this reason, part of the job of M4sh (@pxref{Programming in M4sh})
@@ -15390,7 +15390,7 @@ Some of these external utilities have a portable subset of features; see
 @ref{Limitations of Usual Tools}.
 
 There are other sources of documentation about shells.  The
-specification for the Posix
+specification for the POSIX
 @uref{https://@/pubs.opengroup.org/@/onlinepubs/@/9699919799/@/utilities/@/V3_chap02.html,
 Shell Command Language}, though more generous than the restrictive shell
 subset described above, is fairly portable nowadays.  Also please see
@@ -15423,12 +15423,12 @@ This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
 by users.
 
-@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix-conforming
+@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, POSIX-conforming
 systems} are derived from the
 @uref{https://@/en.wikipedia.org/@/wiki/@/Unix, Unix operating system}.
 
 The @uref{https://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
-contains a table correlating the features of various Posix-conforming
+contains a table correlating the features of various POSIX-conforming
 systems.  @uref{https://@/www.levenez.com/@/unix/, Unix History} is a
 simplified diagram of how many Unix systems were derived from each
 other.
@@ -15465,7 +15465,7 @@ using the @command{diskutil} command or the Disk Utility application.
 @c QNX Neutrino.
 QNX is a realtime operating system running on Intel architecture
 meant to be scalable from the small embedded systems to the hundred
-processor super-computer.  It claims to be Posix certified.  More
+processor super-computer.  It claims to be POSIX certified.  More
 information is available on the
 @uref{https://@/blackberry.qnx.com/@/en, QNX home page}.
 
@@ -15490,7 +15490,7 @@ There are several families of shells, most prominently the Bourne family
 and the C shell family which are deeply incompatible.  If you want to
 write portable shell scripts, avoid members of the C shell family.  The
 @uref{http://@/www.faqs.org/@/faqs/@/unix-faq/@/shell/@/shell-differences/, the
-Shell difference FAQ} includes a small history of Posix shells, and a
+Shell difference FAQ} includes a small history of POSIX shells, and a
 comparison between several of them.
 
 Below we describe some of the members of the Bourne shell family.
@@ -15537,8 +15537,8 @@ Substitutions}, item ``Command Substitution''.
 @cindex Bash
 To detect whether you are running Bash, test whether
 @code{BASH_VERSION} is set.  To require
-Posix compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
-Mode, , Bash Posix Mode, bash, The GNU Bash Reference
+POSIX compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
+Mode, , Bash POSIX Mode, bash, The GNU Bash Reference
 Manual}, for details.
 
 @item Bash 2.05 and later
@@ -15557,18 +15557,18 @@ you'll need to use Bash 2.05 for all other build tasks as well.
 @prindex @samp{ksh88}
 @prindex @samp{ksh93}
 The Korn shell is compatible with the Bourne family and it mostly
-conforms to Posix.  It has two major variants commonly
+conforms to POSIX.  It has two major variants commonly
 called @samp{ksh88} and @samp{ksh93}, named after the years of initial
 release.  It is usually called @command{ksh}, but is called @command{sh}
 on some hosts if you set your path appropriately.
 
 On Solaris 11, @command{/bin/sh} and @command{/usr/bin/ksh} are both
 @samp{ksh93}.  On Solaris 10 and earlier, @command{/bin/sh} is a
-pre-Posix Bourne shell and the Korn shell is found elsewhere:
+pre-POSIX Bourne shell and the Korn shell is found elsewhere:
 @prindex @command{/usr/bin/ksh} on Solaris
 @command{/usr/bin/ksh} is @samp{ksh88} on Solaris 10,
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
-@command{/usr/xpg4/bin/sh} is a Posix-compliant variant of
+@command{/usr/xpg4/bin/sh} is a POSIX-compliant variant of
 @samp{ksh88} on Solaris 10 and later,
 @prindex @command{/usr/dt/bin/dtksh} on Solaris
 and @command{/usr/dt/bin/dtksh} is @samp{ksh93}.
@@ -15583,9 +15583,9 @@ A public-domain clone of the Korn shell called @command{pdksh} is widely
 available: it has most of the @samp{ksh88} features along with a few of
 its own.  It usually sets @code{KSH_VERSION}, except if invoked as
 @command{/bin/sh} on OpenBSD, and similarly to Bash you can require
-Posix compatibility by running @samp{set -o posix}.  Unfortunately, with
+POSIX compatibility by running @samp{set -o posix}.  Unfortunately, with
 @command{pdksh} 5.2.14 (the latest stable version as of January 2007)
-Posix mode is buggy and causes @command{pdksh} to depart from Posix in
+POSIX mode is buggy and causes @command{pdksh} to depart from POSIX in
 at least one respect, see @ref{Shell Substitutions}.
 
 @item Zsh
@@ -15665,7 +15665,7 @@ $ @kbd{echo $?}
 @end example
 
 Some shells mishandle large here-documents: for example,
-Solaris 10 @command{dtksh} and the UnixWare 7.1.1 Posix shell, which are
+Solaris 10 @command{dtksh} and the UnixWare 7.1.1 POSIX shell, which are
 derived from Korn shell version M-12/28/93d, mishandle braced variable
 expansion that crosses a 1024- or 4096-byte buffer boundary
 within a here-document.  Only the part of the variable name after the boundary
@@ -15810,7 +15810,7 @@ in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
 Some shells, like @command{ash}, don't recognize bi-directional
 redirection (@samp{<>}).  And even on shells that recognize it, it is
-not portable to use on fifos: Posix does not require read-write support
+not portable to use on fifos: POSIX does not require read-write support
 for named pipes, and Cygwin does not support it:
 
 @example
@@ -15863,9 +15863,9 @@ As a workaround, @command{echo} or @command{eval} can be used.
 Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
-new process image.  Posix 2008 says this may be done only if the
+new process image.  POSIX 2008 says this may be done only if the
 subsidiary program is set-user-ID or set-group-ID, but HP-UX 11.23 does
-it even for ordinary programs, and the next version of Posix will allow
+it even for ordinary programs, and the next version of POSIX will allow
 HP-UX behavior.
 
 If you want a file descriptor above 2 to be inherited into a child
@@ -15914,7 +15914,7 @@ was opened with.
 
 DOS variants cannot rename or remove open files, such as in
 @samp{mv foo bar >foo} or @samp{rm foo >foo}, even though this is
-perfectly portable among Posix hosts.
+perfectly portable among POSIX hosts.
 
 A few ancient systems reserved some file descriptors.  By convention,
 file descriptor 3 was opened to @file{/dev/tty} when you logged into
@@ -16112,7 +16112,7 @@ the following:
 
 Also, file names should not begin with @samp{~} or @samp{-}, and should
 contain neither @samp{-} immediately after @samp{/} nor @samp{~}
-immediately after @samp{:}.  On Posix-like platforms, directory names
+immediately after @samp{:}.  On POSIX-like platforms, directory names
 should not contain @samp{:}, as this runs afoul of @samp{:} used as the
 path separator.
 
@@ -16120,10 +16120,10 @@ These restrictions apply not only to the files that you distribute, but
 also to the absolute file names of your source, build, and destination
 directories.
 
-On some Posix-like platforms, @samp{!} and @samp{^} are special too, so
+On some POSIX-like platforms, @samp{!} and @samp{^} are special too, so
 they should be avoided.
 
-Posix lets implementations treat leading @file{//} specially, but
+POSIX lets implementations treat leading @file{//} specially, but
 requires leading @file{///} and beyond to be equivalent to @file{/}.
 Most Unix variants treat @file{//} like @file{/}.  However, some treat
 @file{//} as a ``super-root'' that can provide access to files that are
@@ -16131,7 +16131,7 @@ not otherwise reachable from @file{/}.  The super-root tradition began
 with Apollo Domain/OS, which died out long ago, but unfortunately Cygwin
 has revived it.
 
-While @command{autoconf} and friends are usually run on some Posix
+While @command{autoconf} and friends are usually run on some POSIX
 variety, they can be used on other systems, most notably DOS
 variants.  This impacts several assumptions regarding file names.
 
@@ -16151,7 +16151,7 @@ esac
 fails to properly detect absolute file names on those systems, because
 they can use a drivespec, and usually use a backslash as directory
 separator.  If you want to be portable to DOS variants (at the
-price of rejecting valid but oddball Posix file names like @file{a:\b}),
+price of rejecting valid but oddball POSIX file names like @file{a:\b}),
 you can check for absolute file names like this:
 
 @cindex absolute file names, detect
@@ -16175,7 +16175,7 @@ to the appropriate value for the build system (@samp{:} or @samp{;}) when it
 starts up.
 
 File names need extra care as well.  While DOS variants
-that are Posixy enough to run @command{autoconf} (such as DJGPP)
+that are POSIXy enough to run @command{autoconf} (such as DJGPP)
 are usually able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
@@ -16194,7 +16194,7 @@ DOS cannot handle multiple dots in file names.  This is an especially
 important thing to remember when building a portable configure script,
 as @command{autoconf} uses a .in suffix for template files.
 
-This is perfectly OK on Posix variants:
+This is perfectly OK on POSIX variants:
 
 @example
 AC_CONFIG_HEADERS([config.h])
@@ -16308,10 +16308,10 @@ ksh: bar | sed 's, ,,': cannot execute
 @end example
 
 @noindent
-Posix does not specify behavior for this sequence.  On the other hand,
-behavior for @code{"`@dots{}\"@dots{}\"@dots{}`"} is specified by Posix,
+POSIX does not specify behavior for this sequence.  On the other hand,
+behavior for @code{"`@dots{}\"@dots{}\"@dots{}`"} is specified by POSIX,
 but in practice, not all shells understand it the same way: pdksh 5.2.14
-prints spurious quotes when in Posix mode:
+prints spurious quotes when in POSIX mode:
 
 @example
 $ @kbd{echo "`echo \"hello\"`"}
@@ -16445,7 +16445,7 @@ $ @kbd{echo $@{10@}}
 bad substitution
 @end example
 
-Conversely, not all shells obey the Posix rule that when braces are
+Conversely, not all shells obey the POSIX rule that when braces are
 omitted, multiple digits beyond a @samp{$} imply the single-digit
 positional parameter expansion concatenated with the remaining literal
 digits.  To work around the issue, you must use braces.
@@ -16478,7 +16478,7 @@ j a0
 @end ifnotinfo
 When using @samp{$@{@var{var}-@var{value}@}} or
 similar notations that modify a parameter expansion,
-Posix requires that @var{value} must be a single shell word,
+POSIX requires that @var{value} must be a single shell word,
 which can contain quoted strings but cannot contain unquoted spaces.
 If this requirement is not met Solaris 10 @command{/bin/sh}
 sometimes complains, and anyway the behavior is not portable.
@@ -16498,7 +16498,7 @@ b c
 
 Most shells treat the special parameters @code{*} and @code{@@} as being
 unset if there are no positional parameters.  However, some shells treat
-them as being set to the empty string.  Posix does not clearly specify
+them as being set to the empty string.  POSIX does not clearly specify
 either behavior.
 
 @example
@@ -16508,7 +16508,7 @@ $ @kbd{dash -c 'echo "* is $@{*-unset@}."'}
 * is .
 @end example
 
-According to Posix, if an expansion occurs inside double quotes, then
+According to POSIX, if an expansion occurs inside double quotes, then
 the use of unquoted double quotes within @var{value} is unspecified, and
 any single quotes become literal characters; in that case, escaping must
 be done with backslash.  Likewise, the use of unquoted here-documents is
@@ -16606,7 +16606,7 @@ sys	0m0.003s
 
 As with @samp{+} and @samp{-}, @var{value} must be a single shell word,
 otherwise some shells, such as Solaris 10 @command{/bin/sh} or on Digital
-Unix V 5.0, die because of a ``bad substitution''.  Meanwhile, Posix
+Unix V 5.0, die because of a ``bad substitution''.  Meanwhile, POSIX
 requires that with @samp{=}, quote removal happens prior to the
 assignment, and the expansion be the final contents of @var{var} without
 quoting (and thus subject to field splitting), in contrast to the
@@ -16622,7 +16622,7 @@ $ @kbd{bash -c 'echo $@{var=a\ \ b@}'}
 a  b
 @end example
 
-Finally, Posix states that when mixing @samp{$@{a=b@}} with regular
+Finally, POSIX states that when mixing @samp{$@{a=b@}} with regular
 commands, it is unspecified whether the assignments affect the parent
 shell environment.  It is best to perform assignments independently from
 commands, to avoid the problems demonstrated in this example running on
@@ -16700,7 +16700,7 @@ However, these workarounds are no longer needed.
 @cindex @code{$@{@var{var}%%@var{word}@}}
 @cindex @code{$@{@var{var}#@var{word}@}}
 @cindex @code{$@{@var{var}##@var{word}@}}
-Posix requires support for these usages, but they do not work with many
+POSIX requires support for these usages, but they do not work with many
 traditional shells, e.g., Solaris 10 @command{/bin/sh}.
 
 Also, @command{pdksh} 5.2.14 mishandles some @var{word} forms.  For
@@ -16712,7 +16712,7 @@ yields the empty string.
 @item `@var{commands}`
 @cindex @code{`@var{commands}`}
 @cindex Command Substitution
-Posix requires shells to trim all trailing newlines from command
+POSIX requires shells to trim all trailing newlines from command
 output before substituting it, so assignments like
 @samp{dir=`printf '%s\n' "$file" | tr a A`} do not work as expected if
 @samp{$file} ends in a newline.
@@ -16804,7 +16804,7 @@ Arithmetic expansion is not portable as some shells (most
 notably Solaris 10 @command{/bin/sh}) don't support it.
 
 Among shells that do support @samp{$(( ))}, not all of them obey the
-Posix rule that octal and hexadecimal constants must be recognized:
+POSIX rule that octal and hexadecimal constants must be recognized:
 
 @example
 $ @kbd{bash -c 'echo $(( 010 + 0x10 ))'}
@@ -16941,7 +16941,7 @@ for the rationale.
 @cindex Shell parentheses
 
 Beware of two opening parentheses in a row, as many shell
-implementations treat them specially, and Posix says that a portable
+implementations treat them specially, and POSIX says that a portable
 script cannot use @samp{((} outside the @samp{$((} form used for shell
 arithmetic.  In traditional shells, @samp{((cat))} behaves like
 @samp{(cat)}; but many shells, including
@@ -17010,12 +17010,12 @@ the last command executed.
 @evindex CDPATH
 When this variable is set it specifies a list of directories to search
 when invoking @code{cd} with a relative file name that did not start
-with @samp{./} or @samp{../}.  Posix
+with @samp{./} or @samp{../}.  POSIX
 1003.1-2001 says that if a nonempty directory name from @env{CDPATH}
 is used successfully, @code{cd} prints the resulting absolute
 file name.  Unfortunately this output can break idioms like
 @samp{abs=`cd src && pwd`} because @code{abs} receives the name twice.
-Also, many shells do not conform to this part of Posix; for
+Also, many shells do not conform to this part of POSIX; for
 example, @command{zsh} prints the result only if a directory name
 other than @file{.} was chosen from @env{CDPATH}.
 
@@ -17151,7 +17151,7 @@ IFS=$save_IFS
 @evindex LC_TIME
 
 You should set all these variables to @samp{C} because so much
-configuration code assumes the C locale and Posix requires that locale
+configuration code assumes the C locale and POSIX requires that locale
 environment variables be set to @samp{C} if the C locale is desired;
 @file{configure} scripts and M4sh do that for you.
 Export these variables after setting them.
@@ -17159,7 +17159,7 @@ Export these variables after setting them.
 @item LANGUAGE
 @evindex LANGUAGE
 
-@env{LANGUAGE} is not specified by Posix, but it is a GNU
+@env{LANGUAGE} is not specified by POSIX, but it is a GNU
 extension that overrides @env{LC_ALL} in some cases, so you (or M4sh)
 should set it too.
 
@@ -17177,7 +17177,7 @@ should set it too.
 @evindex LC_TELEPHONE
 
 These locale environment variables are GNU extensions.  They
-are treated like their Posix brethren (@env{LC_COLLATE},
+are treated like their POSIX brethren (@env{LC_COLLATE},
 etc.)@: as described above.
 
 @item LINENO
@@ -17340,17 +17340,17 @@ variable can be set to either @samp{:} or @samp{;} to control the path
 separator Bash uses to set up certain environment variables (such as
 @env{PATH}).  You can set this variable to @samp{;} if you want
 @command{configure} to use @samp{;} as a separator; this might be useful
-if you plan to use non-Posix shells to execute files.  @xref{File System
+if you plan to use non-POSIX shells to execute files.  @xref{File System
 Conventions}, for more information about @code{PATH_SEPARATOR}.
 
 @item POSIXLY_CORRECT
 @evindex POSIXLY_CORRECT
 In the GNU environment, exporting @env{POSIXLY_CORRECT} with any value
-(even empty) causes programs to try harder to conform to Posix.
+(even empty) causes programs to try harder to conform to POSIX.
 Autoconf does not directly manipulate this variable, but @command{bash}
 ties the shell variable @env{POSIXLY_CORRECT} to whether the script is
-running in Posix mode.  Therefore, take care when exporting or unsetting
-this variable, so as not to change whether @command{bash} is in Posix
+running in POSIX mode.  Therefore, take care when exporting or unsetting
+this variable, so as not to change whether @command{bash} is in POSIX
 mode.
 
 @example
@@ -17363,7 +17363,7 @@ posix           off
 
 @item PWD
 @evindex PWD
-Posix 1003.1-2001 requires that @command{cd} and
+POSIX 1003.1-2001 requires that @command{cd} and
 @command{pwd} must update the @env{PWD} environment variable to point
 to the logical name of the current directory, but traditional shells
 do not support this.  This can cause confusion if one shell instance
@@ -17458,7 +17458,7 @@ and other options upon function entry and exit.
 
 It is not portable to pass temporary environment variables to shell
 functions.  Solaris 10 @command{/bin/sh} does not see the variable.
-Meanwhile, not all shells follow the Posix rule that the assignment must
+Meanwhile, not all shells follow the POSIX rule that the assignment must
 affect the current environment in the same manner as special built-ins.
 
 @example
@@ -17506,7 +17506,7 @@ Use @command{.} only with regular files (use @samp{test -f}).  Bash
 2.03, for instance, chokes on @samp{. /dev/null}.  Remember that
 @command{.} uses @env{PATH} if its argument contains no slashes.  Also,
 some shells, including bash 3.2, implicitly append the current directory
-to this @env{PATH} search, even though Posix forbids it.  So if you want
+to this @env{PATH} search, even though POSIX forbids it.  So if you want
 to use @command{.} on a file @file{foo} in the current directory, you
 must use @samp{. ./foo}.
 
@@ -17637,7 +17637,7 @@ bash: line 1: /bad: Permission denied
 1
 @end example
 
-Posix requires a syntax error if a brace list has no contents.  However,
+POSIX requires a syntax error if a brace list has no contents.  However,
 not all shells obey this rule; and on shells where empty lists are
 permitted, the effect on @samp{$?} is inconsistent.  To avoid problems,
 ensure that a brace list is never empty.
@@ -17688,7 +17688,7 @@ You don't need to quote the argument; no splitting is performed.
 
 You don't need the final @samp{;;}, but you should use it.
 
-Posix requires support for @code{case} patterns with opening
+POSIX requires support for @code{case} patterns with opening
 parentheses like this:
 
 @example
@@ -17737,7 +17737,7 @@ bash-2.02$
 
 @noindent
 This is extremely unfortunate, since you are likely to use this code to
-handle Posix or MS-DOS absolute file names.  To work around this
+handle POSIX or MS-DOS absolute file names.  To work around this
 bug, always put the backslash first:
 
 @example
@@ -17775,7 +17775,7 @@ ash-0.3.8 $ @kbd{case foo in esac;}
 @error{}Syntax error: ";" unexpected (expecting ")")
 @end example
 
-Posix requires @command{case} to give an exit status of 0 if no cases
+POSIX requires @command{case} to give an exit status of 0 if no cases
 match.  However, @command{/bin/sh} in Solaris 10 does not obey this
 rule.  Meanwhile, it is unclear whether a case that matches, but
 contains no statements, must also change the exit status to 0.  The M4sh
@@ -17792,7 +17792,7 @@ $ @kbd{/bin/sh -c 'case `false` in ?) ;; esac; echo $?'}
 @item @command{cd}
 @c ---------------
 @prindex @command{cd}
-Posix 1003.1-2001 requires that @command{cd} must support
+POSIX 1003.1-2001 requires that @command{cd} must support
 the @option{-L} (``logical'') and @option{-P} (``physical'') options,
 with @option{-L} being the default.  However, traditional shells do
 not support these options, and their @command{cd} command has the
@@ -17800,7 +17800,7 @@ not support these options, and their @command{cd} command has the
 
 Portable scripts should assume neither option is supported, and should
 assume neither behavior is the default.  This can be a bit tricky,
-since the Posix default behavior means that, for example,
+since the POSIX default behavior means that, for example,
 @samp{ls ..} and @samp{cd ..} may refer to different directories if
 the current logical directory is a symbolic link.  It is safe to use
 @code{cd @var{dir}} if @var{dir} contains no @file{..} components.
@@ -17808,7 +17808,7 @@ Also, Autoconf-generated scripts check for this problem when computing
 variables like @code{ac_top_srcdir} (@pxref{Configuration Actions}),
 so it is safe to @command{cd} to these variables.
 
-Posix states that behavior is undefined if @command{cd} is given an
+POSIX states that behavior is undefined if @command{cd} is given an
 explicit empty argument.  Some shells do nothing, some change to the
 first entry in @env{CDPATH}, some change to @env{HOME}, and some exit
 the shell rather than returning an error.  Unfortunately, this means
@@ -17832,10 +17832,10 @@ portability troubles.  It is not possible to use @samp{echo} portably
 unless both options and escape sequences are omitted.
 
 Do not use options, as some shells support them and others do not.
-For example, Posix says that the behavior of @samp{echo -n foo} is
+For example, POSIX says that the behavior of @samp{echo -n foo} is
 implementation-defined.  On some platforms the output is @samp{foo}
 without a trailing newline, on others it is @samp{-n foo} with a
-trailing newline, and Posix allows even other behavior.
+trailing newline, and POSIX allows even other behavior.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  For @samp{echo '\n' | wc -l}, the @command{sh} of
@@ -17924,7 +17924,7 @@ this problem is known.
 @item @command{exec}
 @c -----------------
 @prindex @command{exec}
-Posix describes several categories of shell built-ins.  Special
+POSIX describes several categories of shell built-ins.  Special
 built-ins (such as @command{exit}) must impact the environment of the
 current shell, and need not be available through @command{exec}.  All
 other built-ins are regular, and must not propagate variable assignments
@@ -17932,7 +17932,7 @@ to the environment of the current shell.  However, the group of regular
 built-ins is further distinguished by commands that do not require a
 @env{PATH} search (such as @command{cd}), in contrast to built-ins that
 are offered as a more efficient version of something that must still be
-found in a @env{PATH} search (such as @command{echo}).  Posix is not
+found in a @env{PATH} search (such as @command{echo}).  POSIX is not
 clear on whether @command{exec} must work with the list of 17 utilities
 that are invoked without a @env{PATH} search, and many platforms lack an
 executable for some of those built-ins:
@@ -17942,8 +17942,8 @@ $ @kbd{sh -c 'exec cd /tmp'}
 sh: line 0: exec: cd: not found
 @end example
 
-All other built-ins that provide utilities specified by Posix must have
-a counterpart executable that exists on @env{PATH}, although Posix
+All other built-ins that provide utilities specified by POSIX must have
+a counterpart executable that exists on @env{PATH}, although POSIX
 allows @command{exec} to use the built-in instead of the executable.
 For example, contrast @command{bash} 3.2 and @command{pdksh} 5.2.14:
 
@@ -18030,7 +18030,7 @@ alternately @samp{foo} and @samp{bar}, although they should print only
 Therefore you should @command{export} again each environment variable
 that you update; the export can occur before or after the assignment.
 
-Posix is not clear on whether the @command{export} of an undefined
+POSIX is not clear on whether the @command{export} of an undefined
 variable causes the variable to be defined with the value of an empty
 string, or merely marks any future definition of a variable by that name
 for export.  Various shells behave differently in this regard:
@@ -18041,7 +18041,7 @@ $ @kbd{ash -c 'export foo; env | grep foo'}
 foo=
 @end example
 
-Posix requires @command{export} to honor assignments made as arguments,
+POSIX requires @command{export} to honor assignments made as arguments,
 but older shells do not support this, including @command{/bin/sh} in
 Solaris 10.  Portable scripts should separate assignments and exports
 into different statements.
@@ -18055,7 +18055,7 @@ $ @kbd{/bin/sh -c 'export foo; foo=bar; echo $foo'}
 bar
 @end example
 
-Posix requires @command{export} to work with any arbitrary value for the
+POSIX requires @command{export} to work with any arbitrary value for the
 contents of the variable being exported, as long as the total size of
 the environment combined with arguments doesn't exceed @code{ARG_MAX}
 when executing a child process.  However, some shells have extensions
@@ -18070,7 +18070,7 @@ startup; newer versions of Bash use special environment variable
 @emph{names} instead of values to implement the same feature).
 
 There may be entries inherited into the environment that are not valid
-as shell variable names; Posix states that processes should be tolerant
+as shell variable names; POSIX states that processes should be tolerant
 of these names.  Some shells such as @command{dash} do this by removing
 those names from the environment at startup, while others such as
 @command{bash} hide the entry from shell access but still pass it on to
@@ -18115,7 +18115,7 @@ for arg in "$@@"; do
 done
 @end example
 
-Posix requires support for a @command{for} loop with no list after
+POSIX requires support for a @command{for} loop with no list after
 @code{in}.  However, Solaris 10 @command{/bin/sh} treats that as a syntax
 error.  It is possible to work around this by providing any shell word
 that expands to nothing, or by ignoring an obvious sentinel.
@@ -18263,7 +18263,7 @@ directory name, some of whose components may be symbolic links.  These
 directory names are in contrast to ``physical'' directory names, whose
 components are all directories.
 
-Posix 1003.1-2001 requires that @command{pwd} must support
+POSIX 1003.1-2001 requires that @command{pwd} must support
 the @option{-L} (``logical'') and @option{-P} (``physical'') options,
 with @option{-L} being the default.  However, traditional shells do
 not support these options, and their @command{pwd} command has the
@@ -18271,7 +18271,7 @@ not support these options, and their @command{pwd} command has the
 
 Portable scripts should assume neither option is supported, and should
 assume neither behavior is the default.  Also, on many hosts
-@samp{/bin/pwd} is equivalent to @samp{pwd -P}, but Posix
+@samp{/bin/pwd} is equivalent to @samp{pwd -P}, but POSIX
 does not require this behavior and portable scripts should not rely on
 it.
 
@@ -18321,7 +18321,7 @@ processing as soon as a non-option argument is found.  Therefore, use
 set x $my_list; shift
 @end example
 
-Avoid @samp{set -}, e.g., @samp{set - $my_list}.  Posix no
+Avoid @samp{set -}, e.g., @samp{set - $my_list}.  POSIX no
 longer requires support for this command, and in traditional shells
 @samp{set - $my_list} resets the @option{-v} and @option{-x} options, which
 makes scripts harder to debug.
@@ -18340,7 +18340,7 @@ ambiguities to cause numerous differences across various shell
 implementations; see for example
 @uref{https://www.in-ulm.de/@/~mascheck/@/various/@/set-e/, this overview},
 or @uref{https://www.austingroupbugs.net/@/view.php?id=52, this link},
-documenting a change to Posix 2008 to match @command{ksh88} behavior.
+documenting a change to POSIX 2008 to match @command{ksh88} behavior.
 Note that mixing @code{set -e} and shell functions is asking for surprises:
 
 @example
@@ -18421,7 +18421,7 @@ $
 Job control is not provided by all shells, so the use of @samp{set -m}
 or @samp{set -b} must be done with care.  When using @command{zsh} in
 native mode, asynchronous notification (@samp{set -b}) is enabled by
-default, and using @samp{emulate sh} to switch to Posix mode does not
+default, and using @samp{emulate sh} to switch to POSIX mode does not
 clear this setting (although asynchronous notification has no impact
 unless job monitoring is also enabled).  Also, @command{zsh} 4.3.10 and
 earlier have a bug where job control can be manipulated in interactive
@@ -18471,13 +18471,13 @@ shift, but in addition it is not portable: the shell of MIPS
 RISC/OS 4.52 refuses to do it.
 
 Don't use @samp{shift 2} etc.; while it in the SVR1 shell (1983),
-it is also absent in many pre-Posix shells.
+it is also absent in many pre-POSIX shells.
 
 
 @item @command{source}
 @c -------------------
 @prindex @command{source}
-This command is not portable, as Posix does not require it; use
+This command is not portable, as POSIX does not require it; use
 @command{.} instead.
 
 
@@ -18490,7 +18490,7 @@ that name in Autoconf code is asking for trouble since it is an M4 quote
 character.
 
 The @option{-a}, @option{-o}, @samp{(}, and @samp{)} operands are not
-present in all implementations, and have been marked obsolete by Posix
+present in all implementations, and have been marked obsolete by POSIX
 2008.  This is because there are inherent ambiguities in using them.
 For example, @samp{test "$1" -a "$2"} looks like a binary operator to
 check whether two strings are both non-empty, but if @samp{$1} is the
@@ -18532,9 +18532,9 @@ whether some arbitrary file exists.  To do so, use @samp{test -f},
 Solaris 10 @command{/bin/sh}
 lacks it.  To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
-Posix 1003.1-2001, but @option{-h} has been around longer.
+POSIX 1003.1-2001, but @option{-h} has been around longer.
 
-For historical reasons, Posix reluctantly allows implementations of
+For historical reasons, POSIX reluctantly allows implementations of
 @samp{test -x} that will succeed for the root user, even if no execute
 permissions are present.  Furthermore, shells do not all agree on
 whether Access Control Lists should affect @samp{test -r}, @samp{test
@@ -18552,7 +18552,7 @@ guessed that it might not be permitted.
 
 @item @command{test} (strings)
 @c ---------------------------
-Posix says that @samp{test "@var{string}"} succeeds if @var{string} is
+POSIX says that @samp{test "@var{string}"} succeeds if @var{string} is
 not null, but this usage is not portable to traditional platforms like
 Solaris 10 @command{/bin/sh}, which mishandle strings like @samp{!} and
 @samp{-n}.  However, it @emph{is} portable to test if a variable is set
@@ -18560,7 +18560,7 @@ to a non-empty value, by using @samp{test $@{var+y@}}, since all known
 implementations properly distinguish between no arguments and a
 known-safe string of @samp{y}.
 
-Posix also says that @samp{test ! "@var{string}"},
+POSIX also says that @samp{test ! "@var{string}"},
 @samp{test -n "@var{string}"} and
 @samp{test -z "@var{string}"} work with any string, but many
 shells (such as Solaris 10, AIX 3.2, UNICOS 10.0.0.6,
@@ -18576,7 +18576,7 @@ $ @kbd{test -z ")"; echo $?}
 0
 @end example
 
-Similarly, Posix says that both @samp{test "@var{string1}" = "@var{string2"}}
+Similarly, POSIX says that both @samp{test "@var{string1}" = "@var{string2"}}
 and @samp{test "@var{string1}" != "@var{string2"}} work for any pairs of
 strings, but in practice this is not true for troublesome strings that
 look like operators or parentheses, or that begin with @samp{-}.
@@ -18624,18 +18624,18 @@ explicit @command{exit}, or the end of the script).  The trap for 0 should be
 installed outside of a shell function, or AIX 5.3 @command{/bin/sh}
 will invoke the trap at the end of this function.
 
-Posix says that @samp{trap - 1 2 13 15} resets the traps for the
+POSIX says that @samp{trap - 1 2 13 15} resets the traps for the
 specified signals to their default values, but many common shells (e.g.,
 Solaris 10 @command{/bin/sh}) misinterpret this and attempt to execute a
 ``command'' named @command{-} when the specified conditions arise.
-Posix 2008 also added a requirement to support @samp{trap 1 2 13 15} to
+POSIX 2008 also added a requirement to support @samp{trap 1 2 13 15} to
 reset traps, as this is supported by a larger set of shells, but there
 are still shells like @command{dash} that mistakenly try to execute
 @command{1} instead of resetting the traps.  Therefore, there is no
 portable workaround, except for @samp{trap - 0}, for which
 @samp{trap '' 0} is a portable substitute.
 
-Although Posix is not absolutely clear on this point, it is widely
+Although POSIX is not absolutely clear on this point, it is widely
 admitted that when entering the trap @samp{$?} should be set to the exit
 status of the last command run before the trap.  The ambiguity can be
 summarized as: ``when the trap is launched by an @command{exit}, what is
@@ -18800,7 +18800,7 @@ include some limitations you should be aware of.
 @c ----------------
 @prindex @command{awk}
 Don't leave white space before the opening parenthesis in a user function call.
-Posix does not allow this and GNU Awk rejects it:
+POSIX does not allow this and GNU Awk rejects it:
 
 @example
 $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
@@ -18812,7 +18812,7 @@ $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
 Aaaaarg!
 @end example
 
-Posix says that if a program contains only @samp{BEGIN} actions, and
+POSIX says that if a program contains only @samp{BEGIN} actions, and
 contains no instances of @code{getline}, then the program merely
 executes the actions without reading input.  However, traditional Awk
 implementations (such as Solaris 10 @command{awk}) read and discard
@@ -18823,7 +18823,7 @@ input in this case.  Portable scripts can redirect input from
 awk 'BEGIN @{print "hello world"@}' </dev/null
 @end example
 
-Posix says that in an @samp{END} action, @samp{$NF} (and presumably,
+POSIX says that in an @samp{END} action, @samp{$NF} (and presumably,
 @samp{$1}) retain their value from the last record read, if no
 intervening @samp{getline} occurred.  However, some implementations
 (such as Solaris 10 @samp{/usr/bin/awk}, @samp{nawk}, or Darwin
@@ -18889,7 +18889,7 @@ length of regular expressions and literal strings in an Awk program.
 
 Traditional Awk implementations derived from Unix version 7, such as
 Solaris @command{/bin/awk}, have many limitations and do not
-conform to Posix.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
+conform to POSIX.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
 Programs}) finds you an Awk that doesn't have these problems, but if
 for some reason you prefer not to use @code{AC_PROG_AWK} you may need to
 address them.  For more detailed descriptions, see @ref{Language
@@ -18917,7 +18917,7 @@ Traditional Awk supports only the predefined functions @code{exp}, @code{index},
 @code{int}, @code{length}, @code{log}, @code{split}, @code{sprintf},
 @code{sqrt}, and @code{substr}.
 
-Traditional Awk @code{getline} is not at all compatible with Posix;
+Traditional Awk @code{getline} is not at all compatible with POSIX;
 avoid it.
 
 Traditional Awk has @code{for (i in a) @dots{}} but no other uses of the
@@ -18989,7 +18989,7 @@ Don't rely on any option.
 The command @samp{cc -c foo.c} traditionally produces an object file
 named @file{foo.o}.  Most compilers allow @option{-c} to be combined
 with @option{-o} to specify a different object file name, but
-Posix does not require this combination and a few compilers
+POSIX does not require this combination and a few compilers
 lack support for it.  @xref{C Compiler}, for how GNU Make
 tests for this feature with @code{AC_PROG_CC_C_O}.
 
@@ -19003,7 +19003,7 @@ nothing.
 The default executable, produced by @samp{cc foo.c}, can be
 
 @itemize
-@item @file{a.out} -- usual Posix convention.
+@item @file{a.out} -- usual POSIX convention.
 @item @file{b.out} -- i960 compilers (including @command{gcc}).
 @item @file{a.exe} -- DJGPP port of @command{gcc}.
 @item @file{a_out.exe} -- GNV @command{cc} wrapper for DEC C on OpenVMS.
@@ -19011,8 +19011,8 @@ The default executable, produced by @samp{cc foo.c}, can be
 @end itemize
 
 The C compiler's traditional name is @command{cc}, but other names like
-@command{gcc} are common.  Posix 1003.1-2001 through 1003.1-2017 specify the
-name @command{c99}, but older Posix editions specified
+@command{gcc} are common.  POSIX 1003.1-2001 through 1003.1-2017 specify the
+name @command{c99}, but older POSIX editions specified
 @command{c89}, future POSIX standards will likely specify
 other commands, and anyway these standard names are rarely used in
 practice.  Typically the C compiler is invoked from makefiles that use
@@ -19034,8 +19034,8 @@ Avoid usages like @samp{chmod -w file}; use @samp{chmod a-w file}
 instead, for two reasons.  First, plain @option{-w} does not necessarily
 make the file unwritable, since it does not affect mode bits that
 correspond to bits in the file mode creation mask.  Second,
-Posix says that the @option{-w} might be interpreted as an
-implementation-specific option, not as a mode; Posix suggests
+POSIX says that the @option{-w} might be interpreted as an
+implementation-specific option, not as a mode; POSIX suggests
 using @samp{chmod -- -w file} to avoid this confusion, but unfortunately
 @samp{--} does not work on some older hosts.
 
@@ -19113,7 +19113,7 @@ $ @kbd{date +'%H:%M %Q'}
 @end example
 
 @noindent
-However, this behavior is not required by Posix.
+However, this behavior is not required by POSIX.
 
 
 @item @command{dirname}
@@ -19132,8 +19132,8 @@ dir=`AS_DIRNAME(["$file"])`
 @item @command{egrep}
 @c ------------------
 @prindex @command{egrep}
-Although Posix stopped requiring @command{egrep} in 2001,
-a few traditional hosts (notably Solaris 10) do not support the Posix
+Although POSIX stopped requiring @command{egrep} in 2001,
+a few traditional hosts (notably Solaris 10) do not support the POSIX
 replacement @code{grep -E}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
@@ -19164,9 +19164,9 @@ expressions, @pxref{Problematic Expressions,,,grep, GNU Grep}.
 @item @command{expr}
 @c -----------------
 @prindex @command{expr}
-Not all implementations obey the Posix rule that @samp{--} separates
+Not all implementations obey the POSIX rule that @samp{--} separates
 options from arguments; likewise, not all implementations provide the
-extension to Posix that the first argument can be treated as part of a
+extension to POSIX that the first argument can be treated as part of a
 valid expression rather than an invalid option if it begins with
 @samp{-}.  When performing arithmetic, use @samp{expr 0 + $var} if
 @samp{$var} might be a negative number, to keep @command{expr} from
@@ -19180,7 +19180,7 @@ Don't use @code{length}, @code{substr}, @code{match} and @code{index}.
 
 @item @command{expr} (@samp{|})
 @prindex @command{expr} (@samp{|})
-You can use @samp{|}.  Although Posix does require that @samp{expr
+You can use @samp{|}.  Although POSIX does require that @samp{expr
 ''} return the empty string, it does not specify the result when you
 @samp{|} together the empty string (or zero) with the empty string.  For
 example:
@@ -19189,9 +19189,9 @@ example:
 expr '' \| ''
 @end example
 
-Posix 1003.2-1992 returns the empty string
+POSIX 1003.2-1992 returns the empty string
 for this case, but traditional Unix returns @samp{0} (Solaris is
-one such example).  In Posix 1003.1-2001, the specification was
+one such example).  In POSIX 1003.1-2001, the specification was
 changed to match traditional Unix's behavior (which is
 bizarre, but it's too late to fix this).  Please note that the same
 problem does arise when the empty string results from a computation,
@@ -19210,7 +19210,7 @@ Avoid this portability problem by avoiding the empty string.
 @prindex @command{expr}
 Portable @command{expr} regular expressions should use @samp{\} to
 escape only characters in the string @samp{$()*.123456789[\^@{@}}.
-For example, alternation, @samp{\|}, is common but Posix does not
+For example, alternation, @samp{\|}, is common but POSIX does not
 require its support, so it should be avoided in portable scripts.
 Similarly, @samp{\+} and @samp{\?} should be avoided.
 
@@ -19219,7 +19219,7 @@ Portable @command{expr} regular expressions should not begin with
 not needed anyway.
 
 On the other hand, the behavior of the @samp{$} anchor is not portable
-on multi-line strings.  Posix is ambiguous whether the anchor applies to
+on multi-line strings.  POSIX is ambiguous whether the anchor applies to
 each line, as was done in older versions of the GNU Core Utilities, or
 whether it applies only to the end of the overall string, as in
 Coreutils 6.0 and most other implementations.
@@ -19233,7 +19233,7 @@ $ @kbd{expr-5.97 "X$baz" : 'X\(foo\)$'}
 foo
 @end example
 
-The Posix standard is ambiguous as to whether
+The POSIX standard is ambiguous as to whether
 @samp{expr 'a' : '\(b\)'} outputs @samp{0} or the empty string.
 In practice, it outputs the empty string on most platforms, but portable
 scripts should not assume this.  For instance, the QNX 4.25 native
@@ -19313,8 +19313,8 @@ expr: More than one '\(' was used.
 @item @command{fgrep}
 @c ------------------
 @prindex @command{fgrep}
-Although Posix stopped requiring @command{fgrep} in 2001,
-a few traditional hosts (notably Solaris 10) do not support the Posix
+Although POSIX stopped requiring @command{fgrep} in 2001,
+a few traditional hosts (notably Solaris 10) do not support the POSIX
 replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
@@ -19323,12 +19323,12 @@ not work on long input lines.  To work around these problems, invoke
 @item @command{find}
 @c -----------------
 @prindex @command{find}
-Many operands of GNU @command{find} are not standardized by Posix and
+Many operands of GNU @command{find} are not standardized by POSIX and
 are missing on many platforms. These nonportable operands include
 @option{-follow}, @option{-maxdepth}, @option{-mindepth},
 @option{-printf}, and @option{,}.  See the
 @uref{https://@/pubs.opengroup.org/@/onlinepubs/@/9699919799/@/utilities/@/find.html,
-Posix spec for @command{find}} for @command{find} operands that
+POSIX spec for @command{find}} for @command{find} operands that
 should be portable nowadays.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
@@ -19343,7 +19343,7 @@ $ @kbd{find . -name foo -exec echo "@{@}-@{@}" \;}
 
 @noindent
 while GNU @command{find} reports @samp{./foo-./foo}.
-Posix allows either behavior.
+POSIX allows either behavior.
 
 
 @anchor{grep}
@@ -19352,14 +19352,14 @@ Posix allows either behavior.
 @prindex @command{grep}
 Portable scripts can rely on the @command{grep} options @option{-c},
 @option{-l}, @option{-n}, and @option{-v}, but should avoid other
-options.  For example, don't use @option{-w}, as Posix does not require it.
+options.  For example, don't use @option{-w}, as POSIX does not require it.
 Also, portable scripts should not combine @option{-c} with @option{-l},
-as Posix does not allow this.
+as POSIX does not allow this.
 
-Some of the options required by Posix are not portable in practice.
+Some of the options required by POSIX are not portable in practice.
 Don't use @samp{grep -q} to suppress output, because traditional @command{grep}
 implementations (e.g., Solaris 10) do not support @option{-q}.
-Don't use @samp{grep -s} to suppress output either, because Posix
+Don't use @samp{grep -s} to suppress output either, because POSIX
 says @option{-s} does not suppress output, only some error messages;
 also, the @option{-s} option of traditional @command{grep} behaved
 like @option{-q} does in most modern implementations.  Instead,
@@ -19394,13 +19394,13 @@ Traditional @command{grep} implementations (e.g., Solaris 10) do not
 support the @option{-E} or @option{-F} options.  To work around these
 problems, invoke @code{AC_PROG_EGREP} and then use @code{$EGREP}, and
 similarly for @code{AC_PROG_FGREP} and @code{$FGREP}.  Even if you are
-willing to require support for Posix @command{grep}, your script should
-not use both @option{-E} and @option{-F}, since Posix does not allow
+willing to require support for POSIX @command{grep}, your script should
+not use both @option{-E} and @option{-F}, since POSIX does not allow
 this combination.
 
 Portable @command{grep} regular expressions should use @samp{\} only to
 escape characters in the string @samp{$()*.123456789[\^@{@}}.  For example,
-alternation, @samp{\|}, is common but Posix does not require its
+alternation, @samp{\|}, is common but POSIX does not require its
 support in basic regular expressions, so it should be avoided in
 portable scripts.  Solaris and HP-UX @command{grep} do not support it.
 Similarly, the following escape sequences should also be avoided:
@@ -19409,7 +19409,7 @@ Similarly, the following escape sequences should also be avoided:
 For more information about what can appear in portable regular expressions,
 @pxref{Problematic Expressions,,, grep, GNU Grep}.
 
-Posix does not specify the behavior of @command{grep} on binary files.
+POSIX does not specify the behavior of @command{grep} on binary files.
 An example where this matters is using BSD @command{grep} to
 search text that includes embedded ANSI escape sequences for
 colored output to terminals (@samp{\033[m} is the sequence to restore
@@ -19455,7 +19455,7 @@ For versions of the DJGPP before 2.04,
 @command{ln} emulates symbolic links
 to executables by generating a stub that in turn calls the real
 program.  This feature also works with nonexistent files like in the
-Posix spec.  So @samp{ln -s file link} generates @file{link.exe},
+POSIX spec.  So @samp{ln -s file link} generates @file{link.exe},
 which attempts to call @file{file.exe} if run.  But this feature only
 works for executables, so @samp{cp -p} is used instead for these
 systems.  DJGPP versions 2.04 and later have full support
@@ -19499,7 +19499,7 @@ go-w -p @var{dir}}, often leads to trouble.  FreeBSD
 @command{mkdir} often assigns the wrong permissions to
 any newly-created parents of @var{dir}.
 
-Posix does not clearly specify whether @samp{mkdir -p foo}
+POSIX does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
 directory.  The GNU @command{mkdir}
 succeeds, but Solaris 10 @command{mkdir} fails.
@@ -19526,7 +19526,7 @@ The GNU Coding Standards state that @command{mknod} is safe to use on
 platforms where it has been tested to exist; but it is generally portable
 only for creating named FIFOs, since device numbers are
 platform-specific.  Autotest uses @command{mkfifo} to implement parallel
-testsuites.  Posix states that behavior is unspecified when opening a
+testsuites.  POSIX states that behavior is unspecified when opening a
 named FIFO for both reading and writing; on at least Cygwin, this
 results in failure on any attempt to read or write to that file
 descriptor.
@@ -19592,14 +19592,14 @@ foo
 @end smallexample
 
 @noindent
-This annoying behavior conforms to Posix, unfortunately.
+This annoying behavior conforms to POSIX, unfortunately.
 
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
 
 DOS variants cannot rename or remove open files, and do not
 support commands like @samp{mv foo bar >foo}, even though this is
-perfectly portable among Posix hosts.
+perfectly portable among POSIX hosts.
 
 
 @item @command{od}
@@ -19607,9 +19607,9 @@ perfectly portable among Posix hosts.
 @prindex @command{od}
 
 In Mac OS X versions prior to 10.4.3, @command{od} does not support the
-standard Posix options @option{-A}, @option{-j}, @option{-N}, or
+standard POSIX options @option{-A}, @option{-j}, @option{-N}, or
 @option{-t}, or the XSI option, @option{-s}.  The only
-supported Posix option is @option{-v}, and the only supported
+supported POSIX option is @option{-v}, and the only supported
 XSI options are those in @option{-bcdox}.  The BSD
 @command{hexdump} program can be used instead.
 
@@ -19641,20 +19641,20 @@ As a workaround, you can use octal output (option @code{-t o1}).
 The @option{-f} and @option{-r} options are portable.
 
 It is not portable to invoke @command{rm} without options or operands.
-On the other hand, Posix now requires @command{rm -f} to silently
+On the other hand, POSIX now requires @command{rm -f} to silently
 succeed when there are no operands (useful for constructs like
 @command{rm -rf $filelist} without first checking if @samp{$filelist}
 was empty).  But this was not always portable; at least NetBSD
 @command{rm} built before 2008 would fail with a diagnostic.
 
 A file might not be removed even if its parent directory is writable
-and searchable.  Many Posix hosts cannot remove a mount point, a named
+and searchable.  Many POSIX hosts cannot remove a mount point, a named
 stream, a working directory, or a last link to a file that is being
 executed.
 
 DOS variants cannot rename or remove open files, and do not
 support commands like @samp{rm foo >foo}, even though this is
-perfectly portable among Posix hosts.
+perfectly portable among POSIX hosts.
 
 @item @command{rmdir}
 @c ------------------
@@ -19667,14 +19667,14 @@ directory.
 @c ----------------
 @prindex @command{sed}
 Patterns should not include the separator (unless escaped), even as part
-of a character class.  In conformance with Posix, the Cray
+of a character class.  In conformance with POSIX, the Cray
 @command{sed} rejects @samp{s/[^/]*$//}: use @samp{s%[^/]*$%%}.
 Even when escaped, patterns should not include separators that are also
 used as @command{sed} metacharacters.  For example, GNU sed 4.0.9 rejects
 @samp{s,x\@{1\,\@},,}, while sed 4.1 strips the backslash before the comma
 before evaluating the basic regular expression.
 
-Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  Posix does
+Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  POSIX does
 not require support for empty patterns, and Unicos 9 @command{sed} rejects
 them.
 
@@ -19710,10 +19710,10 @@ yet universal, so if you cannot guarantee the setting of @env{LC_ALL},
 it is better to spell out a range @samp{[ABCDEFGHIJKLMNOPQRSTUVWXYZ]}
 than to rely on @samp{[A-Z]}.
 
-Additionally, Posix states that regular expressions are only
+Additionally, POSIX states that regular expressions are only
 well-defined on characters.  Unfortunately, there exist platforms such
 as Mac OS X 10.5 where not all 8-bit byte values are valid characters,
-even though that platform has a single-byte @samp{C} locale.  And Posix
+even though that platform has a single-byte @samp{C} locale.  And POSIX
 allows the existence of a multi-byte @samp{C} locale, although that does
 not yet appear to be a common implementation.  At any rate, it means
 that not all bytes will be matched by the regular expression @samp{.}:
@@ -19727,7 +19727,7 @@ $ @kbd{printf '\200\n' | LC_ALL=en_US.ISO8859-1 sed -n /./p | wc -l}
 
 Portable @command{sed} regular expressions should use @samp{\} only to escape
 characters in the string @samp{$()*.123456789[\^n@{@}}.  For example,
-alternation, @samp{\|}, is common but Posix does not require its
+alternation, @samp{\|}, is common but POSIX does not require its
 support, so it should be avoided in portable scripts.  Solaris
 @command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
 deletes only lines that contain the literal string @samp{a|b}.
@@ -19778,17 +19778,17 @@ The following usage is sometimes equivalent:
 sed '@var{command-1};@var{command-2}'
 @end example
 
-but Posix says that this use of a semicolon has undefined effect if
+but POSIX says that this use of a semicolon has undefined effect if
 @var{command-1}'s verb is @samp{@{}, @samp{a}, @samp{b}, @samp{c},
 @samp{i}, @samp{r}, @samp{t}, @samp{w}, @samp{:}, or @samp{#}, so you
 should use semicolon only with simple scripts that do not use these
 verbs.
 
-Posix up to the 2008 revision requires the argument of the @option{-e}
+POSIX up to the 2008 revision requires the argument of the @option{-e}
 option to be a syntactically complete script.  GNU @command{sed} allows
 to pass multiple script fragments, each as argument of a separate
 @option{-e} option, that are then combined, with newlines between the
-fragments, and a future Posix revision may allow this as well.  This
+fragments, and a future POSIX revision may allow this as well.  This
 approach is not portable with script fragments ending in backslash; for
 example, the @command{sed} programs on Solaris 10, HP-UX 11, and AIX
 don't allow splitting in this case:
@@ -19804,7 +19804,7 @@ Unrecognized command: 0
 @noindent
 In practice, however, this technique of joining fragments
 through @option{-e} works for multiple @command{sed} functions within
-@samp{@{} and @samp{@}}, even if that is not specified by Posix:
+@samp{@{} and @samp{@}}, even if that is not specified by POSIX:
 
 @example
 @c The quote around the closing brace silences interactive zsh.
@@ -19812,12 +19812,12 @@ $ @kbd{echo a | sed -n -e '/a/@{' -e s/a/b/ -e p -e '@}'}
 b
 @end example
 
-Commands inside @{ @} brackets are further restricted.  Posix 2008 says that
+Commands inside @{ @} brackets are further restricted.  POSIX 2008 says that
 they cannot be preceded by addresses, @samp{!}, or @samp{;}, and that
 each command must be followed immediately by a newline, without any
 intervening blanks or semicolons.  The closing bracket must be alone on
 a line, other than white space preceding or following it.  However, a
-future version of Posix may standardize the use of addresses within brackets.
+future version of POSIX may standardize the use of addresses within brackets.
 
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
@@ -19826,7 +19826,7 @@ matched''.  All descendants of Unix version 7 @command{sed}
 don't have first hand experience with older @command{sed} implementations) have
 supported it.
 
-Posix requires that you must not have any white space between
+POSIX requires that you must not have any white space between
 @samp{!} and the following command.  It is OK to have blanks between
 the address and the @samp{!}.  For instance, on Solaris:
 
@@ -19839,11 +19839,11 @@ $ @kbd{echo "foo" | sed -n '/bar/ !p'}
 foo
 @end example
 
-Posix also says that you should not combine @samp{!} and @samp{;}.  If
+POSIX also says that you should not combine @samp{!} and @samp{;}.  If
 you use @samp{!}, it is best to put it on a command that is delimited by
 newlines rather than @samp{;}.
 
-Also note that Posix requires that the @samp{b}, @samp{t}, @samp{r}, and
+Also note that POSIX requires that the @samp{b}, @samp{t}, @samp{r}, and
 @samp{w} commands be followed by exactly one space before their argument.
 On the other hand, no white space is allowed between @samp{:} and the
 subsequent label name.
@@ -19858,7 +19858,7 @@ Many @command{sed} implementations (e.g., Mac OS X 10.4,
 OpenBSD 3.9, Solaris 10
 @command{/usr/ucb/sed}) strip leading white space from the text of
 @samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to
-work around this incompatibility with Posix:
+work around this incompatibility with POSIX:
 
 @example
 $ @kbd{echo flushleft | sed 'a\}
@@ -19873,7 +19873,7 @@ flushleft
    indented
 @end example
 
-Posix requires that with an empty regular expression, the last non-empty
+POSIX requires that with an empty regular expression, the last non-empty
 regular expression from either an address specification or substitution
 command is applied.  However, busybox 1.6.1 complains when using a
 substitution command with a replacement containing a back-reference to
@@ -20010,7 +20010,7 @@ moonlight
 
 Not all versions of @command{tr} recognize direct ranges of characters: at
 least Solaris @command{/usr/bin/tr} still fails to do so.  But you can
-use @command{/usr/xpg4/bin/tr} instead, or add brackets (which in Posix
+use @command{/usr/xpg4/bin/tr} instead, or add brackets (which in POSIX
 transliterate to themselves).
 
 @example
@@ -20046,7 +20046,7 @@ $ @kbd{echo xyz | coreutils/tr 'a-z' '[A*]'}
 AAA
 @end example
 
-Posix requires @command{tr} to operate on binary files.  But at least
+POSIX requires @command{tr} to operate on binary files.  But at least
 Solaris @command{/usr/ucb/tr} and @command{/usr/bin/tr} silently discard
 @code{NUL} in the input prior to doing any translation.  When using
 @command{tr} to process a binary file that may contain @code{NUL} bytes,
@@ -20113,7 +20113,7 @@ itself.
 @node $< in Ordinary Make Rules
 @section @code{$<} in Ordinary Make Rules
 
-Posix says that the @samp{$<} construct in makefiles can be
+POSIX says that the @samp{$<} construct in makefiles can be
 used only in inference rules and in the @samp{.DEFAULT} rule; its
 meaning in ordinary rules is unspecified.  Solaris @command{make}
 for instance replaces it with the empty string.  OpenBSD (3.0 and
@@ -20124,7 +20124,7 @@ later) @command{make} diagnoses these uses and errors out.
 
 Unless errors are being ignored
 (e.g., because a makefile command line is preceded by a @samp{-} prefix),
-Posix 2008 requires that @command{make} must invoke each command with
+POSIX 2008 requires that @command{make} must invoke each command with
 the equivalent of a @samp{sh -e -c} subshell, which causes the
 subshell to exit immediately if a subsidiary simple-command fails,
 with some complicated exceptions.
@@ -20132,7 +20132,7 @@ Historically not all @command{make} implementations
 followed this rule.  For
 example, the command @samp{touch T; rm -f U} may attempt to
 remove @file{U} even if the @command{touch} fails, although this is not
-permitted with Posix make.  One way to work around failures in simple
+permitted with POSIX make.  One way to work around failures in simple
 commands is to reword them so that they always succeed, e.g., @samp{touch
 T || :; rm -f U}.
 However, even this approach can run into common bugs in BSD
@@ -20148,7 +20148,7 @@ complicated @command{make} actions into separate scripts.
 Makefile command lines can be preceded by zero or more of
 the command line prefixes @samp{-}, @samp{@@}, and @samp{+},
 which modify how @command{make} processes the command.
-Although Posix says these are the only command line prefixes,
+Although POSIX says these are the only command line prefixes,
 some @command{make} implementations, such as Solaris @command{make},
 support the additional prefixes @samp{!} and @samp{?}.
 Portable makefiles should therefore avoid using these two characters at
@@ -20163,7 +20163,7 @@ portable-to-Solaris-make:; :;! grep FIXME foo.c
 @node Special Chars in Names
 @section Special Characters in Make Macro Names
 
-Posix limits macro names to nonempty strings containing only
+POSIX limits macro names to nonempty strings containing only
 ASCII letters and digits, @samp{.}, and @samp{_}.  Many
 @command{make} implementations allow a wider variety of characters, but
 portable makefiles should avoid them.  It is portable to start a name
@@ -20218,7 +20218,7 @@ line.
 @node Backslash-Newline Comments
 @section Backslash-Newline in Make Comments
 
-According to Posix, Make comments start with @code{#}
+According to POSIX, Make comments start with @code{#}
 and continue until an unescaped newline is reached.
 
 @example
@@ -20346,7 +20346,7 @@ automake, GNU Automake}).
 @cindex @code{MAKEFLAGS} and @command{make}
 @cindex @command{make} and @code{MAKEFLAGS}
 
-Posix requires @command{make} to use @code{MAKEFLAGS} to affect the
+POSIX requires @command{make} to use @code{MAKEFLAGS} to affect the
 current and recursive invocations of make, but allows implementations
 several formats for the variable.  It is tricky to parse
 @code{$MAKEFLAGS} to determine whether @option{-s} for silent execution
@@ -20378,7 +20378,7 @@ the default can be overridden by a makefile or by a command-line argument,
 though not by the environment.
 
 Other @command{make} implementations use other ways to spawn shell
-processes, and the Posix standard for @command{make} says that portable
+processes, and the POSIX standard for @command{make} says that portable
 makefiles should neither define nor use the @code{$(SHELL)} macro.
 
 Despite this prohibition, in practice it does not hurt to define and
@@ -20396,7 +20396,7 @@ SHELL = @@SHELL@@
 If you use Automake, this is done for you.
 
 Do not force @code{SHELL = /bin/sh} because that is not correct
-everywhere.  Remember, @file{/bin/sh} is not Posix compliant on some
+everywhere.  Remember, @file{/bin/sh} is not POSIX compliant on some
 systems, such as Solaris 10.
 Additionally, DJGPP lacks @code{/bin/sh}, and when its
 GNU @command{make} port sees such a setting it enters a
@@ -20627,7 +20627,7 @@ CPPFLAGS = "-DCOMMENT_CHAR='#'"
 @noindent
 as @samp{CPPFLAGS} is expanded to @samp{"-DCOMMENT_CHAR='}.
 
-GNU @command{make}, when not in Posix mode, lets you put
+GNU @command{make}, when not in POSIX mode, lets you put
 @samp{#} into a macro value by escaping it with a backslash, i.e.,
 @samp{\#}.  However, this usage is not portable.
 @xref{Comments in Make Rules}, for a portable alternative.
@@ -20662,7 +20662,7 @@ print: ; @@echo $(foo:=.test)
 prints @samp{bar.test .test}.
 
 BSD and Solaris @command{make} implementations do not honor trailing
-whitespace in macro definitions as Posix requires:
+whitespace in macro definitions as POSIX requires:
 
 @example
 foo = bar # Note the space after "bar".
@@ -20747,7 +20747,7 @@ exit status: 0
 @section @code{VPATH} and Make
 @cindex @code{VPATH}
 
-Posix does not specify the semantics of @code{VPATH}.  Typically,
+POSIX does not specify the semantics of @code{VPATH}.  Typically,
 @command{make} supports @code{VPATH}, but its implementation is not
 consistent.
 
@@ -21250,7 +21250,7 @@ dest-stamp: src
 
 Apart from timestamp resolution, there are also differences in handling
 equal timestamps.  HP-UX @command{make} updates targets if it has the
-same timestamp as one of its prerequisites, in violation of Posix rules.
+same timestamp as one of its prerequisites, in violation of POSIX rules.
 
 This can cause spurious rebuilds for repeated runs of @command{make}.
 This in turn can cause @command{make} to fail if it tries to rebuild
@@ -21283,7 +21283,7 @@ GCC, gcc, Using the GNU Compiler Collection
 (GCC)},
 @end ifnothtml
 for a list of C-related standards.  Many programs also assume the
-@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix standard}.
+@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, POSIX standard}.
 
 @cindex K&R C
 @cindex C89, C99, C11, C17, and C23
@@ -21819,7 +21819,7 @@ handler reads any non-local object, or writes to any non-local object
 whose type is not @code{sig_atomic_t volatile}, or calls any standard
 library function other than @code{abort}, @code{signal}, and
 @code{_Exit}.  Hence C compilers need not worry about a signal handler
-disturbing ordinary computation.  C11 and Posix allow some additional
+disturbing ordinary computation.  C11 and POSIX allow some additional
 behavior in a portable signal handler, but are still quite restrictive.
 
 Some C implementations allow memory-access optimizations within each
@@ -21841,7 +21841,7 @@ restrictions imposed by the GNU C library.  Restrictions
 differ on other platforms.
 
 If possible, it is best to use a signal handler that fits within the
-limits imposed by the C and Posix standards.
+limits imposed by the C and POSIX standards.
 
 If this is not practical, you can try the following rules of thumb.  A
 signal handler should access only volatile lvalues, preferably lvalues
@@ -21885,14 +21885,14 @@ A C or C++ program can exit with status @var{N} by returning
 @var{N} from the @code{main} function.  Portable programs are supposed
 to exit either with status 0 or @code{EXIT_SUCCESS} to succeed, or with
 status @code{EXIT_FAILURE} to fail, but in practice it is portable to
-fail by exiting with status 1, and test programs that assume Posix can
+fail by exiting with status 1, and test programs that assume POSIX can
 fail by exiting with status values from 1 through 255.
 
 A program can also exit with status @var{N} by passing @var{N} to the
 @code{exit} function, and a program can fail by calling the @code{abort}
 function.  If a program is specialized to just some platforms, it can fail
 by calling functions specific to those platforms, e.g., @code{_exit}
-(Posix).  However, like other functions, an exit
+(POSIX).  However, like other functions, an exit
 function should be declared, typically by including a header.  For
 example, if a C program calls @code{exit}, it should include @file{stdlib.h}
 either directly or via the default includes (@pxref{Default Includes}).
@@ -23474,7 +23474,7 @@ now it is just @code{AC_FUNC_GETMNTENT} (@pxref{AC_FUNC_GETMNTENT}).
 @ovindex EXEEXT
 Defined the output variable @code{EXEEXT} based on the output of the
 compiler, which is now done automatically.  Typically set to empty
-string if Posix and @samp{.exe} if a DOS variant.
+string if POSIX and @samp{.exe} if a DOS variant.
 @end defmac
 
 @defmac AC_EMXOS2
@@ -23546,7 +23546,7 @@ If @code{wait3} is found and fills in the contents of its third argument
 @code{HAVE_WAIT3}.
 
 These days portable programs should use @code{waitpid}, not
-@code{wait3}, as @code{wait3} has been removed from Posix.
+@code{wait3}, as @code{wait3} has been removed from POSIX.
 @end defmac
 
 @defmac AC_GCC_TRADITIONAL
@@ -23683,7 +23683,7 @@ See @ref{AC_FUNC_GETMNTENT} and @ref{AC_CHECK_LIB}.
 @acindex{ISC_POSIX}
 @ovindex LIBS
 This macro adds @option{-lcposix} to output variable @code{LIBS} if
-necessary for Posix facilities.  Sun dropped support for the obsolete
+necessary for POSIX facilities.  Sun dropped support for the obsolete
 INTERACTIVE Systems Corporation Unix on 2006-07-23.  New programs
 need not use this macro.  It is implemented as
 @code{AC_SEARCH_LIBS([strerror], [cposix])} (@pxref{AC_SEARCH_LIBS}).
@@ -23822,7 +23822,7 @@ Replaced by @code{AC_TYPE_MODE_T} (@pxref{AC_TYPE_MODE_T}).
 @ovindex OBJEXT
 Defined the output variable @code{OBJEXT} based on the output of the
 compiler, after .c files have been excluded.  Typically set to @samp{o}
-if Posix, @samp{obj} if a DOS variant.
+if POSIX, @samp{obj} if a DOS variant.
 Now the compiler checking macros handle
 this automatically.
 @end defmac
@@ -24319,7 +24319,7 @@ Replaced by @code{AC_FUNC_VPRINTF} (@pxref{AC_FUNC_VPRINTF}).
 @acindex{WAIT3}
 This macro was renamed @code{AC_FUNC_WAIT3}.  However, these days
 portable programs should use @code{waitpid}, not @code{wait3}, as
-@code{wait3} has been removed from Posix.
+@code{wait3} has been removed from POSIX.
 @end defmac
 
 @defmac AC_WARN
@@ -24949,7 +24949,7 @@ It is paradoxical that portable projects depend on nonportable tools
 to run their test suite.  Autoconf by itself is the paragon of this
 problem: although it aims at perfectly portability, up to 2.13 its
 test suite was using DejaGNU, a rich and complex testing
-framework, but which is far from being standard on Posix systems.
+framework, but which is far from being standard on POSIX systems.
 Worse yet, it was likely to be missing on the most fragile platforms,
 the very platforms that are most likely to torture Autoconf and
 exhibit deficiencies.
@@ -26910,7 +26910,7 @@ introduced in this document.
 @c  LocalWords:  msindex alloca fnindex Aaarg indices FSF's dircategory ifnames
 @c  LocalWords:  direntry autoscan autoreconf autoheader autoupdate config FDs
 @c  LocalWords:  testsuite titlepage Elliston Demaille vskip filll ifnottex hmm
-@c  LocalWords:  insertcopying Autoconf's detailmenu Automake Libtool Posix ois
+@c  LocalWords:  insertcopying Autoconf's detailmenu Automake Libtool POSIX ois
 @c  LocalWords:  Systemology Checkpointing Changequote INTERCAL changequote dfn
 @c  LocalWords:  Quadrigraphs builtins Shellology acconfig Bugward LIBOBJ Imake
 @c  LocalWords:  LIBOBJS IFELSE cindex flushright Pinard Metaconfig uref Simons
@@ -26938,7 +26938,7 @@ introduced in this document.
 @c  LocalWords:  closedir FNMATCH fnmatch vfork FSEEKO LARGEFILE fseeko SVR sc
 @c  LocalWords:  largefile GETGROUPS getgroups GETLOADAVG DGUX UMAX NLIST KMEM
 @c  LocalWords:  SETGID getloadavg nlist GETMNTENT irix acxindex autom
-@c  LocalWords:  getmntent UnixWare GETPGRP getpgid getpgrp Posix's pid LSTAT
+@c  LocalWords:  getmntent UnixWare GETPGRP getpgid getpgrp POSIX's pid LSTAT
 @c  LocalWords:  lstat rpl MEMCMP memcmp OpenStep MBRTOWC mbrtowc MKTIME mktime
 @c  LocalWords:  localtime MMAP mmap OBSTACK obstack obstacks ARGTYPES timeval
 @c  LocalWords:  SETPGRP setpgrp defmacx Hurd SETVBUF setvbuf STRCOLL strcoll
@@ -26967,7 +26967,7 @@ introduced in this document.
 @c  LocalWords:  miscian DIRNAME dirname MKDIR CATFILE XMKMF TRAVOLTA celsius
 @c  LocalWords:  EMX emxos Emacsen Korn DYNIX subshell posix Ksh ksh Pdksh Zsh
 @c  LocalWords:  pdksh zsh Allbery Lipe Kubota UWS zorglub stderr eval esac lfn
-@c  LocalWords:  drivespec Posixy DJGPP doschk prettybird LPT pfew Zsh's yu yaa
+@c  LocalWords:  drivespec POSIXy DJGPP doschk prettybird LPT pfew Zsh's yu yaa
 @c  LocalWords:  yM uM aM firebird IP subdir misparses ok Unpatched abc bc zA
 @c  LocalWords:  CDPATH DUALCASE LINENO prepass Subshells lineno NULLCMD cmp wc
 @c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf expr cp pR
