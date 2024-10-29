@@ -984,7 +984,7 @@ AC_DEFUN([_AC_FUNC_MALLOC_IF],
             /* Use pmalloc to test; 'volatile' prevents the compiler
                from optimizing the malloc call away.  */
             void *(*volatile pmalloc) (size_t) = malloc;]],
-          [[void *p = pmalloc (nbytes);
+          [[void *p = pmalloc (0);
             int result = !p;
             free (p);
             return result;]])
@@ -1500,7 +1500,7 @@ AC_DEFUN([_AC_FUNC_REALLOC_IF],
             /* Use prealloc to test; 'volatile' prevents the compiler
                from optimizing the realloc call away.  */
             void *(*volatile prealloc) (void *, size_t) = realloc;]],
-          [[void *p = prealloc (n, n);
+          [[void *p = prealloc (0, 0);
             int result = !p;
             free (p);
             return result;]])
