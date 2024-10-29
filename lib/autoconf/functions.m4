@@ -968,30 +968,41 @@ fi
 ])
 
 
-# _AC_FUNC_MALLOC_IF(IF-WORKS, IF-NOT)
-# ------------------------------------
-# If 'malloc (0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
+# _AC_FUNC_MALLOC_IF(IF-WORKS, IF-NOT, UNKNOWN-ASSUME)
+# ----------------------------------------------------
+# If 'malloc (0, 0)' returns nonnull, run IF-WORKS, otherwise, IF-NOT.
+# If it is not known whether it works, assume the shell word UNKNOWN-ASSUME,
+# which should end in "yes" or in something else.
 AC_DEFUN([_AC_FUNC_MALLOC_IF],
-[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
-[AC_RUN_IFELSE(
-[AC_LANG_PROGRAM([[#include <stdlib.h>
-                 ]],
-		 [[void *p = malloc (0);
-		   int result = !p;
-		   free (p);
-		   return result;]])],
-	       [ac_cv_func_malloc_0_nonnull=yes],
-	       [ac_cv_func_malloc_0_nonnull=no],
-	       [case "$host_os" in # ((
-		  # Guess yes on platforms where we know the result.
-		  *-gnu* | *-musl* | freebsd* | netbsd* | openbsd* | bitrig* \
-		  | hpux* | solaris* | cygwin* | mingw* | windows* | msys* )
-		    ac_cv_func_malloc_0_nonnull=yes ;;
-		  # If we don't know, assume the worst.
-		  *) ac_cv_func_malloc_0_nonnull=no ;;
-		esac])])
-AS_IF([test $ac_cv_func_malloc_0_nonnull = yes], [$1], [$2])
+[
+  AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
+  AC_CACHE_CHECK([whether malloc (0) returns nonnull],
+    [ac_cv_func_malloc_0_nonnull],
+    [AC_RUN_IFELSE(
+       [AC_LANG_PROGRAM(
+          [[#include <stdlib.h>
+            /* Use pmalloc to test; 'volatile' prevents the compiler
+               from optimizing the malloc call away.  */
+            void *(*volatile pmalloc) (size_t) = malloc;]],
+          [[void *p = pmalloc (nbytes);
+            int result = !p;
+            free (p);
+            return result;]])
+       ],
+       [ac_cv_func_malloc_0_nonnull=yes],
+       [ac_cv_func_malloc_0_nonnull=no],
+       [case "$host_os" in
+          # Guess yes on platforms where we know the result.
+          *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
+          | gnu* | *-musl* | midipix* | midnightbsd* \
+          | hpux* | solaris* | cygwin* | mingw* | windows* | msys* )
+            ac_cv_func_malloc_0_nonnull="guessing yes" ;;
+          # Guess as follows if we don't know.
+          *) ac_cv_func_malloc_0_nonnull=$3 ;;
+        esac
+       ])
+    ])
+  AS_CASE([$ac_cv_func_malloc_0_nonnull], [*yes], [$1], [$2])
 ])# _AC_FUNC_MALLOC_IF
 
 
@@ -1008,7 +1019,8 @@ AC_DEFUN([AC_FUNC_MALLOC],
   [AC_DEFINE([HAVE_MALLOC], 0)
    AC_LIBOBJ(malloc)
    AC_DEFINE([malloc], [rpl_malloc],
-      [Define to rpl_malloc if the replacement function should be used.])])
+      [Define to rpl_malloc if the replacement function should be used.])],
+  ["guessing no"])
 ])# AC_FUNC_MALLOC
 
 
@@ -1472,30 +1484,41 @@ AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 
 
 
-# _AC_FUNC_REALLOC_IF(IF-WORKS, IF-NOT)
-# -------------------------------------
-# If 'realloc (0, 0)' is properly handled, run IF-WORKS, otherwise, IF-NOT.
+# _AC_FUNC_REALLOC_IF(IF-WORKS, IF-NOT, UNKNOWN-ASSUME)
+# -----------------------------------------------------
+# If 'realloc (0, 0)' returns nonnull, run IF-WORKS, otherwise, IF-NOT.
+# If it is not known whether it works, assume the shell word UNKNOWN-ASSUME,
+# which should end in "yes" or in something else.
 AC_DEFUN([_AC_FUNC_REALLOC_IF],
-[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
-[AC_RUN_IFELSE(
-[AC_LANG_PROGRAM([[#include <stdlib.h>
-                 ]],
-		 [[void *p = realloc (0, 0);
-		   int result = !p;
-		   free (p);
-		   return result;]])],
-	       [ac_cv_func_realloc_0_nonnull=yes],
-	       [ac_cv_func_realloc_0_nonnull=no],
-	       [case "$host_os" in # ((
-		  # Guess yes on platforms where we know the result.
-		  *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
-		  | hpux* | solaris* | cygwin* | mingw* | windows* | msys* )
-		    ac_cv_func_realloc_0_nonnull=yes ;;
-		  # If we don't know, assume the worst.
-		  *) ac_cv_func_realloc_0_nonnull=no ;;
-		esac])])
-AS_IF([test $ac_cv_func_realloc_0_nonnull = yes], [$1], [$2])
+[
+  AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
+  AC_CACHE_CHECK([whether realloc (0, 0) returns nonnull],
+    [ac_cv_func_realloc_0_nonnull],
+    [AC_RUN_IFELSE(
+       [AC_LANG_PROGRAM(
+          [[#include <stdlib.h>
+            /* Use prealloc to test; 'volatile' prevents the compiler
+               from optimizing the realloc call away.  */
+            void *(*volatile prealloc) (void *, size_t) = realloc;]],
+          [[void *p = prealloc (n, n);
+            int result = !p;
+            free (p);
+            return result;]])
+       ],
+       [ac_cv_func_realloc_0_nonnull=yes],
+       [ac_cv_func_realloc_0_nonnull=no],
+       [case "$host_os" in
+          # Guess yes on platforms where we know the result.
+          *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
+          | gnu* | *-musl* | midipix* | midnightbsd* \
+          | hpux* | solaris* | cygwin* | mingw* | windows* | msys* )
+            ac_cv_func_realloc_0_nonnull="guessing yes" ;;
+          # Guess as follows if we don't know.
+          *) ac_cv_func_realloc_0_nonnull=$3 ;;
+        esac
+       ])
+    ])
+  AS_CASE([$ac_cv_func_realloc_0_nonnull], [*yes], [$1], [$2])
 ])# _AC_FUNC_REALLOC_IF
 
 
@@ -1512,7 +1535,8 @@ AC_DEFUN([AC_FUNC_REALLOC],
   [AC_DEFINE([HAVE_REALLOC], 0)
    AC_LIBOBJ([realloc])
    AC_DEFINE([realloc], [rpl_realloc],
-      [Define to rpl_realloc if the replacement function should be used.])])
+      [Define to rpl_realloc if the replacement function should be used.])],
+  ["guessing no"])
 ])# AC_FUNC_REALLOC
 
 
