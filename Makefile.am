@@ -74,7 +74,8 @@ OMIT_TRAILING_EMPTY_LINES = '/^$$/H; /^$$/d; x; s/\n//p; s/\n*//; x'
 $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	echo @firstparagraphindent insert				\
 	  | cat - $(top_srcdir)/doc/install.texi > tmp.texi
-	$(MAKEINFO) $(custom_MAKEINFOFLAGS) $(MAKEINFOFLAGS)		\
+	$(MAKEINFO) $(custom_MAKEINFOFLAGS)				\
+	     $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS)			\
 	     --plaintext tmp.texi					\
 	  | sed -e $(OMIT_TRAILING_EMPTY_LINES)				\
 	     > $@-t && mv $@-t $@
