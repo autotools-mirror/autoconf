@@ -1020,7 +1020,7 @@ AC_DEFUN([AC_FUNC_MALLOC],
    AC_LIBOBJ(malloc)
    AC_DEFINE([malloc], [rpl_malloc],
       [Define to rpl_malloc if the replacement function should be used.])],
-  ["guessing no"])
+  ["guessing yes"])
 ])# AC_FUNC_MALLOC
 
 
