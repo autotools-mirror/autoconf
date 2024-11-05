@@ -970,7 +970,7 @@ fi
 
 # _AC_FUNC_MALLOC_IF(IF-WORKS, IF-NOT[, UNKNOWN-ASSUME])
 # ------------------------------------------------------
-# If 'malloc (0, 0)' returns nonnull, run IF-WORKS, otherwise, IF-NOT.
+# If 'malloc (0)' returns nonnull, run IF-WORKS, otherwise, IF-NOT.
 # If it is not known whether it works, assume the shell word UNKNOWN-ASSUME,
 # which should end in "yes" or in something else (the latter is the default).
 AC_DEFUN([_AC_FUNC_MALLOC_IF],
