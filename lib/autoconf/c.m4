@@ -1118,7 +1118,9 @@ fi[]dnl
 #     <iso646.h> <stdbool.h> <stdint.h>
 # C11 adds:
 #     <stdalign.h> <stdnoreturn.h>
-# C23 adds:
+# C23 adds the following.  Do not test it, though, as compiler options like
+# -std=gnu23 are useful even when <stdbit.h> is supplied by a non-C23 library,
+# not by the compiler:
 #     <stdbit.h>
 
 AC_DEFUN([_AC_C_C89_TEST_GLOBALS],
@@ -1447,7 +1449,9 @@ int function_with_unnamed_parameter (int) { return 0; }
 
 void c23_noreturn ();
 
-bool use_u8 = !u8"\xFF" == u8'\''x'\'';
+/* Test parsing of string and char UTF-8 literals (including hex escapes).
+   The parens pacify GCC 15.  */
+bool use_u8 = (!sizeof u8"\xFF") == (!u8'\''x'\'');
 
 bool check_that_bool_works = true | false | !nullptr;
 #if !true
@@ -1483,9 +1487,6 @@ static_assert (0 < -uione);
 #include <stddef.h>
 constexpr nullptr_t null_pointer = nullptr;
 
-#include <stdbit.h>
-static_assert (__STDC_ENDIAN_LITTLE__ != __STDC_ENDIAN_BIG__);
-
 static typeof (1 + 1L) two () { return 2; }
 static long int three () { return 3; }
 '
@@ -1504,6 +1505,7 @@ ac_c_conftest_c23_main='
         goto label_at_end_of_block;
     label_at_end_of_block:
   }
+  ok |= !null_pointer;
   ok |= two != three;
 '
 ]])])
