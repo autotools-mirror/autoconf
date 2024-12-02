@@ -28,6 +28,9 @@
 set -e
 (set -o pipefail 2> /dev/null) && set -o pipefail
 
+# Error on undefined variables.
+(set -u 2> /dev/null) && set -u
+
 # Avoid problems due to various shell wrinkles.
 # We assume we have a shell new enough to implement unset correctly.
 (set -o posix 2> /dev/null) && set -o posix
@@ -109,7 +112,7 @@ fi
 # Override SHELL.  This is required on DJGPP so that Perl's system()
 # uses bash, not COMMAND.COM which doesn't quote arguments properly.
 # It's not used otherwise.
-if test -n "$DJDIR"; then
+if test -n "${DJDIR-}"; then
   BOOTSTRAP_SHELL=/dev/env/DJDIR/bin/bash.exe
 else
   BOOTSTRAP_SHELL=/bin/sh
