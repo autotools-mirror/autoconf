@@ -19985,6 +19985,14 @@ timestamp truncation problems that @samp{cp -p} has.
 @item @command{tr}
 @c ---------------
 @prindex @command{tr}
+
+Many @command{tr} implementations do not support multi-byte locales
+well.  For example, Solaris 10 @command{tr} rejects character classes in
+multi-byte locales.  Also, ranges have well-defined behavior only in the
+@samp{C} (or @samp{POSIX}) locale, so if you cannot guarantee the
+setting of @env{LC_ALL} it is better to spell out a range
+@samp{[ABCDEFGHIJKLMNOPQRSTUVWXYZ]} than to rely on @samp{[A-Z]}.
+
 @cindex carriage return, deleting
 @cindex newline, deleting
 @cindex deleting carriage return
