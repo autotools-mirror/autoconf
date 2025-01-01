@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Fortran languages support.
-# Copyright (C) 2001, 2003-2017, 2020-2024 Free Software Foundation,
+# Copyright (C) 2001, 2003-2017, 2020-2025 Free Software Foundation,
 # Inc.
 
 # This file is part of Autoconf.  This program is free

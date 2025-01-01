@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with autoscan.
 
-# Copyright (C) 2002, 2009-2017, 2020-2024 Free Software Foundation,
+# Copyright (C) 2002, 2009-2017, 2020-2025 Free Software Foundation,
 # Inc.
 
 # This file is part of Autoconf.  This program is free

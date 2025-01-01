@@ -3,7 +3,7 @@
 # @configure_input@
 
 # autoscan - Create configure.scan (a preliminary configure.ac) for a package.
-# Copyright (C) 1994, 1999-2017, 2020-2024 Free Software Foundation,
+# Copyright (C) 1994, 1999-2017, 2020-2025 Free Software Foundation,
 # Inc.
 
 # This program is free software: you can redistribute it and/or modify
