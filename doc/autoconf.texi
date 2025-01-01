@@ -18532,9 +18532,17 @@ the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f},
 @samp{test -r}, or @samp{test -x}.  Do not use @samp{test -e}, because
 Solaris 10 @command{/bin/sh}
-lacks it.  To test for symbolic links on systems that have them, use
+lacks it.
+
+To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
 POSIX 1003.1-2001, but @option{-h} has been around longer.
+
+The commands @samp{test A -ot B} and @samp{test A -nt B} are not reliable
+on macOS @command{sh} through at least macOS Sequoia 15.1.1 (2024),
+where @samp{test} ignores the subsecond part of file timestamps.
+To work around this bug, arrange for the timestamps to be at least one
+second apart.
 
 For historical reasons, POSIX reluctantly allows implementations of
 @samp{test -x} that will succeed for the root user, even if no execute

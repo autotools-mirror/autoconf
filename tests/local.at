@@ -137,10 +137,7 @@ then
 fi
 
 # In order to catch current-generation FAT out, we must *modify* files
-# that already exist; the *creation* timestamp is finer.  Use names
-# that make ls -t sort them differently when they have equal
-# timestamps than when they have distinct timestamps, keeping
-# in mind that ls -t prints the *newest* file first.
+# that already exist; the *creation* timestamp is finer.
 rm -f conftest.ts?
 : > conftest.ts1
 : > conftest.ts2
@@ -157,12 +154,8 @@ for at_try_res in $at_try_resolutions; do
   sleep $at_try_res
   echo gamma > conftest.ts3
 
-  # We assume that 'ls -t' will make use of high-resolution
-  # timestamps if the operating system supports them at all.
-  set X `ls -t conftest.ts?`
-  if test "$[]2" = conftest.ts3 &&
-     test "$[]3" = conftest.ts2 &&
-     test "$[]4" = conftest.ts1; then
+  if test conftest.ts1 -ot conftest.ts2 &&
+     test conftest.ts2 -ot conftest.ts3; then
     at_ts_resolution=$at_try_res
     break
   fi

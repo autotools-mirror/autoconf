@@ -729,7 +729,7 @@ AT_CHECK([grep cache stdout], [0], [ignore])
 : > a-stamp-file
 AT_CHECK_CONFIGURE([], [], [stdout])
 AT_CHECK([grep cache stdout], [1])
-AT_CHECK([LC_ALL=C ls -t config.cache a-stamp-file | sed 1q | grep config.cache], [1])
+AT_CHECK([test config.cache -ot a-stamp-file])
 
 # Using a symlinked cache file works.
 : > cache
