@@ -28,6 +28,8 @@ GNU Autoconf NEWS - User visible changes.
   The autom4te, autoscan and ifnames programs now recognize the two
   preprocessor directives, which were introduced in C23 and C++23.
 
+*** AC_USE_SYSTEM_EXTENSIONS now defines _COSMO_SOURCE for Cosmopolitan Libc.
+
 ** Notable bug fixes
 
 *** AC_FUNC_STRNLEN now detects Android 5.0's broken strnlen.

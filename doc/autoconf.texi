@@ -8852,6 +8852,9 @@ Define the following preprocessor macros unconditionally:
 @item _ALL_SOURCE
 @cvindex _ALL_SOURCE
 Enable extensions on AIX and z/OS.
+@item _COSMO_SOURCE
+@cvindex _COSMO_SOURCE
+Enable extensions on Cosmopolitan Libc.
 @item _DARWIN_C_SOURCE
 @cvindex _DARWIN_C_SOURCE
 Enable extensions on macOS.

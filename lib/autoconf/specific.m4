@@ -551,6 +551,10 @@ AH_VERBATIM([USE_SYSTEM_EXTENSIONS],
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
 #endif
+/* Enable extensions on Cosmopolitan Libc. */
+#ifndef _COSMO_SOURCE
+# undef _COSMO_SOURCE
+#endif
 /* Enable general extensions on macOS.  */
 #ifndef _DARWIN_C_SOURCE
 # undef _DARWIN_C_SOURCE
@@ -677,6 +681,7 @@ dnl it should only be defined when necessary.
           [ac_cv_should_define__xopen_source=yes])])])])
 
   AC_DEFINE([_ALL_SOURCE])
+  AC_DEFINE([_COSMO_SOURCE])
   AC_DEFINE([_DARWIN_C_SOURCE])
   AC_DEFINE([_GNU_SOURCE])
   AC_DEFINE([_HPUX_ALT_XOPEN_SOCKET_API])
