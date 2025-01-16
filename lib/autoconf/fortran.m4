@@ -664,7 +664,7 @@ while test $[@%:@] != 1; do
 	  ;;
 	  # Ignore these flags.
 	-lang* | -lcrt*.o | -lc | -lgcc* | -lSystem | -libmil | -little \
-	  |-LANG:=* | -LIST:* | -LNO:* | -link)
+	  | -[[lLR]]*=* | -LIST:* | -LNO:* | -link)
 	  ;;
 	-lkernel32)
 	  # Ignore this library only on Windows-like systems.
