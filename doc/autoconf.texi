@@ -4891,7 +4891,7 @@ be used.  @xref{Gnulib}.
 @c @fuindex strerror_r
 @prindex @code{strerror_r}
 POSIX specifies that @code{strerror_r} returns an @code{int}, but many
-systems (e.g., GNU C Library version 2.36) provide a
+systems (e.g., the GNU C Library) provide a
 different version returning a @code{char *}.  @code{AC_FUNC_STRERROR_R}
 can detect which is in use (@pxref{Particular Functions}).
 
@@ -5325,7 +5325,7 @@ The result of this macro is cached in the @code{ac_cv_func_getpgrp_void}
 variable.
 
 This macro is obsolescent, as current systems have a @code{getpgrp}
-whose signature conforms to POSIX.  New programs need not use this macro.
+whose signature conforms to POSIX@.  New programs need not use this macro.
 @end defmac
 
 @defmac AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
@@ -5521,7 +5521,7 @@ to @samp{int}, @code{SELECT_TYPE_ARG234} defaults to @samp{int *},
 and @code{SELECT_TYPE_ARG5} defaults to @samp{struct timeval *}.
 
 This macro is obsolescent, as current systems have a @code{select} whose
-signature conforms to POSIX.  New programs need not use this macro.
+signature conforms to POSIX@.  New programs need not use this macro.
 @end defmac
 
 @defmac AC_FUNC_SETPGRP
@@ -5604,7 +5604,7 @@ it is declared, define @code{HAVE_DECL_STRERROR_R}.  If it returns a
 @code{char *} message, define @code{STRERROR_R_CHAR_P}; otherwise it
 returns an @code{int} error number.  The Thread-Safe Functions option of
 POSIX requires @code{strerror_r} to return @code{int}, but
-many systems (including, for example, version 2.2.4 of the GNU C
+many systems (including, for example, the GNU C
 Library) return a @code{char *} value that is not necessarily equal to
 the buffer argument.
 
@@ -6263,7 +6263,7 @@ example:
 This macro caches its result in the @code{ac_cv_header_sys_wait_h}
 variable.
 
-This macro is obsolescent, as current systems are compatible with POSIX.
+This macro is obsolescent, as current systems are compatible with POSIX@.
 New programs need not use this macro.
 @end defmac
 
@@ -6274,7 +6274,7 @@ POSIX systems.  If there is no @file{unistd.h}, it is definitely
 not a POSIX system.  However, some non-POSIX systems do
 have @file{unistd.h}.
 
-The way to check whether the system supports POSIX is:
+The way to check whether the system says it supports POSIX is:
 
 @example
 @group
@@ -11986,12 +11986,12 @@ Like the M4 builtins, but warn against multiple inclusions of @var{file}.
 @defmacx m4_maketemp (@var{template})
 @msindex{maketemp}
 @msindex{mkstemp}
-POSIX requires @code{maketemp} to replace the trailing @samp{X}
+Older versions of POSIX specified a macro @code{maketemp},
+which replaced the trailing @samp{X}
 characters in @var{template} with the process id, without regards to the
-existence of a file by that name, but this a security hole.  When this
-was pointed out to the POSIX folks, they agreed to invent a new macro
-@code{mkstemp} that always creates a uniquely named file, but not all
-versions of GNU M4 support the new macro.  In M4sugar,
+existence of a file by that name.
+This was a security hole, so current POSIX instead specifies a macro
+@code{mkstemp} that always creates a uniquely named file.  In M4sugar,
 @code{m4_maketemp} and @code{m4_mkstemp} are synonyms for each other,
 and both have the secure semantics regardless of which macro the
 underlying M4 provides.
@@ -15463,14 +15463,14 @@ that expects case-sensitive filenames, it is best to create a separate
 disk volume or disk image formatted as case sensitive; this can be done
 using the @command{diskutil} command or the Disk Utility application.
 
-@item QNX 4.25
-@cindex QNX 4.25
+@item QNX
+@cindex QNX
 @c FIXME: Please, if you feel like writing something more precise,
 @c it'd be great.  In particular, I can't understand the difference with
 @c QNX Neutrino.
 QNX is a realtime operating system running on Intel architecture
 meant to be scalable from the small embedded systems to the hundred
-processor super-computer.  It claims to be POSIX certified.  More
+processor super-computer.  More
 information is available on the
 @uref{https://@/blackberry.qnx.com/@/en, QNX home page}.
 
@@ -15562,7 +15562,7 @@ you'll need to use Bash 2.05 for all other build tasks as well.
 @prindex @samp{ksh88}
 @prindex @samp{ksh93}
 The Korn shell is compatible with the Bourne family and it mostly
-conforms to POSIX.  It has two major variants commonly
+conforms to POSIX@.  It has two major variants commonly
 called @samp{ksh88} and @samp{ksh93}, named after the years of initial
 release.  It is usually called @command{ksh}, but is called @command{sh}
 on some hosts if you set your path appropriately.
@@ -15589,7 +15589,7 @@ available: it has most of the @samp{ksh88} features along with a few of
 its own.  It usually sets @code{KSH_VERSION}, except if invoked as
 @command{/bin/sh} on OpenBSD, and similarly to Bash you can require
 POSIX compatibility by running @samp{set -o posix}.  Unfortunately, with
-@command{pdksh} 5.2.14 (the latest stable version as of January 2007)
+@command{pdksh} 5.2.14 (the latest stable version as of 2025)
 POSIX mode is buggy and causes @command{pdksh} to depart from POSIX in
 at least one respect, see @ref{Shell Substitutions}.
 
@@ -15779,7 +15779,7 @@ One workaround is to grep out uninteresting lines, hoping not to remove
 good ones.
 
 If you intend to redirect both standard error and standard output,
-redirect standard output first.  This works better with HP-UX,
+redirect standard output first.  This works better with AIX,
 since its shell mishandles tracing if standard error is redirected
 first:
 
@@ -15865,13 +15865,13 @@ y1
 @noindent
 As a workaround, @command{echo} or @command{eval} can be used.
 
-Don't rely on file descriptors 0, 1, and 2 remaining closed in a
+When running a subsidiary program be careful if descriptor 0 is not open
+for reading or decriptors 1 and 2 are not open for writing,
+as the subsidiary program might not behave as expected.
+In particular, don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
-new process image.  POSIX 2008 says this may be done only if the
-subsidiary program is set-user-ID or set-group-ID, but HP-UX 11.23 does
-it even for ordinary programs, and the next version of POSIX will allow
-HP-UX behavior.
+newly created process.
 
 If you want a file descriptor above 2 to be inherited into a child
 process, then you must use redirections specific to that command or a
@@ -17016,7 +17016,7 @@ the last command executed.
 When this variable is set it specifies a list of directories to search
 when invoking @code{cd} with a relative file name that did not start
 with @samp{./} or @samp{../}.  POSIX
-1003.1-2001 says that if a nonempty directory name from @env{CDPATH}
+says that if a nonempty directory name from @env{CDPATH}
 is used successfully, @code{cd} prints the resulting absolute
 file name.  Unfortunately this output can break idioms like
 @samp{abs=`cd src && pwd`} because @code{abs} receives the name twice.
@@ -17351,7 +17351,7 @@ Conventions}, for more information about @code{PATH_SEPARATOR}.
 @item POSIXLY_CORRECT
 @evindex POSIXLY_CORRECT
 In the GNU environment, exporting @env{POSIXLY_CORRECT} with any value
-(even empty) causes programs to try harder to conform to POSIX.
+(even empty) causes programs to try harder to conform to POSIX@.
 Autoconf does not directly manipulate this variable, but @command{bash}
 ties the shell variable @env{POSIXLY_CORRECT} to whether the script is
 running in POSIX mode.  Therefore, take care when exporting or unsetting
@@ -17368,9 +17368,9 @@ posix           off
 
 @item PWD
 @evindex PWD
-POSIX 1003.1-2001 requires that @command{cd} and
-@command{pwd} must update the @env{PWD} environment variable to point
-to the logical name of the current directory, but traditional shells
+POSIX requires that @command{cd}
+must update the @env{PWD} environment variable to point
+to the name of the current directory, but traditional shells
 do not support this.  This can cause confusion if one shell instance
 maintains @env{PWD} but a subsidiary and different shell does not know
 about @env{PWD} and executes @command{cd}; in this case @env{PWD}
@@ -17797,7 +17797,7 @@ $ @kbd{/bin/sh -c 'case `false` in ?) ;; esac; echo $?'}
 @item @command{cd}
 @c ---------------
 @prindex @command{cd}
-POSIX 1003.1-2001 requires that @command{cd} must support
+POSIX requires that @command{cd} must support
 the @option{-L} (``logical'') and @option{-P} (``physical'') options,
 with @option{-L} being the default.  However, traditional shells do
 not support these options, and their @command{cd} command has the
@@ -18268,7 +18268,7 @@ directory name, some of whose components may be symbolic links.  These
 directory names are in contrast to ``physical'' directory names, whose
 components are all directories.
 
-POSIX 1003.1-2001 requires that @command{pwd} must support
+POSIX requires that @command{pwd} must support
 the @option{-L} (``logical'') and @option{-P} (``physical'') options,
 with @option{-L} being the default.  However, traditional shells do
 not support these options, and their @command{pwd} command has the
@@ -18539,7 +18539,7 @@ lacks it.
 
 To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
-POSIX 1003.1-2001, but @option{-h} has been around longer.
+POSIX, but @option{-h} has been around longer.
 
 The commands @samp{test A -ot B} and @samp{test A -nt B} are not reliable
 on macOS @command{sh} through at least macOS Sequoia 15.1.1 (2024),
@@ -18902,7 +18902,7 @@ length of regular expressions and literal strings in an Awk program.
 
 Traditional Awk implementations derived from Unix version 7, such as
 Solaris @command{/bin/awk}, have many limitations and do not
-conform to POSIX.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
+conform to POSIX@.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
 Programs}) finds you an Awk that doesn't have these problems, but if
 for some reason you prefer not to use @code{AC_PROG_AWK} you may need to
 address them.  For more detailed descriptions, see @ref{Language
@@ -19024,9 +19024,9 @@ The default executable, produced by @samp{cc foo.c}, can be
 @end itemize
 
 The C compiler's traditional name is @command{cc}, but other names like
-@command{gcc} are common.  POSIX 1003.1-2001 through 1003.1-2017 specify the
-name @command{c99}, but older POSIX editions specified
-@command{c89}, future POSIX standards will likely specify
+@command{gcc} are common.  POSIX 1003.1-2024 specifies the
+name @command{c17}, but older POSIX editions specified
+@command{c99} or @command{c89}, future POSIX standards will likely specify
 other commands, and anyway these standard names are rarely used in
 practice.  Typically the C compiler is invoked from makefiles that use
 @samp{$(CC)}, so the value of the @samp{CC} make variable selects the
@@ -19345,19 +19345,18 @@ POSIX spec for @command{find}} for @command{find} operands that
 should be portable nowadays.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
-exactly @emph{@{@}}, not if it's only a part of an argument.  For
-instance, on HP-UX 11:
+exactly @samp{@{@}}, not if @samp{@{@}} only a part of a larger argument.
+For instance, on AIX 7.3:
 
 @example
 $ @kbd{touch foo}
-$ @kbd{find . -name foo -exec echo "@{@}-@{@}" \;}
+$ @kbd{find . -name foo -exec echo '@{@}-@{@}' \;}
 @{@}-@{@}
 @end example
 
 @noindent
 while GNU @command{find} reports @samp{./foo-./foo}.
 POSIX allows either behavior.
-
 
 @anchor{grep}
 @item @command{grep}
