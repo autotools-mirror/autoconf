@@ -63,7 +63,7 @@ CLEANFILES += \
   tests/wrapper.in \
   $(wrappers)
 
-tests/wrapper.in: $(srcdir)/tests/wrapper.as $(m4sh_m4f_dependencies)
+tests/wrapper.in: $(srcdir)/tests/wrapper.as lib/m4sugar/m4sh.m4f
 	$(MY_AUTOM4TE) --language=M4sh $(srcdir)/tests/wrapper.as -o $@
 
 edit_wrapper = sed \
