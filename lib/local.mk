@@ -130,7 +130,7 @@ lib/autoscan/autoscan.list: $(srcdir)/lib/autoscan/autoscan.pre
 	    -t'AN_OUTPUT:$$1: $$2		$$3' \
 	) | LC_ALL=C sort >>$@
 
-lib/autoscan/autoscan.list: $(autoconf_m4f_dependencies) Makefile
+lib/autoscan/autoscan.list: lib/autoconf/autoconf.m4f Makefile
 
 ## ----------------------------------- ##
 ## Make Autoconf library for M4sugar.  ##
