@@ -19358,6 +19358,13 @@ $ @kbd{find . -name foo -exec echo '@{@}-@{@}' \;}
 while GNU @command{find} reports @samp{./foo-./foo}.
 POSIX allows either behavior.
 
+AIX 7.3 @samp{find ... -exec @var{command} +} incorrectly fails if
+@var{command} is not executed.  For example, @samp{find . -name '*.tmp'
+-exec rm @{@} +} incorrectly outputs a diagnostic and fails if no file
+names end in @samp{.tmp}.  To work around this problem you can use a
+circumlocution like @samp{find . -name '*.tmp' -exec rm -f @{@} + -o
+-exec true ';'}.
+
 @anchor{grep}
 @item @command{grep}
 @c -----------------
