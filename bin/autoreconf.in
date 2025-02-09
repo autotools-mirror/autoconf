@@ -400,8 +400,10 @@ sub install_aux_file
             or fatal "rm -f $dest: $!";
         }
       my ($temp, $tempname) = tempfile (UNLINK => 0, DIR => $destdir);
-      copy ($src, $tempname)
+      copy ($src, $temp)
         or fatal "copying $src to $tempname: $!";
+      close ($temp)
+        or fatal "closing $tempname: $!";
       make_executable ($tempname) if -x $src;
       update_file ($tempname, $dest, $force);
     }
