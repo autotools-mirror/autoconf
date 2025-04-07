@@ -988,12 +988,13 @@ AC_DEFINE_UNQUOTED([unq4], [${baz+set}], [unquoted, test 4])
 AC_DEFINE_UNQUOTED([unq5], ["${baz+`echo "a "' b'`}"], [unquoted, test 5])
 AC_DEFINE_UNQUOTED([unq6], [`echo hi`], [unquoted, test 6])
 AC_DEFINE_UNQUOTED([unq7], ['\\"'], [unquoted, test 7])
+AC_DEFINE_UNQUOTED([unq8], ["${baz+$(echo "a "' b')}"], [unquoted, test 8])
 AC_PROG_AWK
 AC_CONFIG_FILES([Foo Zardoz])]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER([],
-   [foo fooq bar barq unq1 unq2 unq2 unq3 unq4 unq5 unq6 unq7])
+   [foo fooq bar barq unq1 unq2 unq2 unq3 unq4 unq5 unq6 unq7 unq8])
 # Check both awk and the result of AC_PROG_AWK
 # Quote the first word in the for list for Solaris sh.
 for awk_arg in "FOO=" AWK=awk; do
@@ -1023,6 +1024,7 @@ X@file@
 #define unq5 "a  b"
 #define unq6 hi
 #define unq7 '\"'
+#define unq8 "a  b"
 ]])
 done
 AT_CLEANUP

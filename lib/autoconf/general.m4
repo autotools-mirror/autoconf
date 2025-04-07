@@ -2385,7 +2385,7 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([_$0], $@)])
 # avoid AS_ECHO if "#" is present to avoid confusing m4 with comments,
 # but quadrigraphs are fine in that case.
 m4_define([_AC_DEFINE_UNQUOTED],
-[m4_if(m4_bregexp([$1], [#\|\\\|`\|\(\$\|@S|@\)\((|{|@{:@\)]), [-1],
+[m4_if(m4_bregexp([$1], [#\|\\\|`\|\(\$\|@S|@\)\((\|{\|@{:@\)]), [-1],
        [AS_ECHO(["AS_ESCAPE([$1], [""])"]) >>confdefs.h],
        [cat >>confdefs.h <<_ACEOF
 [$1]

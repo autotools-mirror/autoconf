@@ -32,6 +32,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Notable bug fixes
 
+*** AC_DEFINE_UNQUOTED no longer mishandles double-quotes inside $(...)
+  and ${...}.
+
 *** AC_FUNC_STRNLEN now detects Android 5.0's broken strnlen.
 
 *** AC_PROG_OBJC now finds the GNU Objective-C compiler, as packaged in
