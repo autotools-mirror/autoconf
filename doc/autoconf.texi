@@ -598,6 +598,7 @@ Transforming Program Names When Installing
 Running @command{configure} Scripts
 
 * Basic Installation::          Instructions for typical cases
+* Installation Prerequisites::  What you need to install
 * Compilers and Options::       Selecting compilers and optimization
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
@@ -22893,6 +22894,7 @@ may use comes with Autoconf.
 
 @menu
 * Basic Installation::          Instructions for typical cases
+* Installation Prerequisites::  What you need to install
 * Compilers and Options::       Selecting compilers and optimization
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories

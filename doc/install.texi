@@ -132,6 +132,22 @@ If the package follows the GNU Coding Standards,
 you can type @samp{make uninstall} to remove the installed files.
 @end enumerate
 
+@node Installation Prerequisites
+@section Installation Prerequisites
+
+Installation requires a POSIX-like environment
+with a shell and the following standard utilities:
+
+@example
+[ awk cat cmp cp diff echo expr false
+grep ls mkdir mv printf pwd rm rmdir
+sed sort test touch tr true
+@end example
+
+@noindent
+Depending on the package, other programs may be needed,
+such as a compiler for the language the package is written in.
+
 @node Compilers and Options
 @section Compilers and Options
 
