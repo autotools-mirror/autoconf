@@ -403,14 +403,13 @@ rm -f conf$$files.sh
   echo "_ACEOF"
 } >conf$$subs.sh ||
   AC_MSG_ERROR([could not make $CONFIG_STATUS])
-ac_delim_num=`echo "$ac_subst_vars" | grep -c '^'`
+ac_delim_num=`echo "$ac_subst_vars" | sed -n '$='`
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   . ./conf$$subs.sh ||
     AC_MSG_ERROR([could not make $CONFIG_STATUS])
 
-dnl Do not use grep on conf$$subs.awk, since AIX grep has a line length limit.
-  ac_delim_n=`sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X`
+  ac_delim_n=`sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | sed -n '$='`
   if test $ac_delim_n = $ac_delim_num; then
     break
   elif $ac_last_try; then
