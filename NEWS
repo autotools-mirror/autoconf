@@ -43,6 +43,9 @@ GNU Autoconf NEWS - User visible changes.
 *** Autoconf no longer generates ${1+"$@"} in scripts, working around
   a bug in AIX 7.2 ksh93.
 
+*** config.status now fails with a diagnostic if awk is missing,
+  rather than misbehaving.
+
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 
 ** Backward incompatibilities

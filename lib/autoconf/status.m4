@@ -1470,7 +1470,13 @@ AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
 AC_PROVIDE_IFELSE([AC_PROG_AWK],
 [AWK='$AWK'
 ])dnl
-test -n "\$AWK" || AWK=awk
+test -n "\$AWK" || {
+  awk '' </dev/null ||
+    AS_ESCAPE(
+      m4_dquote(m4_expand([AC_MSG_ERROR([try installing gawk])])),
+      [\$`])
+  AWK=awk
+}
 _ACEOF
 
 cat >>"$CONFIG_STATUS" <<\_ACEOF || ac_write_fail=1
