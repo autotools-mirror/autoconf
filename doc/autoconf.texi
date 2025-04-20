@@ -4162,14 +4162,19 @@ otherwise to @samp{:} (do nothing).
 @acindex{PROG_AWK}
 @ovindex AWK
 @caindex prog_AWK
-Check for @code{gawk}, @code{mawk}, @code{nawk}, and @code{awk}, in that
+Check for the commands @command{gawk}, @command{mawk},
+@command{nawk}, @command{awk}, and @code{busybox awk}, in that
 order, and set output variable @code{AWK} to the first one that is found.
-It tries @code{gawk} first because that is reported to be the
+Try @code{gawk} first because that is reported to be the
 best implementation.  The result can be overridden by setting the
 variable @code{AWK} or the cache variable @code{ac_cv_prog_AWK}.
 
-Using this macro is sufficient to avoid the pitfalls of traditional
-@command{awk} (@pxref{awk, , Limitations of Usual Tools}).
+Using this macro avoids some pitfalls of older systems that have both
+traditional @command{awk} (@pxref{awk, , Limitations of Usual Tools})
+and better alternatives like @command{gawk}.
+It also can help port to stripped-down systems that have only
+@code{busybox awk}, although these systems could well have problems
+with other build components that use plain @command{awk}.
 @end defmac
 
 @defmac AC_PROG_GREP

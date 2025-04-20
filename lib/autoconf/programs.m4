@@ -357,7 +357,7 @@ AN_PROGRAM([gawk], [AC_PROG_AWK])
 AN_PROGRAM([mawk], [AC_PROG_AWK])
 AN_PROGRAM([nawk], [AC_PROG_AWK])
 AC_DEFUN([AC_PROG_AWK],
-[AC_CHECK_PROGS(AWK, gawk mawk nawk awk, )])
+[AC_CHECK_PROGS([AWK], [gawk mawk nawk awk 'busybox awk'])])
 
 
 # AC_PROG_EGREP
