@@ -16280,6 +16280,17 @@ some shells but not others; hence portable scripts should never use
 Outside the C locale, patterns like @samp{[a-z]} are problematic since
 they may match characters that are not lower-case letters.
 
+Patterns with braces are, although not specified by POSIX, supported
+by most shells.  Not so by AIX 7.3 @command{/bin/sh}, though:
+
+@example
+$ @kbd{ls -1 sequence000.c sequence999.c}
+sequence000.c
+sequence999.c
+$ @kbd{ls -1 sequence@{000,999@}.c}
+ls: 0653-341 The file sequence@{000,999@}.c does not exist.
+@end example
+
 @node Shell Substitutions
 @section Shell Substitutions
 @cindex Shell substitutions
