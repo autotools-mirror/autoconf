@@ -16272,24 +16272,53 @@ File names are case insensitive, so even names like
 @section Shell Pattern Matching
 @cindex Shell pattern matching
 
-Nowadays portable patterns can use negated character classes like
-@samp{[!-aeiou]}.  The older syntax @samp{[^-aeiou]} is supported by
-some shells but not others; hence portable scripts should never use
-@samp{^} as the first character of a bracket pattern.
+Portable patterns should avoid the following constructs:
 
-Outside the C locale, patterns like @samp{[a-z]} are problematic since
-they may match characters that are not lower-case letters.
+@itemize @bullet
+@item
+A bracket expression like @samp{[a-z]} outside the C locale.
+This pattern may match characters that are not lower-case letters.
+Outside the C locale, use @samp{[[:lower:]]} instead,
+or to match just lower-case ASCII letters use
+@samp{[abcdefghijklmnopqrstuvwxyz]}.
 
-Patterns with braces are, although not specified by POSIX, supported
-by most shells.  Not so by AIX 7.3 @command{/bin/sh}, though:
+@item
+A bracket expression starting with @samp{^}.
+For example, @samp{[!-aeiou]} is portable, but @samp{[^-aeiou]} is not.
+
+@item
+When matching file names, a pattern containing @samp{*}, @samp{?} or
+@samp{[...]} that might match the file names @samp{.} or @samp{..}.
+For example @samp{.*} might match @samp{.} and @samp{..}, but it might not.
+
+@item
+Any of the following characters,
+unless quoted or escaped or in a bracket expression:
 
 @example
-$ @kbd{ls -1 sequence000.c sequence999.c}
-sequence000.c
-sequence999.c
-$ @kbd{ls -1 sequence@{000,999@}.c}
-ls: 0653-341 The file sequence@{000,999@}.c does not exist.
+! # % = [ ] ^ @{ @} ~
 @end example
+
+An unescaped @samp{[} that does not introduce a bracket expression is
+problematic because, for example, @samp{a*[} might match the file name
+@samp{abc[}, but it might not.
+
+Curly braces are problematic because POSIX allows but does not require
+brace expansion.  For example, the shell command @samp{echo a@{b,c,d@}e}
+outputs @samp{abe ace ade} with Bash, but @samp{a@{b,c,d@}e} with Dash.
+
+@item
+Backlashes in bracket expressions, unless doubled.
+For example, @samp{[\\^]} is portable, but @samp{[\^]} is not.
+
+@item
+An unescaped backslash at pattern end.
+
+@item
+A NUL byte.
+More generally, a NUL byte should never appear anywhere
+in a portable shell script.
+@end itemize
 
 @node Shell Substitutions
 @section Shell Substitutions
