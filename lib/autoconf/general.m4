@@ -3105,7 +3105,7 @@ AC_DEFUN([AC_CHECK_FILES],
 # used by AC_CHECK_DECL, report failure.
 AC_DEFUN([_AC_UNDECLARED_BUILTIN],
 [AC_CACHE_CHECK(
-  [for $[]_AC_CC options needed to detect all undeclared functions],
+  [for $[]_AC_CC options to detect undeclared functions],
   [ac_cv_[]_AC_LANG_ABBREV[]_undeclared_builtin_options],
   [ac_save_CFLAGS=$CFLAGS
    ac_cv_[]_AC_LANG_ABBREV[]_undeclared_builtin_options='cannot detect'
@@ -3143,6 +3143,39 @@ extern void ac_decl (int, char *);
     ['none needed'],
       [ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options=''],
       [ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options=$ac_cv_[]_AC_LANG_ABBREV[]_undeclared_builtin_options])
+])
+
+# _AC_FUTURE_DARWIN
+# -----------------
+# Set ac_[]_AC_LANG_ABBREV[]_future_darwin_options to any options needed
+# to make the compiler issue a hard error, not a warning, when a function
+# is used that is declared in the .h files but that is introduced in a
+# version *after* the current minimum OS version.
+# These options should not cause any other unrelated warnings to become
+# errors.
+AC_DEFUN([_AC_FUTURE_DARWIN],
+[AC_CACHE_CHECK(
+  [for $[]_AC_CC options to ignore future-version functions],
+  [ac_cv_[]_AC_LANG_ABBREV[]_future_darwin_options],
+  [dnl Test whether the compiler supports the option
+   dnl '-Werror=unguarded-availability-new'.
+   ac_compile_saved="$ac_compile"
+   ac_compile="$ac_compile -Werror=unguarded-availability-new"
+   AC_COMPILE_IFELSE(
+     [AC_LANG_PROGRAM(
+	[[#if ! (defined __APPLE__ && defined __MACH__)
+	   #error "-Werror=unguarded-availability-new not needed here"
+	  #endif
+	]],
+	[[]])],
+     [ac_cv_[]_AC_LANG_ABBREV[]_future_darwin_options='-Werror=unguarded-availability-new'],
+     [ac_cv_[]_AC_LANG_ABBREV[]_future_darwin_options='none needed'])
+   ac_compile="$ac_compile_saved"
+  ])
+ AS_CASE([$ac_cv_[]_AC_LANG_ABBREV[]_future_darwin_options],
+   ['none needed'],
+     [ac_[]_AC_LANG_ABBREV[]_future_darwin_options=''],
+     [ac_[]_AC_LANG_ABBREV[]_future_darwin_options=$ac_cv_[]_AC_LANG_ABBREV[]_future_darwin_options])
 ])
 
 # _AC_CHECK_DECL_BODY
@@ -3195,10 +3228,16 @@ dnl Initialize each $ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options once.
 [AC_DEFUN([_AC_UNDECLARED_BUILTIN_]_AC_LANG_ABBREV,
           [_AC_UNDECLARED_BUILTIN])]dnl
 [AC_REQUIRE([_AC_UNDECLARED_BUILTIN_]_AC_LANG_ABBREV)]dnl
+dnl Initialize each $ac_[]_AC_LANG_ABBREV[]_future_darwin_options once.
+[AC_DEFUN([_AC_FUTURE_DARWIN_]_AC_LANG_ABBREV,
+	  [_AC_FUTURE_DARWIN])]dnl
+[AC_REQUIRE([_AC_FUTURE_DARWIN_]_AC_LANG_ABBREV)]dnl
 [AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])]dnl
 [ac_fn_check_decl ]dnl
 ["$LINENO" "$1" "ac_Symbol" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])" ]dnl
-["$ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options" "_AC_LANG_PREFIX[]FLAGS"]
+["$ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options]dnl
+[$ac_[]_AC_LANG_ABBREV[]_future_darwin_options" ]dnl
+["_AC_LANG_PREFIX[]FLAGS"]
 [AS_VAR_IF([ac_Symbol], [yes], [$2], [$3])]dnl
 [AS_VAR_POPDEF([ac_Symbol])]dnl
 )# AC_CHECK_DECL

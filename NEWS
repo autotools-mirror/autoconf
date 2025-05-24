@@ -34,6 +34,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Notable bug fixes
 
+*** AC_CHECK_DECL and AC_CHECK_DECLS will, on macOS, now report "no" for
+  functions that are declared as existing in future macOS versions only.
+
 *** AC_DEFINE_UNQUOTED no longer mishandles double-quotes inside $(...)
   and ${...}.
 
