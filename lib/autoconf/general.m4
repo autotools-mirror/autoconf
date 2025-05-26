@@ -1309,6 +1309,59 @@ done
 AS_UNSET(ac_configure_args0)
 AS_UNSET(ac_configure_args1)
 
+# Dump the cache to stdout.  It can be in a pipe (this is a requirement).
+ac_cache_dump ()
+{
+  _AC_CACHE_DUMP
+}
+
+# Print debugging info to stdout.
+ac_dump_debugging_info ()
+{
+  echo
+
+  AS_BOX([Cache variables.])
+  echo
+  ac_cache_dump
+  echo
+
+  AS_BOX([Output variables.])
+  echo
+  for ac_var in $ac_subst_vars
+  do
+    eval ac_val=\$$ac_var
+    case $ac_val in
+    *\'*) ac_val=`AS_ECHO(["$ac_val"]) | sed "s/'/'\\\\\\\\''/g"`;;
+    esac
+    AS_ECHO(["$ac_var='$ac_val'"])
+  done | sort
+  echo
+
+  if test -n "$ac_subst_files"; then
+    AS_BOX([File substitutions.])
+    echo
+    for ac_var in $ac_subst_files
+    do
+      eval ac_val=\$$ac_var
+      case $ac_val in
+      *\'*) ac_val=`AS_ECHO(["$ac_val"]) | sed "s/'/'\\\\\\\\''/g"`;;
+      esac
+      AS_ECHO(["$ac_var='$ac_val'"])
+    done | sort
+    echo
+  fi
+
+  if test -s confdefs.h; then
+    AS_BOX([confdefs.h.])
+    echo
+    cat confdefs.h
+    echo
+  fi
+  test "$ac_signal" != 0 &&
+    AS_ECHO(["$as_me: caught signal $ac_signal"])
+  AS_ECHO(["$as_me: exit $exit_status"])
+}
+
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
 # would cause problems or look ugly.
@@ -1318,53 +1371,7 @@ trap 'exit_status=$?
   # Sanitize IFS.
   IFS=" ""	$as_nl"
   # Save into config.log some information that might help in debugging.
-  {
-    echo
-
-    AS_BOX([Cache variables.])
-    echo
-    m4_bpatsubsts(m4_defn([_AC_CACHE_DUMP]),
-		  [^ *\(#.*\)?
-],                [],
-		  ['], ['\\''])
-    echo
-
-    AS_BOX([Output variables.])
-    echo
-    for ac_var in $ac_subst_vars
-    do
-      eval ac_val=\$$ac_var
-      case $ac_val in
-      *\'\''*) ac_val=`AS_ECHO(["$ac_val"]) | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
-      esac
-      AS_ECHO(["$ac_var='\''$ac_val'\''"])
-    done | sort
-    echo
-
-    if test -n "$ac_subst_files"; then
-      AS_BOX([File substitutions.])
-      echo
-      for ac_var in $ac_subst_files
-      do
-	eval ac_val=\$$ac_var
-	case $ac_val in
-	*\'\''*) ac_val=`AS_ECHO(["$ac_val"]) | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
-	esac
-	AS_ECHO(["$ac_var='\''$ac_val'\''"])
-      done | sort
-      echo
-    fi
-
-    if test -s confdefs.h; then
-      AS_BOX([confdefs.h.])
-      echo
-      cat confdefs.h
-      echo
-    fi
-    test "$ac_signal" != 0 &&
-      AS_ECHO(["$as_me: caught signal $ac_signal"])
-    AS_ECHO(["$as_me: exit $exit_status"])
-  } >&AS_MESSAGE_LOG_FD
+  ac_dump_debugging_info >&AS_MESSAGE_LOG_FD
   eval "rm -f $ac_clean_CONFIG_STATUS core *.core core.conftest.*" &&
     rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
@@ -2253,7 +2260,7 @@ m4_define([AC_CACHE_SAVE],
 
 _ACEOF
 
-_AC_CACHE_DUMP() |
+ac_cache_dump |
   sed ['
      /^ac_cv_env_/b end
      t clear
