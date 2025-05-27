@@ -1363,11 +1363,10 @@ ac_dump_debugging_info ()
 }
 
 # When interrupted or exit'd, cleanup temporary files, and complete
-# config.log.  We remove comments because anyway the quotes in there
-# would cause problems or look ugly.
-# WARNING: Use '\'' to represent an apostrophe within the trap.
-# WARNING: Do not start the trap code with a newline, due to a FreeBSD 4.0 bug.
-trap 'exit_status=$?
+# config.log.
+ac_exit_trap ()
+{
+  exit_status=$1
   # Sanitize IFS.
   IFS=" ""	$as_nl"
   # Save into config.log some information that might help in debugging.
@@ -1375,7 +1374,11 @@ trap 'exit_status=$?
   eval "rm -f $ac_clean_CONFIG_STATUS core *.core core.conftest.*" &&
     rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
-' 0
+}
+
+dnl To minimize quoting issues, put as little code as possible in traps.
+dnl Do not start any trap code with a newline, due to a FreeBSD 4.0 bug.
+trap 'ac_exit_trap $?' 0
 for ac_signal in 1 2 13 15; do
   trap 'ac_signal='$ac_signal'; AS_EXIT([1])' $ac_signal
 done
