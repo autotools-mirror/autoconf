@@ -19790,14 +19790,6 @@ $ @kbd{printf '\200\n' | LC_ALL=en_US.ISO8859-1 sed -n /./p | wc -l}
 1
 @end example
 
-Portable @command{sed} regular expressions should use @samp{\} only to escape
-characters in the string @samp{$()*.123456789[\^n@{@}}.  For example,
-alternation, @samp{\|}, is common but POSIX does not require its
-support, so it should be avoided in portable scripts.  Solaris
-@command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
-deletes only lines that contain the literal string @samp{a|b}.
-Similarly, @samp{\+} and @samp{\?} should be avoided.
-
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
 
 Nested parentheses in patterns (e.g., @samp{\(\(a*\)b*)\)}) are
@@ -19815,6 +19807,27 @@ $ @kbd{echo '1*23*4' | /usr/bin/sed 's/\(.\)*/x/g'}
 x2x4
 $ @kbd{echo '1*23*4' | /usr/xpg4/bin/sed 's/\(.\)*/x/g'}
 x
+@end example
+
+Portable @command{sed} regular expressions should use @samp{\} only to escape
+characters in the string @samp{$()*.123456789[\^n@{@}}.  For example,
+alternation, @samp{\|}, is common but POSIX does not require its
+support, so it should be avoided in portable scripts.  Solaris
+@command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
+deletes only lines that contain the literal string @samp{a|b}.
+Similarly, @samp{\+} and @samp{\?} should be avoided.
+
+Portable @command{sed} replacement strings should use @samp{\} only to
+escape the delimiter character, newline, and characters in the string
+@samp{&123456789\}.  For example, although in GNU @command{sed}
+the command @samp{s/AB/\n/} replaces the first @samp{AB} with a newline,
+in OpenBSD and Solaris @command{sed} it acts like @samp{s/AB/n/}.
+To be portable, escape a newline instead:
+
+@example
+# This is portable; "sed 's/AB/\n/'" is not.
+sed 's/AB/\
+/'
 @end example
 
 The @option{-e} option is mostly portable.
@@ -19849,21 +19862,16 @@ but POSIX says that this use of a semicolon has undefined effect if
 should use semicolon only with simple scripts that do not use these
 verbs.
 
-POSIX up to the 2008 revision requires the argument of the @option{-e}
-option to be a syntactically complete script.  GNU @command{sed} allows
-to pass multiple script fragments, each as argument of a separate
-@option{-e} option, that are then combined, with newlines between the
-fragments, and a future POSIX revision may allow this as well.  This
-approach is not portable with script fragments ending in backslash; for
+POSIX requires each @option{-e} and @option{-f} option to specify a
+syntactically complete script.  Although GNU @command{sed} also allows
+@option{-e} and @option{-f} options to specify script fragments
+that it assembles into a full script, this is not portable.  For
 example, the @command{sed} programs on Solaris 10, HP-UX 11, and AIX
-don't allow splitting in this case:
+do not allow script fragments:
 
 @example
-$ @kbd{echo a | sed -n -e 'i\}
-@kbd{0'}
-0
-$ @kbd{echo a | sed -n -e 'i\' -e 0}
-Unrecognized command: 0
+$ @kbd{sed -e 'i\' -e ouch}
+Unrecognized command: ouch
 @end example
 
 @noindent
