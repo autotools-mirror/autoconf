@@ -17145,6 +17145,12 @@ output via terminal escape sequences, and the result can cause spurious
 failures when the output is not directed to a terminal.  Configure
 scripts use M4sh, which automatically unsets this variable.
 
+@item HOME
+@evindex HOME
+Strange things can happen if @env{HOME} is unset or empty.
+For example, plain @command{cd} (with no arguments) has unspecified behavior.
+Also, @env{HOME} should be absolute, not relative.
+
 @item IFS
 @evindex IFS
 Long ago, shell scripts inherited @env{IFS} from the environment,
@@ -17379,6 +17385,12 @@ compatibility mode and the @command{zsh} version is newer
 than 3.1.6-dev-18.  If you are using an older @command{zsh}
 and forget to set @env{NULLCMD},
 your script might be suspended waiting for data on its standard input.
+
+@item OLDPWD
+@evindex OLDPWD
+POSIX requires that @command{cd} must update the @env{OLDPWD}
+environment variable, if set, to point to the name of the previous
+directory, but Solaris 10 @command{/bin/sh} does not support this.
 
 @item options
 @evindex options
@@ -17860,8 +17872,26 @@ Also, Autoconf-generated scripts check for this problem when computing
 variables like @code{ac_top_srcdir} (@pxref{Configuration Actions}),
 so it is safe to @command{cd} to these variables.
 
-POSIX states that behavior is undefined if @command{cd} is given an
-explicit empty argument.  Some shells do nothing, some change to the
+POSIX specifies an @option{-e} option that affects the exit status
+when the @option{-P} option is in effect.  Portable scripts should
+avoid it for the same reason they avoid @option{-P}.
+
+@evindex OLDPWD
+@evindex PWD
+POSIX says that a successful @command{cd} updates the values of the
+@env{OLDPWD} and @env{PWD} variables, and that @command{cd -} acts like
+@command{cd $OLDPWD}.  Older shells, such as Solaris 10
+@command{/bin/sh}, do not support this and portable scripts should not
+rely on it.
+
+@evindex HOME
+If @env{HOME} is unset or empty, the behavior of @command{cd} with no
+arguments is implementation-defined, so portable scripts should avoid it
+in that case.
+
+POSIX 1003.1-2024 states that @command{cd} must fail if given an
+explicit empty argument.  However, earlier POSIX editions did not
+specify the behavior and some shells do nothing, some change to the
 first entry in @env{CDPATH}, some change to @env{HOME}, and some exit
 the shell rather than returning an error.  Unfortunately, this means
 that if @samp{$var} is empty, then @samp{cd "$var"} is less predictable
@@ -17869,6 +17899,11 @@ than @samp{cd $var} (at least the latter is well-behaved in all shells
 at changing to @env{HOME}, although this is probably not what you wanted
 in a script).  You should check that a directory name was supplied
 before trying to change locations.
+
+If @command{cd} fails, POSIX requires the invoking shell to behave as if
+@command{cd} exited with status 1, which means the invoking shell can continue.
+However, Solaris 10 @command{/bin/sh} aborts the containing command if
+interactive, and exits otherwise.
 
 @xref{Special Shell Variables}, for portability problems involving
 @command{cd} and the @env{CDPATH} environment variable.
