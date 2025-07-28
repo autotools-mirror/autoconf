@@ -17880,7 +17880,7 @@ avoid it for the same reason they avoid @option{-P}.
 @evindex PWD
 POSIX says that a successful @command{cd} updates the values of the
 @env{OLDPWD} and @env{PWD} variables, and that @command{cd -} acts like
-@command{cd $OLDPWD}.  Older shells, such as Solaris 10
+@command{cd "$OLDPWD"}.  Older shells, such as Solaris 10
 @command{/bin/sh}, do not support this and portable scripts should not
 rely on it.
 
