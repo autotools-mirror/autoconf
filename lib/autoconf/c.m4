@@ -1316,7 +1316,7 @@ ac_c_conftest_c99_main='
   // Check restrict.
   if (test_restrict ("String literal") == 0)
     success = true;
-  char *restrict newvar = "Another string";
+  const char *restrict newvar = "Another string";
 
   // Check varargs.
   success &= test_varargs ("s, d'\'' f .", "string", 65, 34.234);
