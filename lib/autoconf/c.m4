@@ -2137,15 +2137,12 @@ AC_DEFUN([AC_C_CONST],
     *t++ = 0;
     if (s) return 0;
   }
-  { /* Someone thinks the Sun supposedly-ANSI compiler will reject this.  */
+  { /* Derived from code rejected by Sun C 1.0 and similar vintage.  */
     int x[] = {25, 17};
-    const int *foo = &x[0];
+    typedef int const *iptr;
+    iptr foo = &x[0];
     ++foo;
-  }
-  { /* Sun SC1.0 ANSI compiler rejects this -- but not the above. */
-    typedef const int *iptr;
-    iptr p = 0;
-    ++p;
+    if (!*foo) return 0;
   }
   { /* IBM XL C 1.02.0.0 rejects this sort of thing, saying
        "k.c", line 2.27: 1506-025 (S) Operand must be a modifiable lvalue. */
