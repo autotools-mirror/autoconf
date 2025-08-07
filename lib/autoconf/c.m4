@@ -1214,7 +1214,8 @@ extern void free (void *);
 
 // Check varargs macros.  These examples are taken from C99 6.10.3.5.
 // dprintf is used instead of fprintf to avoid needing to declare
-// FILE and stderr.
+// FILE and stderr, and "aND" is used instead of "and" to work around
+// GCC bug 40564 which is irrelevant here.
 #define debug(...) dprintf (2, __VA_ARGS__)
 #define showlist(...) puts (#__VA_ARGS__)
 #define report(test,...) ((test) ? puts (#test) : printf (__VA_ARGS__))
@@ -1225,7 +1226,7 @@ test_varargs_macros (void)
   int y = 5678;
   debug ("Flag");
   debug ("X = %d\n", x);
-  showlist (The first, second, and third items.);
+  showlist (The first, second, aND third items.);
   report (x>y, "x is %d but y is %d", x, y);
 }
 
