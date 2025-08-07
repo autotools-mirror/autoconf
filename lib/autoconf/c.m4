@@ -1324,8 +1324,8 @@ ac_c_conftest_c99_main='
   test_varargs_macros ();
 
   // Check flexible array members.
-  struct incomplete_array *ia =
-    malloc (sizeof (struct incomplete_array) + (sizeof (double) * 10));
+  static struct incomplete_array *volatile incomplete_array_pointer;
+  struct incomplete_array *ia = incomplete_array_pointer;
   ia->datasize = 10;
   for (int i = 0; i < ia->datasize; ++i)
     ia->data[i] = i * 1.234;
