@@ -95,6 +95,7 @@ dist_autoconflib_DATA = \
   lib/autoconf/fortran.m4 \
   lib/autoconf/functions.m4 \
   lib/autoconf/go.m4 \
+  lib/autoconf/a68.m4 \
   lib/autoconf/headers.m4 \
   lib/autoconf/types.m4 \
   lib/autoconf/libs.m4 \

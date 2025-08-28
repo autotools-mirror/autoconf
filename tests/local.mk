@@ -92,6 +92,7 @@ TESTSUITE_GENERATED_AT = \
   tests/acerlang.at \
   tests/acfortran.at \
   tests/acgo.at \
+  tests/aca68.at \
   tests/acgeneral.at \
   tests/acstatus.at \
   tests/acautoheader.at \
@@ -116,6 +117,7 @@ TESTSUITE_HAND_AT = \
   tests/erlang.at \
   tests/fortran.at \
   tests/go.at \
+  tests/a68.at \
   tests/semantics.at \
   tests/autoscan.at \
   tests/foreign.at
@@ -198,6 +200,7 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/erlang.m4 \
 		 $(autoconfdir)/fortran.m4 \
 		 $(autoconfdir)/go.m4 \
+		 $(autoconfdir)/a68.m4 \
 		 $(autoconfdir)/headers.m4 \
 		 $(autoconfdir)/libs.m4 \
 		 $(autoconfdir)/types.m4 \

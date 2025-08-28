@@ -417,6 +417,7 @@ Compilers and Preprocessors
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 * Go Compiler::                 Likewise
+* Algol 68 Compiler::           Likewise
 
 Writing Tests
 
@@ -2743,7 +2744,7 @@ programs to test for Fortran 77 features.
 Options for the linker.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
 @command{configure} uses this variable when linking programs to test for
-C, C++, Objective C, Objective C++, Fortran, and Go features.
+features in C, C++, Objective C, Objective C++, Fortran, Go, and Algol 68.
 
 This variable's contents should contain options like @option{-s} and
 @option{-L} that affect only the behavior of the linker.  Please see the
@@ -2784,6 +2785,13 @@ acts like @code{CXXFLAGS}, but for Objective C++ instead of C++.
 @ovindex GOFLAGS
 Debugging and optimization options for the Go compiler.  It acts like
 @code{CFLAGS}, but for Go instead of C.
+@end defvar
+
+@defvar A68FLAGS
+@evindex A68FLAGS
+@ovindex A68FLAGS
+Debugging and optimization options for the Algol 68 compiler.  It acts
+like @code{CFLAGS}, but for Algol 68 instead of C.
 @end defvar
 
 @defvar builddir
@@ -7094,6 +7102,7 @@ compiling.
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 * Go Compiler::                 Likewise
+* Algol 68 Compiler::           Likewise
 @end menu
 
 @node Specific Compiler Characteristics
@@ -8635,6 +8644,38 @@ If output variable @code{GOFLAGS} was not already set, set it to
 @end defmac
 
 
+@node Algol 68 Compiler
+@subsection Algol 68 Compiler
+@cindex Algol 68
+
+Autoconf provides basic support for the Algol 68 programming language
+when using the @code{ga68} compiler.
+
+Note that the GCC Algol 68 front-end is not yet integrated in the main
+compiler, so it is developed and distributed off-tree.  See
+@url{https://gcc.gnu.org/wiki/Algol68FrontEnd}.  Additional information
+about the Algol 68 programming language, and how it is being evolved by
+the GNU Algol 68 Working Group can be found at
+@url{https://algol68-lang.org}.
+
+@defmac AC_PROG_A68 (@ovar{compiler-search-list})
+Find the Algol 68 compiler to use.  Check whether the environment
+variable @code{A68} is set; if so, then set output variable @code{A68}
+to its value.
+
+Otherwise, if the macro is invoked without an argument, then search for
+an Algol 68 compiler named @code{ga68}.  If it is not found, then as a
+last resort set @code{A68} to @code{ga68}.
+
+This macro may be invoked with an optional first argument which, if
+specified, must be a blank-separated list of Algol 68 compilers to
+search for.
+
+If output variable @code{A68FLAGS} was not already set, set it to
+@option{-g -O2}.  If your package does not like this default,
+@code{A68FLAGS} may be set before @code{AC_PROG_A68}.
+@end defmac
+
 @node System Services
 @section System Services
 
@@ -9185,6 +9226,10 @@ extension @file{.mm} for test programs.  Use compilation flags:
 @item Go
 Do compilation tests using @code{GOC} and use extension @file{.go} for
 test programs.  Use compilation flags @code{GOFLAGS}.
+
+@item Algol 68
+Do compilation tests using @code{A68} and use extension @file{.a68} for
+test programs.  Use compilation flags @code{A68FLAGS}.
 @end table
 @end defmac
 
@@ -9432,7 +9477,8 @@ on a system with @command{gcc} installed, results in:
 const char hw[] = "Hello, World\n";
 @end example
 
-When the test language is Fortran, Erlang, or Go, the @code{AC_DEFINE}
+When the test language is Fortran, Erlang, Go, or Algol 68,
+the @code{AC_DEFINE}
 definitions are not automatically translated into constants in the
 source code by this macro.
 
@@ -9557,7 +9603,7 @@ Nevertheless, if you need to run the preprocessor, then use
 @code{AC_PREPROC_IFELSE}.
 
 The macros described in this section cannot be used for tests in Erlang,
-Fortran, or Go, since those languages require no preprocessor.
+Fortran, Go, or Algol 68 since those languages require no preprocessor.
 
 @anchor{AC_PREPROC_IFELSE}
 @defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @

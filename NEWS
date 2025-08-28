@@ -28,6 +28,9 @@ GNU Autoconf NEWS - User visible changes.
   The autom4te, autoscan and ifnames programs now recognize the two
   preprocessor directives, which were introduced in C23 and C++23.
 
+*** Support for the Algol 68 programming language has been added.
+  The new macro AC_LANG_A68 sets variables A68 and A68FLAGS.
+
 *** AC_PROG_AWK now also checks for busybox awk.
 
 *** AC_USE_SYSTEM_EXTENSIONS now defines _COSMO_SOURCE for Cosmopolitan Libc.
