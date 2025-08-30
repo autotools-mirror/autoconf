@@ -4436,8 +4436,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @caindex path_SED
 Set output variable @code{SED} to a Sed implementation that conforms to
 POSIX and does not have arbitrary length limits.  Report an error if no
-acceptable Sed is found.  @xref{sed, , Limitations of Usual Tools}, for more
-information about portability problems with Sed.
+acceptable Sed is found.  @xref{sed, , Limitations of Usual Tools}.
 
 The result of this test can be overridden by setting the @code{SED} variable
 and is cached in the @code{ac_cv_path_SED} variable.
@@ -18657,9 +18656,8 @@ known-safe string of @samp{y}.
 
 POSIX also says that @samp{test ! "@var{string}"},
 @samp{test -n "@var{string}"} and
-@samp{test -z "@var{string}"} work with any string, but many
-shells (such as Solaris 10, AIX 3.2, UNICOS 10.0.0.6,
-Digital Unix 4, etc.)@: get confused if
+@samp{test -z "@var{string}"} work with any string, but some
+shells (such as Solaris 10) get confused if
 @var{string} looks like an operator:
 
 @example
@@ -18683,7 +18681,7 @@ It is best to protect such strings with a leading @samp{X}, e.g.,
 It is common to find variations of the following idiom:
 
 @example
-test -n "`echo $ac_feature | sed 's/[-a-zA-Z0-9_]//g'`" &&
+test -n "`echo $ac_feature | sed 's/[a-zA-Z0-9_-]//g'`" &&
   @var{action}
 @end example
 
@@ -18716,7 +18714,7 @@ expr "X$ac_feature" : 'X.*[^-a-zA-Z0-9_]' >/dev/null &&
 It is safe to trap at least the signals 1, 2, 13, and 15.  You can also
 trap 0, i.e., have the @command{trap} run when the script ends (either via an
 explicit @command{exit}, or the end of the script).  The trap for 0 should be
-installed outside of a shell function, or AIX 5.3 @command{/bin/sh}
+installed outside of a shell function, or AIX 7.3 @command{/bin/sh}
 will invoke the trap at the end of this function.
 
 POSIX says that @samp{trap - 1 2 13 15} resets the traps for the
@@ -19767,36 +19765,34 @@ directory.
 @item @command{sed}
 @c ----------------
 @prindex @command{sed}
+The portable options are @option{-e}, @option{-f}, and @option{-n}.
+POSIX standardized @option{-E} in 2024 but some older implementations lack it.
+Although GNU @command{sed} supports other options like @option{-i},
+these can be missing or have different meanings elsewhere.
+
 Patterns should not include the separator (unless escaped), even as part
-of a character class.  In conformance with POSIX, the Cray
-@command{sed} rejects @samp{s/[^/]*$//}: use @samp{s%[^/]*$%%}.
+of a character class.
 Even when escaped, patterns should not include separators that are also
 used as @command{sed} metacharacters.  For example, GNU sed 4.0.9 rejects
 @samp{s,x\@{1\,\@},,}, while sed 4.1 strips the backslash before the comma
 before evaluating the basic regular expression.
 
-Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  POSIX does
-not require support for empty patterns, and Unicos 9 @command{sed} rejects
-them.
+Avoid empty patterns, such as the parenthesized empty pattern in @samp{\(\)}
+or the empty pattern followed by an interval expression in @samp{\@{2\@}}.
+POSIX does not require support for empty patterns.
 
-Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
+Comments in Sed scripts should not contain @samp{n} immediately after
+the leading @samp{#}.  Although POSIX.1-2024 says this is equivalent to the
+@option{-n} option, earlier POSIX editions said that
+the equivalence occurs only if the comment is the first line of the script,
+and many @command{sed} implementations are confused about this.
+It is more portable to use @option{-n}.
 
-Sed scripts should not use branch labels longer than 7 characters and
-should not contain comments; AIX 5.3 @command{sed} rejects indented comments.
 HP-UX sed has a limit of 99 commands (not counting @samp{:} commands) and
 48 labels, which cannot be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
-Solaris @command{/usr/ucb/sed} rejects usages that exceed a limit of
+Solaris 10 @command{/usr/ucb/sed} rejects usages that exceed a limit of
 about 6000 bytes for the internal representation of commands.
-
-Avoid redundant @samp{;}, as some @command{sed} implementations, such as
-NetBSD 1.4.2's, incorrectly try to interpret the second
-@samp{;} as a command:
-
-@example
-$ @kbd{echo a | sed 's/x/x/;;s/x/x/'}
-sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
-@end example
 
 Some @command{sed} implementations have a buffer limited to 4000 bytes,
 and this limits the size of input lines, output lines, and internal
@@ -19804,7 +19800,7 @@ buffers that can be processed portably.  Likewise,
 not all @command{sed} implementations can handle embedded @code{NUL} or
 a missing trailing newline.
 
-Remember that ranges within a bracket expression of a regular expression
+Ranges within a bracket expression of a regular expression
 are only well-defined in the @samp{C} (or @samp{POSIX}) locale.
 Meanwhile, support for character classes like @samp{[[:upper:]]} is not
 yet universal, so if you cannot guarantee the setting of @env{LC_ALL},
@@ -19814,10 +19810,10 @@ than to rely on @samp{[A-Z]}.
 Additionally, POSIX states that regular expressions are only
 well-defined on characters.  Unfortunately, there exist platforms such
 as Mac OS X 10.5 where not all 8-bit byte values are valid characters,
-even though that platform has a single-byte @samp{C} locale.  And POSIX
-allows the existence of a multi-byte @samp{C} locale, although that does
-not yet appear to be a common implementation.  At any rate, it means
-that not all bytes will be matched by the regular expression @samp{.}:
+even though that platform has a single-byte @samp{C} locale.  Although
+this practice was disallowed by recent releases of POSIX, it means that
+in the @samp{C} locale not all bytes will be matched by the regular
+expression @samp{.}:
 
 @example
 $ @kbd{printf '\200\n' | LC_ALL=C sed -n /./p | wc -l}
@@ -19828,11 +19824,7 @@ $ @kbd{printf '\200\n' | LC_ALL=en_US.ISO8859-1 sed -n /./p | wc -l}
 
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
 
-Nested parentheses in patterns (e.g., @samp{\(\(a*\)b*)\)}) are
-quite portable to current hosts, but was not supported by some ancient
-@command{sed} implementations like SVR3.
-
-Some @command{sed} implementations, e.g., Solaris, restrict the special
+Some @command{sed} implementations, e.g., Solaris 11.4, restrict the special
 role of the asterisk @samp{*} to one-character regular expressions and
 back-references, and the special role of interval expressions
 @samp{\@{@var{m}\@}}, @samp{\@{@var{m},\@}}, or @samp{\@{@var{m},@var{n}\@}}
@@ -19845,10 +19837,12 @@ $ @kbd{echo '1*23*4' | /usr/xpg4/bin/sed 's/\(.\)*/x/g'}
 x
 @end example
 
-Portable @command{sed} regular expressions should use @samp{\} only to escape
-characters in the string @samp{$()*.123456789[\^n@{@}}.  For example,
-alternation, @samp{\|}, is common but POSIX does not require its
-support, so it should be avoided in portable scripts.  Solaris
+In the normal case when @option{-E} is not used,
+portable @command{sed} regular expressions should use @samp{\} only to escape
+characters in the string @samp{$*.123456789[\^n}.  For example,
+POSIX.1-2024 says it is implementation-defined
+whether @samp{\|} means alternation or simply matches @samp{|},
+so it should be avoided in portable scripts.  Solaris
 @command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
 deletes only lines that contain the literal string @samp{a|b}.
 Similarly, @samp{\+} and @samp{\?} should be avoided.
@@ -19894,15 +19888,25 @@ sed '@var{command-1};@var{command-2}'
 
 but POSIX says that this use of a semicolon has undefined effect if
 @var{command-1}'s verb is @samp{@{}, @samp{a}, @samp{b}, @samp{c},
-@samp{i}, @samp{r}, @samp{t}, @samp{w}, @samp{:}, or @samp{#}, so you
+@samp{i}, @samp{r}, @samp{t}, @samp{w} or @samp{:},
+or if @var{command-1} is an @samp{s} with the @samp{w} option, so you
 should use semicolon only with simple scripts that do not use these
-verbs.
+constructs.
+
+Avoid redundant @samp{;}, as some @command{sed} implementations, such as
+NetBSD 1.4.2's, incorrectly try to interpret the second
+@samp{;} as a command:
+
+@example
+$ @kbd{echo a | sed 's/x/x/;;s/x/x/'}
+sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
+@end example
 
 POSIX requires each @option{-e} and @option{-f} option to specify a
 syntactically complete script.  Although GNU @command{sed} also allows
 @option{-e} and @option{-f} options to specify script fragments
 that it assembles into a full script, this is not portable.  For
-example, the @command{sed} programs on Solaris 10, HP-UX 11, and AIX
+example, the @command{sed} programs on Solaris 11, HP-UX 11, and AIX
 do not allow script fragments:
 
 @example
@@ -19921,12 +19925,18 @@ $ @kbd{echo a | sed -n -e '/a/@{' -e s/a/b/ -e p -e '@}'}
 b
 @end example
 
-Commands inside @{ @} brackets are further restricted.  POSIX 2008 says that
+Commands should not be followed by white space.
+Although trailing white space often works,
+it can be dicey in some situations and
+it is simpler to avoid it entirely.
+
+Commands inside @{ @} brackets are further restricted.  POSIX.1-2004 says that
 they cannot be preceded by addresses, @samp{!}, or @samp{;}, and that
 each command must be followed immediately by a newline, without any
 intervening blanks or semicolons.  The closing bracket must be alone on
-a line, other than white space preceding or following it.  However, a
-future version of POSIX may standardize the use of addresses within brackets.
+a line, other than white space preceding or following it.  Although these
+restrictions were lifted in POSIX.1-2008, it is more portable to
+respect them.
 
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
@@ -19952,10 +19962,12 @@ POSIX also says that you should not combine @samp{!} and @samp{;}.  If
 you use @samp{!}, it is best to put it on a command that is delimited by
 newlines rather than @samp{;}.
 
-Also note that POSIX requires that the @samp{b}, @samp{t}, @samp{r}, and
+POSIX requires that the @samp{b}, @samp{t}, @samp{r}, and
 @samp{w} commands be followed by exactly one space before their argument.
 On the other hand, no white space is allowed between @samp{:} and the
-subsequent label name.
+subsequent label.  Branch labels should contain at most 8 bytes,
+each of which should be an ASCII graphical character.
+Do not put trailing white space after a branch label.
 
 If a sed script is specified on the command line and ends in an
 @samp{a}, @samp{c}, or @samp{i} command, the last line of inserted text
@@ -19982,11 +19994,11 @@ flushleft
    indented
 @end example
 
-POSIX requires that with an empty regular expression, the last non-empty
+POSIX requires that with a missing regular expression, the last
 regular expression from either an address specification or substitution
-command is applied.  However, busybox 1.6.1 complains when using a
+command is used.  However, busybox 1.6.1 complains when using a
 substitution command with a replacement containing a back-reference to
-an empty regular expression; the workaround is repeating the regular
+a missing regular expression; the workaround is repeating the regular
 expression.
 
 @example
@@ -20001,7 +20013,7 @@ handling word boundaries, as these are not specified by POSIX.
 
 @example
                 \<      \b      [[:<:]]
-Solaris 10      yes     no      no
+Solaris 11      yes     no      no
 Solaris XPG4    yes     no      error
 NetBSD 5.1      no      no      yes
 FreeBSD 9.1     no      no      yes
@@ -27089,7 +27101,7 @@ introduced in this document.
 @c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS VM url fc
 @c  LocalWords:  sparc Proulx nbar nfoo maxdepth acdilrtu TWG mc ing FP
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
-@c  LocalWords:  fooXXXXXX Unicos utimes hpux hppa unescaped SUBST'ed
+@c  LocalWords:  fooXXXXXX utimes hpux hppa unescaped SUBST'ed
 @c  LocalWords:  pmake DOS's gmake ifoo DESTDIR autoconfiscated pc coff mips gg
 @c  LocalWords:  cpu wildcards rpcc rdtsc powerpc readline
 @c  LocalWords:  withval vxworks gless localcache usr LOFF loff CYGWIN Cygwin
