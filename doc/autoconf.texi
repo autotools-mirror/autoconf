@@ -9436,7 +9436,7 @@ When the test language is Fortran, Erlang, or Go, the @code{AC_DEFINE}
 definitions are not automatically translated into constants in the
 source code by this macro.
 
-@defmac AC_LANG_PROGRAM (@var{prologue}, @var{body})
+@defmac AC_LANG_PROGRAM (@ovar{prologue}, @ovar{body})
 @acindex{LANG_PROGRAM}
 Expands into a source file which consists of the @var{prologue}, and
 then @var{body} as body of the main function (e.g., @code{main} in
