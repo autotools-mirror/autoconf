@@ -1665,13 +1665,13 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 _AC_LANG_PREFIX[]FLAGS=$ac_fc_implicit_none_[]_AC_LANG_PREFIX[]FLAGS_save
 ])
 if test "x$ac_cv_[]_AC_LANG_ABBREV[]_implicit_none" = xunknown; then
-  m4_default([$3],
+  m4_default([$2],
     [AC_MSG_ERROR([no Fortran flag to disallow implicit declarations found], 77)])
 else
   if test "x$ac_cv_[]_AC_LANG_ABBREV[]_implicit_none" != xnone; then
     _AC_LANG_PREFIX[]FLAGS="$_AC_LANG_PREFIX[]FLAGS $ac_cv_[]_AC_LANG_ABBREV[]_implicit_none"
   fi
-  $2
+  $1
 fi
 ])# _AC_FC_IMPLICIT_NONE
 
