@@ -676,6 +676,12 @@ while test $[@%:@] != 1; do
 	    ;;
 	  esac
 	  ;;
+	-target-feature)
+	  # for target specific feature flags, ignore the next argument,
+	  # which may include a feature starting with -l
+	  # (e.g -target-feature -lwp)
+	  shift;
+	  ;;
 	-[[LRuYz]])
 	  # These flags, when seen by themselves, take an argument.
 	  # We remove the space between option and argument and re-iterate
