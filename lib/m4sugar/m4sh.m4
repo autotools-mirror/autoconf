@@ -1798,8 +1798,9 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
       if (d1 < d2) exit 1
       if (d1 > d2) exit 2
     }
-    # Beware Solaris /usr/xgp4/bin/awk (at least through Solaris 10),
-    # which mishandles some comparisons of empty strings to integers.
+    # Beware Solaris 11 /usr/xgp4/bin/awk, which mishandles some
+    # comparisons of empty strings to integers.  For example,
+    # LC_ALL=C /usr/xpg4/bin/awk 'BEGIN {if (-1 < "") print "a"}' prints "a".
     if (length(v2)) exit 1
     if (length(v1)) exit 2
   }

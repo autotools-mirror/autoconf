@@ -18441,11 +18441,10 @@ any options) does not sort its output.
 
 The @command{set} builtin faces the usual problem with arguments
 starting with a
-dash.  Modern shells such as Bash or Zsh understand @option{--} to specify
+dash.  Modern shells understand @option{--} to specify
 the end of the options (any argument after @option{--} is a parameter,
-even @samp{-x} for instance), but many traditional shells (e.g., Solaris
-10 @command{/bin/sh}) simply stop option
-processing as soon as a non-option argument is found.  Therefore, use
+even @samp{-x} for instance), but some ancient shells stop option
+processing only after a non-option argument is found.  Therefore, use
 @samp{dummy} or simply @samp{x} to end the option processing, and use
 @command{shift} to pop it out:
 
@@ -19272,7 +19271,7 @@ dir=`AS_DIRNAME(["$file"])`
 @c ------------------
 @prindex @command{egrep}
 Although POSIX stopped requiring @command{egrep} in 2001,
-a few traditional hosts (notably Solaris 10) do not support the POSIX
+a few traditional hosts (notably Solaris 11) do not support the POSIX
 replacement @code{grep -E}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
@@ -19453,7 +19452,7 @@ expr: More than one '\(' was used.
 @c ------------------
 @prindex @command{fgrep}
 Although POSIX stopped requiring @command{fgrep} in 2001,
-a few traditional hosts (notably Solaris 10) do not support the POSIX
+a few traditional hosts (notably Solaris 11) do not support the POSIX
 replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
@@ -19520,7 +19519,7 @@ Some traditional @command{grep} implementations do not work on long
 input lines.  On AIX the default @code{grep} silently truncates long
 lines on the input before matching.
 
-Also, Solaris 10 @command{grep} does not support @option{-e}.
+Also, Solaris 11 @command{grep} does not support @option{-e}.
 To work around this, invoke @code{AC_PROG_GREP} and then use @code{$GREP}.
 
 Another possible workaround for the multiple @option{-e} problem is to
@@ -19535,7 +19534,7 @@ bar' in.txt
 except that this fails with traditional @command{grep}
 implementations and with OpenBSD 3.8 @command{grep}.
 
-Traditional @command{grep} implementations (e.g., Solaris 10) do not
+Traditional @command{grep} implementations (e.g., Solaris 11) do not
 support the @option{-E} or @option{-F} options.  To work around these
 problems, invoke @code{AC_PROG_EGREP} and then use @code{$EGREP}, and
 similarly for @code{AC_PROG_FGREP} and @code{$FGREP}.  Even if you are
@@ -20022,7 +20021,7 @@ implementations (e.g., OpenBSD 3.9) do not append a newline to the
 inserted text.
 
 Many @command{sed} implementations (e.g., Mac OS X 10.4,
-OpenBSD 3.9, Solaris 10
+OpenBSD 3.9, Solaris 11
 @command{/usr/ucb/sed}) strip leading white space from the text of
 @samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to
 work around this incompatibility with POSIX:
