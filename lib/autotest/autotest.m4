@@ -1,6 +1,6 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright (C) 2000-2002, 2009-2017, 2020-2025 Free Software
+# Copyright (C) 2000-2002, 2009-2017, 2020-2026 Free Software
 # Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

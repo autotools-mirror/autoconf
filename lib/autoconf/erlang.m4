@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Erlang/OTP language support.
-# Copyright (C) 2006, 2008-2017, 2020-2025 Free Software Foundation,
+# Copyright (C) 2006, 2008-2017, 2020-2026 Free Software Foundation,
 # Inc.
 
 # This file is part of Autoconf.  This program is free

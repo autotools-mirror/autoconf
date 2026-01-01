@@ -1,5 +1,5 @@
 # autoconf -- create 'configure' using m4 macros
-# Copyright (C) 2001-2003, 2009-2017, 2020-2025 Free Software
+# Copyright (C) 2001-2003, 2009-2017, 2020-2026 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
