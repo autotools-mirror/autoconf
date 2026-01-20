@@ -440,7 +440,10 @@ sub autoreconf_current_directory ($)
   # ---------------------- #
 
   my $uses_autoconf;
+  my $uses_liblink;
+  my $uses_iconv;
   my $uses_gettext;
+  my $uses_gettextversion;
   if (-f $configure_ac)
     {
       my $configure_ac_file = new Autom4te::XFile ("$configure_ac", "<");
@@ -449,8 +452,15 @@ sub autoreconf_current_directory ($)
 	  s/#.*//;
 	  s/dnl.*//;
 	  $uses_autoconf = 1 if /AC_INIT/;
+	  $uses_liblink = 1 if /AC_LIB_HAVE_LINKFLAGS/;
+	  $uses_liblink = 1 if /AC_LIB_LINKFLAGS/;
+	  $uses_liblink = 1 if /AC_LIB_LINKFLAGS_FROM_LIBS/;
+	  $uses_iconv = 1 if /AM_ICONV/;
 	  # See below for why we look for gettext here.
-	  $uses_gettext = 1  if /^AM_GNU_GETTEXT_(?:REQUIRE_)?VERSION/;
+	  $uses_gettext = 1 if /AM_GNU_GETTEXT/;
+	  $uses_gettext = 1 if /AM_PO_SUBDIRS/;
+	  # Older autopoint versions fail if this macro is not present.
+	  $uses_gettextversion = 1 if /^AM_GNU_GETTEXT_(?:REQUIRE_)?VERSION/;
 	}
       if (!$uses_autoconf)
         {
@@ -485,20 +495,63 @@ sub autoreconf_current_directory ($)
   # Actually, it is even more restrictive, as it greps for
   # '^AM_GNU_GETTEXT_(REQUIRE_)?VERSION('.  We did this above, while
   # scanning configure.ac.
-  if (!$uses_gettext)
+
+  # Older autopoint versions fail if $configure.ac contains no
+  # AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION
+  # invocation.  We need to do this check even if none of the relevant
+  # $uses_ variables are true, because we might discover later that
+  # we need to run it after all.
+  my $autopoint_is_available = 0;
+  my $autopoint_works_without_gtver = 0;
+
+  # This doesn't use xqx because we don't want to *fail* if
+  # there's no autopoint, we just want to not run it.  Written
+  # this way, Perl won't invoke a subshell.
+  eval
     {
-      verb "$configure_ac: not using Gettext";
+      no warnings 'exec';
+      my @autopoint_version_output = qx/$autopoint --version/;
+      if ($? == 0 && scalar @autopoint_version_output >= 1)
+        {
+          $autopoint_is_available = 1;
+
+          # Extract the version from "PROGRAM_NAME (GNU PACKAGE_NAME) VERSION".
+          my $autopoint_version = $autopoint_version_output[0];
+          $autopoint_version =~ s/^.*?\)\s+//;
+          $autopoint_works_without_gtver =
+            ($autopoint_version !~
+             /^0\.(1.*|2[0-5]|2[0-2]\..*|2[34]\.[0-1].*|25\.0.*)$/);
+        }
+    };
+
+  if (!$uses_liblink && !$uses_iconv && !$uses_gettext)
+    {
+      verb "$configure_ac: no obvious need to run autopoint";
     }
   elsif (!$install)
     {
       verb "$configure_ac: not running autopoint: --install not given";
     }
+  elsif (!$autopoint_is_available)
+    {
+      verb "$configure_ac: not running autopoint because it is unavailable"
+    }
+  elsif (!$uses_gettextversion && !$autopoint_works_without_gtver)
+    {
+      verb "$configure_ac: not running autopoint because it is too old";
+    }
   else
     {
-      xsystem_hint ("autopoint is needed because this package uses Gettext",
+      my $what_used =
+        $uses_gettext ? "Gettext" :
+        $uses_iconv ? "AM_ICONV" :
+        $uses_liblink ? "AC_LIB_LINKFLAGS" :
+        die ("impossible: one of \$uses_gettext, $uses_iconv, or"
+             . " \$uses_liblink should have been true");
+
+      xsystem_hint ("autopoint is needed because this package uses $what_used",
                     $autopoint);
     }
-
 
   # ----------------- #
   # Running aclocal.  #
@@ -576,7 +629,10 @@ sub autoreconf_current_directory ($)
   # from the final autoconf invocation.
   my $aux_dir;
   my @aux_files;
+  my $uses_liblink_via_traces;
+  my $uses_iconv_via_traces;
   my $uses_gettext_via_traces;
+  my $uses_gettextversion_via_traces;
   my $uses_libtool;
   my $uses_intltool;
   my $uses_gtkdoc;
@@ -603,7 +659,14 @@ sub autoreconf_current_directory ($)
                'AM_PROG_LIBTOOL',
                'LT_INIT',
                'LT_CONFIG_LTDL_DIR',
+               'AC_LIB_LINKFLAGS',
+               'AC_LIB_HAVE_LINKFLAGS',
+               'AC_LIB_LINKFLAGS_FROM_LIBS',
+               'GUILE_FLAGS',
+               'AM_ICONV',
                'AM_GNU_GETTEXT',
+               'AM_GNU_GETTEXT_VERSION',
+               'AM_GNU_GETTEXT_REQUIRE_VERSION',
                'AM_INIT_AUTOMAKE',
                'GTK_DOC_CHECK',
                'IT_PROG_INTLTOOL',
@@ -617,7 +680,19 @@ sub autoreconf_current_directory ($)
       $aux_dir = $args[0]           if $macro eq "AC_CONFIG_AUX_DIR";
       push @aux_files, $args[0]     if $macro eq "AC_REQUIRE_AUX_FILE";
       $uses_autoconf = 1            if $macro eq "AC_INIT";
+      # Here we need to explicitly test for GUILE_FLAGS, because in the
+      # typical situation where configure.ac invokes GUILE_FLAGS,
+      # guile.m4 defines GUILE_FLAGS and uses AC_LIB_LINKFLAGS_FROM_LIBS,
+      # the traces still for AC_LIB_LINKFLAGS_FROM_LIBS are empty.
+      $uses_liblink_via_traces = 1  if $macro eq "AC_LIB_LINKFLAGS"
+                                       || $macro eq "AC_LIB_HAVE_LINKFLAGS"
+                                       || $macro eq "AC_LIB_LINKFLAGS_FROM_LIBS"
+                                       || $macro eq "GUILE_FLAGS";
+      $uses_iconv_via_traces = 1    if $macro eq "AM_ICONV";
       $uses_gettext_via_traces = 1  if $macro eq "AM_GNU_GETTEXT";
+      $uses_gettextversion_via_traces = 1
+                               if $macro eq "AM_GNU_GETTEXT_VERSION"
+                                  || $macro eq "AM_GNU_GETTEXT_REQUIRE_VERSION";
       $uses_libtool = 1             if $macro eq "AC_PROG_LIBTOOL"
                                        || $macro eq "AM_PROG_LIBTOOL"
                                        || $macro eq "LT_INIT";
@@ -654,11 +729,11 @@ sub autoreconf_current_directory ($)
   msg('syntax', $configure_ac,
       "AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
       . " or AM_GNU_GETTEXT_REQUIRE_VERSION")
-    if $uses_gettext_via_traces && ! $uses_gettext;
+    if $uses_gettext_via_traces && ! $uses_gettextversion_via_traces;
   msg('syntax', $configure_ac,
       "AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION is used,"
       . " but not AM_GNU_GETTEXT")
-    if $uses_gettext && ! $uses_gettext_via_traces;
+    if $uses_gettextversion_via_traces && ! $uses_gettext_via_traces;
 
 
   # ---------------------------- #
@@ -738,6 +813,49 @@ sub autoreconf_current_directory ($)
   else
     {
       verb "$configure_ac: not running gtkdocize: --install not given";
+    }
+
+
+  # --------------------------------------------- #
+  # Running autopoint, if not already run above.  #
+  # --------------------------------------------- #
+
+  if (!$uses_liblink_via_traces
+      && !$uses_iconv_via_traces
+      && !$uses_gettext_via_traces)
+    {
+      verb "$configure_ac: no need to run autopoint (confirmed)";
+    }
+  elsif (!$install)
+    {
+      verb "$configure_ac: not running autopoint: --install not given";
+    }
+  elsif (!$autopoint_is_available)
+    {
+      verb "$configure_ac: not running autopoint because it is unavailable"
+    }
+  elsif (!$autopoint_works_without_gtver && !$uses_gettextversion_via_traces)
+    {
+      # Older autopoint versions fail if $configure.ac contains no
+      # AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION invocation.
+      verb "$configure_ac: not running autopoint because it is too old";
+    }
+  elsif ($uses_liblink || $uses_iconv || $uses_gettext)
+    {
+      verb "$configure_ac: not running autopoint a second time";
+    }
+  else
+    {
+      my $what_used =
+        $uses_gettext_via_traces ? "Gettext" :
+        $uses_iconv_via_traces ? "AM_ICONV" :
+        $uses_liblink_via_traces ? "AC_LIB_LINKFLAGS" :
+        die ("impossible: one of \$uses_gettext_via_traces,"
+             . " \$uses_iconv_via_traces, or \$uses_liblink_via_traces"
+             . " should have been true");
+
+      xsystem_hint ("autopoint is needed because this package uses $what_used",
+                    $autopoint);
     }
 
 
