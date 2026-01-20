@@ -503,6 +503,7 @@ sub autoreconf_current_directory ($)
   # we need to run it after all.
   my $autopoint_is_available = 0;
   my $autopoint_works_without_gtver = 0;
+  my $invoked_autopoint = 0;
 
   # This doesn't use xqx because we don't want to *fail* if
   # there's no autopoint, we just want to not run it.  Written
@@ -549,6 +550,7 @@ sub autoreconf_current_directory ($)
         die ("impossible: one of \$uses_gettext, $uses_iconv, or"
              . " \$uses_liblink should have been true");
 
+      $invoked_autopoint = 1;
       xsystem_hint ("autopoint is needed because this package uses $what_used",
                     $autopoint);
     }
@@ -629,6 +631,7 @@ sub autoreconf_current_directory ($)
   # from the final autoconf invocation.
   my $aux_dir;
   my @aux_files;
+  my @macro_dirs;
   my $uses_liblink_via_traces;
   my $uses_iconv_via_traces;
   my $uses_gettext_via_traces;
@@ -653,6 +656,8 @@ sub autoreconf_current_directory ($)
                'AC_CONFIG_AUX_DIR',
                'AC_CONFIG_HEADERS',
                'AC_CONFIG_SUBDIRS',
+               'AC_CONFIG_MACRO_DIR_TRACE',
+               'AC_CONFIG_MACRO_DIR',
                'AC_INIT',
                'AC_REQUIRE_AUX_FILE',
                'AC_PROG_LIBTOOL',
@@ -679,6 +684,8 @@ sub autoreconf_current_directory ($)
       my ($macro, @args) = split (/::/);
       $aux_dir = $args[0]           if $macro eq "AC_CONFIG_AUX_DIR";
       push @aux_files, $args[0]     if $macro eq "AC_REQUIRE_AUX_FILE";
+      push @macro_dirs, $args[0]    if $macro eq "AC_CONFIG_MACRO_DIR_TRACE"
+                                       || $macro eq "AC_CONFIG_MACRO_DIR";
       $uses_autoconf = 1            if $macro eq "AC_INIT";
       # Here we need to explicitly test for GUILE_FLAGS, because in the
       # typical situation where configure.ac invokes GUILE_FLAGS,
@@ -854,9 +861,16 @@ sub autoreconf_current_directory ($)
              . " \$uses_iconv_via_traces, or \$uses_liblink_via_traces"
              . " should have been true");
 
+      $invoked_autopoint = 1;
       xsystem_hint ("autopoint is needed because this package uses $what_used",
                     $autopoint);
     }
+
+  # When configure.ac does not specify a macro dir, autopoint has
+  # created a directory named 'm4' and copied its *.m4 files into it.
+  # In this case, we need to rerun 'aclocal', in order to pass it the
+  # options "-I m4" this time.
+  $rerun_aclocal = 1 if $invoked_autopoint && !@macro_dirs;
 
 
   # ------------------- #
@@ -873,6 +887,9 @@ sub autoreconf_current_directory ($)
 	}
       else
 	{
+	  # When configure.ac does not specify a macro dir, autopoint has
+	  # created a directory named 'm4' and copied its *.m4 files into it.
+	  $aclocal_flags .= " -I m4" if $invoked_autopoint && !@macro_dirs;
 	  xsystem ("$aclocal $aclocal_flags");
 	}
     }
@@ -965,6 +982,8 @@ sub autoreconf_current_directory ($)
               error $configure_ac, "required file '$f' not found";
             }
         }
+      $invoked_autopoint = 1;
+      $rerun_aclocal = 1;
     }
 
   # -------------- #
