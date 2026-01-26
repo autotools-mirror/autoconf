@@ -2902,7 +2902,7 @@ m4_define([m4_version_compare],
 # --------------------
 # If version.m4 is present, then define version strings.  This
 # file is optional, provided by Autoconf but absent in Bison.
-m4_sinclude([version.m4])
+m4_sinclude([autoconf_version.m4])
 
 
 # m4_version_prereq(VERSION, [IF-OK], [IF-NOT = FAIL])
@@ -2916,7 +2916,7 @@ m4_ifdef([m4_PACKAGE_VERSION],
 		    [m4_fatal([Autoconf version $1 or higher is required],
 			      [63])])],
 	[$2])]],
-[[m4_fatal([version.m4 not found])]]))
+[[m4_fatal([autoconf_version.m4 not found])]]))
 
 
 ## ------------------ ##

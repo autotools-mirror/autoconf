@@ -62,7 +62,7 @@ m4f_dependencies = $(top_build_prefix)bin/autom4te $(AUTOM4TE_CFG)
 m4sugar_m4f_dependencies =			\
 	$(m4f_dependencies)			\
 	$(src_libdir)/m4sugar/m4sugar.m4	\
-	$(build_libdir)/version.m4
+	$(build_libdir)/autoconf_version.m4
 
 m4sh_m4f_dependencies =				\
 	$(m4sugar_m4f_dependencies)		\

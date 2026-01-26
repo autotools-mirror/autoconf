@@ -240,7 +240,7 @@ mkdir "$ACBOOTDIR"/bin "$ACBOOTDIR"/lib "$ACBOOTDIR"/tmp
 dosubst x bin/autoconf.in bin/autoconf
 dosubst x bin/autom4te.in bin/autom4te
 dosubst . lib/autom4te.in lib/autom4te.cfg
-dosubst . lib/version.in  lib/version.m4
+dosubst . lib/autoconf_version.in lib/autoconf_version.m4
 
 AUTOCONF="$ACBOOTDIR"/bin/autoconf
 AUTOM4TE="$ACBOOTDIR/bin/autom4te -M -C $ACBOOTDIR/tmp/autom4te.cache"

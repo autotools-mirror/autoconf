@@ -149,7 +149,7 @@ nodist_m4sugarlib_DATA = \
   lib/m4sugar/m4sh.m4f
 
 nodist_pkgdata_DATA += \
-  lib/version.m4
+  lib/autoconf_version.m4
 
 CLEANFILES += $(nodist_m4sugarlib_DATA) $(nodist_pkgdata_DATA)
 TAGS_FILES += $(dist_m4sugarlib_DATA)
