@@ -95,6 +95,7 @@ begin-language: "Autoreconf-preselections"
 args: --preselect AC_CONFIG_AUX_DIR
 args: --preselect AC_CONFIG_HEADERS
 args: --preselect AC_CONFIG_MACRO_DIR_TRACE
+args: --preselect AC_CONFIG_MACRO_DIR
 args: --preselect AC_CONFIG_SUBDIRS
 args: --preselect AC_INIT
 args: --preselect AC_REQUIRE_AUX_FILE
@@ -102,7 +103,15 @@ args: --preselect AC_PROG_LIBTOOL
 args: --preselect AM_PROG_LIBTOOL
 args: --preselect LT_INIT
 args: --preselect LT_CONFIG_LTDL_DIR
+args: --preselect AC_LIB_LINKFLAGS
+args: --preselect AC_LIB_HAVE_LINKFLAGS
+args: --preselect AC_LIB_LINKFLAGS_FROM_LIBS
+args: --preselect GUILE_FLAGS
+args: --preselect AM_ICONV
 args: --preselect AM_GNU_GETTEXT
+args: --preselect AM_GNU_GETTEXT_VERSION
+args: --preselect AM_GNU_GETTEXT_REQUIRE_VERSION
+args: --preselect AM_INIT_AUTOMAKE
 args: --preselect GTK_DOC_CHECK
 args: --preselect IT_PROG_INTLTOOL
 end-language: "Autoreconf-preselections"
