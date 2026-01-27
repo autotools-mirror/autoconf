@@ -450,17 +450,17 @@ sub autoreconf_current_directory ($)
       while ($_ = $configure_ac_file->getline)
 	{
 	  s/#.*//;
-	  s/dnl.*//;
-	  $uses_autoconf = 1 if /AC_INIT/;
-	  $uses_liblink = 1 if /AC_LIB_HAVE_LINKFLAGS/;
-	  $uses_liblink = 1 if /AC_LIB_LINKFLAGS/;
-	  $uses_liblink = 1 if /AC_LIB_LINKFLAGS_FROM_LIBS/;
-	  $uses_iconv = 1 if /AM_ICONV/;
+	  s/\bdnl\b.*//;
+	  $uses_autoconf = 1 if /\bAC_INIT\b/;
+	  $uses_liblink = 1 if /\bAC_LIB_HAVE_LINKFLAGS\b/;
+	  $uses_liblink = 1 if /\bAC_LIB_LINKFLAGS\b/;
+	  $uses_liblink = 1 if /\bAC_LIB_LINKFLAGS_FROM_LIBS\b/;
+	  $uses_iconv = 1 if /\bAM_ICONV\b/;
 	  # See below for why we look for gettext here.
-	  $uses_gettext = 1 if /AM_GNU_GETTEXT/;
-	  $uses_gettext = 1 if /AM_PO_SUBDIRS/;
+	  $uses_gettext = 1 if /\bAM_GNU_GETTEXT\b/;
+	  $uses_gettext = 1 if /\bAM_PO_SUBDIRS\b/;
 	  # Older autopoint versions fail if this macro is not present.
-	  $uses_gettextversion = 1 if /^AM_GNU_GETTEXT_(?:REQUIRE_)?VERSION/;
+	  $uses_gettextversion = 1 if /\bAM_GNU_GETTEXT_(?:REQUIRE_)?VERSION\b/;
 	}
       if (!$uses_autoconf)
         {
