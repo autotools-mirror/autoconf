@@ -6,9 +6,10 @@ GNU Autoconf NEWS - User visible changes.
 
 *** AC_PROG_CC now prefers C23 if available.
   Older code may need to be updated, as C23 has removed old-style
-  (K&R) function definitions and declarations, and has new keywords
+  (K&R) function definitions and declarations, now uses type-generic
+  functions for strchr and similar functions, and has new keywords
   alignas, alignof, bool, constexpr, false, nullptr, static_assert,
-  thread_local, typeof, typeof_unqual, true.
+  thread_local, true, typeof, typeof_unqual.
 
 *** AC_PROG_CC no longer checks __STDC__ or variable length arrays (VLAs).
   This ports better to MSVC, which does not define __STDC__ and does
