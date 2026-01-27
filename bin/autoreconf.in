@@ -812,14 +812,27 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Gtkdoc";
     }
-  elsif ($install)
+  elsif (!$install)
     {
-      xsystem_hint ("gtkdocize is needed because this package uses Gtkdoc",
-		    $gtkdocize);
+      verb "$configure_ac: not running gtkdocize: --install not given";
     }
   else
     {
-      verb "$configure_ac: not running gtkdocize: --install not given";
+      my $gtkdoc_available = eval
+	{
+	  no warnings 'exec';
+	  my $output = qx/gtkdocize --version/;
+	  !$! && $? == 0;
+	};
+      if (!$gtkdoc_available)
+	{
+	  verb "$configure_ac: not running gtkdocize because it is unavailable";
+	}
+      else
+	{
+	  xsystem_hint ("gtkdocize is needed because this package uses Gtkdoc",
+			$gtkdocize);
+	}
     }
 
 
