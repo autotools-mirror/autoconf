@@ -1029,6 +1029,51 @@ X@file@
 done
 AT_CLEANUP
 
+## ---------------------------------------------- ##
+## No trailing white space in macro definitions.  ##
+## ---------------------------------------------- ##
+AT_SETUP([No trailing white space in macro definitions])
+AT_KEYWORDS([AC@&t@_DEFINE AC@&t@_DEFINE_UNQUOTED])
+
+AT_DATA([config.hin], [
+#undef EMPTY
+#undef SPACE
+#undef TAB
+#undef LEADING_SPACES
+#undef LEADING_TABS
+])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADERS([config.h:config.hin])
+empty=
+space=' '
+tab='	'
+leading_spaces='  a'
+leading_tabs='		a'
+AC_DEFINE_UNQUOTED([EMPTY], [$empty], [empty])
+AC_DEFINE_UNQUOTED([SPACE], [$space], [space])
+AC_DEFINE_UNQUOTED([TAB], [$tab], [tab])
+AC_DEFINE_UNQUOTED([LEADING_SPACES], [$leading_spaces], [leading spaces])
+AC_DEFINE_UNQUOTED([LEADING_TABS], [$leading_tabs], [leading tabs])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_DATA([expout],
+[[/* config.h.  Generated from config.hin by configure.  */
+
+#define EMPTY
+#define SPACE
+#define TAB
+#define LEADING_SPACES a
+#define LEADING_TABS a
+]])
+AT_CHECK([cat config.h], 0, expout)
+
+AT_CLEANUP
 
 ## ---------------------- ##
 ## Substitute a newline.  ##

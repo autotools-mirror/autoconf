@@ -838,8 +838,12 @@ cat >>"$CONFIG_STATUS" <<_ACEOF || ac_write_fail=1
   macro = mac2[1]
   prefix = substr(line, 1, index(line, defundef) - 1)
   if (D_is_set[macro]) {
+    suffix = P[macro] D[macro]
+    while (suffix ~ /[\t ]$/) {
+      suffix = substr(suffix, 1, length(suffix) - 1)
+    }
     # Preserve the white space surrounding the "#".
-    print prefix "define", macro P[macro] D[macro]
+    print prefix "define", macro suffix
     next
   } else {
     # Replace #undef with comments.  This is necessary, for example,
