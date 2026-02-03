@@ -20573,7 +20573,7 @@ MAKEFLAGS = --unix -k
 @cindex @code{SHELL} and @command{make}
 @cindex @command{make} and @code{SHELL}
 
-Many @command{make} implementations use the the @code{$(SHELL)}
+Many @command{make} implementations use the @code{$(SHELL)}
 macro to spawn shell processes and execute Make rules.  This
 is a builtin macro with a default value upplied by @command{make};
 the default can be overridden by a makefile or by a command-line argument,
