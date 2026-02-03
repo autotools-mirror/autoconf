@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2024 Free Software Foundation, Inc.
+# Copyright (C) 2002-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,10 +66,7 @@ etc.) that can also be overridden on a per-message basis.
 
 =cut
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
-
+use 5.006; use strict; use warnings;
 use Carp;
 use Exporter;
 use File::Basename;
@@ -286,7 +283,7 @@ sub _reset_duplicates (\%)
 {
   my ($ref) = @_;
   my $dup = 0;
-  foreach my $k (keys %$ref)
+  foreach my $k (keys %$ref) # sort keys not needed
     {
       $dup += $ref->{$k};
     }
@@ -328,7 +325,7 @@ sub _merge_options (\%%)
   my ($hash, %options) = @_;
   local $_;
 
-  foreach (keys %options)
+  foreach (sort keys %options)
     {
       if (exists $hash->{$_})
 	{
@@ -731,7 +728,7 @@ with those specified by C<%options>.
 sub setup_channel_type ($%)
 {
   my ($type, %opts) = @_;
-  foreach my $channel (keys %channels)
+  foreach my $channel (sort keys %channels)
     {
       setup_channel $channel, %opts
 	if $channels{$channel}{'type'} eq $type;
@@ -759,7 +756,7 @@ our @_saved_werrors = ();
 sub dup_channel_setup ()
 {
   my %channels_copy;
-  foreach my $k1 (keys %channels)
+  foreach my $k1 (keys %channels) # sort keys not needed
     {
       $channels_copy{$k1} = {%{$channels{$k1}}};
     }
@@ -823,7 +820,7 @@ and the key to use for serialization.
 sub setup_channel_queue ($$)
 {
   my ($queue, $key) = @_;
-  foreach my $channel (keys %channels)
+  foreach my $channel (sort keys %channels)
     {
       setup_channel $channel, queue => $queue, queue_key => $key
         if $channels{$channel}{'ordered'};

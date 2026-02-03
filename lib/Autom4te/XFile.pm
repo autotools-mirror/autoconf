@@ -1,4 +1,4 @@
-# Copyright (C) 2001-2024 Free Software Foundation, Inc.
+# Copyright (C) 2001-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,10 +69,7 @@ and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 =cut
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
-
+use 5.006; use strict; use warnings;
 use Errno;
 use Exporter;
 use IO::File;

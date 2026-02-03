@@ -2,7 +2,7 @@
 # This Makefile fragment tries to be general-purpose enough to be
 # used by many projects via the gnulib maintainer-makefile module.
 
-## Copyright (C) 2001-2024 Free Software Foundation, Inc.
+## Copyright (C) 2001-2026 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -64,11 +64,14 @@ VC_LIST = $(srcdir)/$(_build-aux)/vc-list-files -C $(srcdir)
 
 # You can override this variable in cfg.mk if your gnulib submodule lives
 # in a different location.
-gnulib_dir ?= $(shell if test -n "$(GNULIB_SRCDIR)" && test -f "$(GNULIB_SRCDIR)/gnulib-tool"; then \
-			echo "$(GNULIB_SRCDIR)"; \
-		else \
-			echo $(srcdir)/gnulib; \
-		fi)
+ifeq ($(origin gnulib_dir),undefined)
+  gnulib_dir := $(shell if test -n "$(GNULIB_SRCDIR)" \
+                             && test -f "$(GNULIB_SRCDIR)/gnulib-tool"; then \
+                          echo "$(GNULIB_SRCDIR)"; \
+                        else \
+                          echo $(srcdir)/gnulib; \
+                        fi)
+endif
 
 # You can override this variable in cfg.mk to set your own regexp
 # matching files to ignore.
@@ -124,8 +127,10 @@ release_archive_dir ?= ../release
 # If RELEASE_TYPE is undefined, but RELEASE is, use its second word.
 # But overwrite VERSION.
 ifdef RELEASE
-  VERSION := $(word 1, $(RELEASE))
-  RELEASE_TYPE ?= $(word 2, $(RELEASE))
+  ifeq ($(origin RELEASE),command line)
+    VERSION := $(word 1,$(RELEASE))
+    RELEASE_TYPE ?= $(word 2,$(RELEASE))
+  endif
 endif
 
 # Validate and return $(RELEASE_TYPE), or die.
@@ -144,16 +149,28 @@ url_dir_list ?= $(if $(call _equal,$(gnu_rel_host),ftp.gnu.org),	\
                      https://ftpmirror.gnu.org/$(PACKAGE),		\
                      https://$(gnu_rel_host)/gnu/$(PACKAGE))
 
+# NEWS.md takes precedence over NEWS.
+# Override this in cfg.mk if you use a different file name.
+ifeq ($(origin NEWS_file),undefined)
+  NEWS_file := NEWS$(and $(wildcard $(srcdir)/NEWS.md),.md)
+endif
+
+# An ERE matching the release date (typically today, but not necessarily).
 # Override this in cfg.mk if you are using a different format in your
 # NEWS file.
-today = $(shell date +%Y-%m-%d)
+today = [0-9]{4,}-[0-9][0-9]-[0-9][0-9]
 
 # Select which lines of NEWS are searched for $(news-check-regexp).
 # This is a sed line number spec.  The default says that we search
 # lines 1..10 of NEWS for $(news-check-regexp).
 # If you want to search only line 3 or only lines 20-22, use "3" or "20,22".
 news-check-lines-spec ?= 1,10
-news-check-regexp ?= '^\*.* $(VERSION_REGEXP) \($(today)\)'
+
+# An ERE quoted for the shell, for matching a version+date line prefix.
+news-check-regexp ?= '^[\#*].* $(VERSION_REGEXP) \($(today)\)'
+
+# Like news-check-regexp, but as an unquoted BRE for .prev-version.
+news-check-regexp-prev ?= ^[\#*].* $(PREV_VERSION_REGEXP) ([0-9-]*)
 
 # Prevent programs like 'sort' from considering distinct strings to be equal.
 # Doing it here saves us from having to set LC_ALL elsewhere in this file.
@@ -381,12 +398,12 @@ sc_prohibit_atoi_atof:
 	halt='do not use *scan''f, ato''f, ato''i, ato''l, ato''ll or ato''q'	\
 	  $(_sc_search_regexp)
 
-# Use STREQ rather than comparing strcmp == 0, or != 0.
+# Use streq rather than comparing strcmp == 0, or != 0.
 sp_ = strcmp *\(.+\)
 sc_prohibit_strcmp:
 	@prohibit='! *strcmp *\(|\<$(sp_) *[!=]=|[!=]= *$(sp_)'		\
 	exclude='# *define STRN?EQ\('					\
-	halt='replace strcmp calls above with STREQ/STRNEQ'		\
+	halt='replace strcmp calls above with streq'			\
 	  $(_sc_search_regexp)
 
 # Really.  You don't want to use this function.
@@ -538,13 +555,16 @@ sc_require_config_h_first:
 	fi
 
 # Generated headers that override system headers.
-# Keep sorted.
+# These are documented in gnulib-tool.texi.  Keep sorted.
+# sed -n -e 's/^@item[[:space:]]\{1,\}@code{\([^}]\{1,\}\)}$/\1/p' $GNULIB_SRCDIR/doc/gnulib-tool.texi  | sort -u
 gl_prefer_angle_bracket_headers_ ?= \
   alloca.h		\
   arpa/inet.h		\
   assert.h		\
+  byteswap.h		\
   ctype.h		\
   dirent.h		\
+  endian.h		\
   errno.h		\
   error.h		\
   fcntl.h		\
@@ -560,9 +580,10 @@ gl_prefer_angle_bracket_headers_ ?= \
   locale.h		\
   malloc.h		\
   math.h		\
+  mntent.h		\
   monetary.h		\
-  netdb.h		\
   net/if.h		\
+  netdb.h		\
   netinet/in.h		\
   omp.h			\
   poll.h		\
@@ -581,7 +602,6 @@ gl_prefer_angle_bracket_headers_ ?= \
   stdlib.h		\
   string.h		\
   strings.h		\
-  sysexits.h		\
   sys/file.h		\
   sys/ioctl.h		\
   sys/msg.h		\
@@ -596,8 +616,10 @@ gl_prefer_angle_bracket_headers_ ?= \
   sys/times.h		\
   sys/types.h		\
   sys/uio.h		\
+  sys/un.h		\
   sys/utsname.h		\
   sys/wait.h		\
+  sysexits.h		\
   termios.h		\
   threads.h		\
   time.h		\
@@ -718,8 +740,8 @@ sc_prohibit_posixver_without_use:
 sc_prohibit_same_without_use:
 	@h='same.h' re='\<same_name(at)? *\(' $(_sc_header_without_use)
 
-sc_prohibit_hash_pjw_without_use:
-	@h='hash-pjw.h' \
+sc_prohibit_hashcode_string2_without_use:
+	@h='hashcode-string2.h' \
 	re='\<hash_pjw\>' \
 	  $(_sc_header_without_use)
 
@@ -852,6 +874,24 @@ sc_prohibit_xfreopen_without_use:
 sc_obsolete_symbols:
 	@prohibit='\<(HAVE''_FCNTL_H|O''_NDELAY)\>'			\
 	halt='do not use HAVE''_FCNTL_H or O'_NDELAY			\
+	  $(_sc_search_regexp)
+
+# Prohibit BSD4.3/SysV u_char, u_short, u_int and u_long usage.
+sc_unsigned_char:
+	@prohibit=u''_char \
+	halt='don'\''t use u''_char; instead use unsigned char'	\
+	  $(_sc_search_regexp)
+sc_unsigned_short:
+	@prohibit=u''_short \
+	halt='don'\''t use u''_short; instead use unsigned short' \
+	  $(_sc_search_regexp)
+sc_unsigned_int:
+	@prohibit=u''_int \
+	halt='don'\''t use u''_int; instead use unsigned int' \
+	  $(_sc_search_regexp)
+sc_unsigned_long:
+	@prohibit=u''_long \
+	halt='don'\''t use u''_long; instead use unsigned long'	\
 	  $(_sc_search_regexp)
 
 # FIXME: warn about definitions of EXIT_FAILURE, EXIT_SUCCESS, STREQ
@@ -1021,6 +1061,13 @@ sc_GFDL_version:
 	@prohibit='$(_GFDL_regexp)'					\
 	halt='GFDL vN, N!=3'						\
 	  $(_sc_search_regexp)
+
+# Look out for FSF postal addresses -- use URLs instead:
+# https://www.gnu.org/prep/maintain/html_node/License-Notices-for-Code.html
+sc_fsf_postal:
+	@prohibit='(Mass Ave|Massachusetts Ave|Temple Pl|Franklin St|Milk St)' \
+	halt='use license URLs instead of FSF postal address' \
+	 $(_sc_search_regexp)
 
 # Don't use Texinfo's @acronym{}.
 # https://lists.gnu.org/r/bug-gnulib/2010-03/msg00321.html
@@ -1223,8 +1270,7 @@ sc_const_long_option:
 	  $(_sc_search_regexp)
 
 NEWS_hash =								\
-  $$($(SED) -n '/^\*.* $(PREV_VERSION_REGEXP) ([0-9-]*)/,$$p'		\
-       $(srcdir)/NEWS							\
+  $$($(SED) -n '/$(news-check-regexp-prev)/,$$p' $(srcdir)/$(NEWS_file)	\
      | perl -0777 -pe							\
 	's/^Copyright.+?Free\sSoftware\sFoundation,\sInc\.\n//ms'	\
      | md5sum -								\
@@ -1232,15 +1278,16 @@ NEWS_hash =								\
 
 # Ensure that we don't accidentally insert an entry into an old NEWS block.
 sc_immutable_NEWS:
-	@if test -f $(srcdir)/NEWS; then				\
+	@if test -f $(srcdir)/$(NEWS_file); then			\
 	  test "$(NEWS_hash)" = '$(old_NEWS_hash)' && : ||		\
 	    { echo '$(ME): you have modified old NEWS' 1>&2; exit 1; };	\
 	fi
 
 # Update the hash stored above.  Do this after each release and
 # for any corrections to old entries.
-update-NEWS-hash: NEWS
-	perl -pi -e 's/^(old_NEWS_hash[ \t]+:?=[ \t]+).*/$${1}'"$(NEWS_hash)/" \
+update-NEWS-hash: $(NEWS_file)
+	$(AM_V_GEN)perl -pi						\
+	  -e 's/^(old_NEWS_hash[ \t]+:?=[ \t]+).*/$${1}'"$(NEWS_hash)/"	\
 	  $(srcdir)/cfg.mk
 
 # Ensure that we use only the standard $(VAR) notation,
@@ -1265,12 +1312,12 @@ sc_makefile_at_at_check:
 	    $$($(VC_LIST_EXCEPT) | $(GREP) -E '(^|/)(Makefile\.am|[^/]+\.mk)$$') \
 	  && { echo '$(ME): use $$(...), not @...@' 1>&2; exit 1; } || :
 
-news-check: NEWS
+news-check: $(NEWS_file)
 	$(AM_V_GEN)if $(SED) -n $(news-check-lines-spec)p $<		\
 	    | $(GREP) -E $(news-check-regexp) >/dev/null; then		\
 	  :;								\
 	else								\
-	  echo 'NEWS: $$(news-check-regexp) failed to match' 1>&2;	\
+	  echo '$<: $$(news-check-regexp) failed to match' 1>&2;	\
 	  exit 1;							\
 	fi
 
@@ -1419,10 +1466,13 @@ sc_prohibit_reversed_compare_failure:
 # That would be flagged by using -Wundef, however gnulib currently
 # tests many undefined macros, and so we can't enable that option.
 # So at least preclude common boolean strings as macro values.
+# Although this rule formerly also complained about 'true' and 'false',
+# that complaint is now incorrect given that C23 has blessed this practice
+# and the 'bool' module supports it.
 sc_Wundef_boolean:
-	@prohibit='^#define.*(yes|no|true|false)$$'			\
+	@prohibit='^#define.*(yes|no)$$'				\
 	in_files='$(CONFIG_INCLUDE)'					\
-	halt='Use 0 or 1 for macro values'				\
+	halt='Use 0/1 or false/true for macro values'			\
 	  $(_sc_search_regexp)
 
 # Even if you use pathmax.h to guarantee that PATH_MAX is defined, it might
@@ -1483,11 +1533,17 @@ vc-diff-check:
 
 rel-files = $(DIST_ARCHIVES)
 
-gnulib-version = $$(cd $(gnulib_dir)				\
-                    && { git describe || git rev-parse --short=10 HEAD; } )
+gnulib-version ?= \
+  $$(head -c11 $(gnulib_dir)/ChangeLog;					\
+     if test -e $(gnulib_dir)/.git; then				\
+       git -C $(gnulib_dir) rev-parse HEAD;				\
+     elif test -f $(srcdir)/bootstrap.conf; then			\
+       perl -lne '/^\s*GNULIB_REVISION=(\S+)/ and $$d=$$1;'		\
+         -e 'END{defined $$d and print $$d}' $(srcdir)/bootstrap.conf;	\
+     fi)
 bootstrap-tools ?= autoconf,automake,gnulib
 
-gpgv = $$(gpgv2 --version >/dev/null && echo gpgv2 || echo gpgv)
+gpgv = $$(command -v gpgv2 >/dev/null && echo gpgv2 || echo gpgv)
 # If it's not already specified, derive the GPG key ID from
 # the signed tag we've just applied to mark this release.
 gpg_key_ID ?=								\
@@ -1518,9 +1574,11 @@ announcement_mail_headers_alpha =		\
 announcement_mail_Cc_beta = $(announcement_mail_Cc_alpha)
 announcement_mail_headers_beta = $(announcement_mail_headers_alpha)
 
+announce_gen_args ?=
+
 announcement_Cc_ ?= $(announcement_Cc_$(release-type))
 announcement_mail_headers_ ?= $(announcement_mail_headers_$(release-type))
-announcement: NEWS ChangeLog $(rel-files)
+announcement: $(NEWS_file) ChangeLog $(rel-files)
 # Not $(AM_V_GEN) since the output of this command serves as
 # announcement message: it would start with " GEN announcement".
 	$(AM_V_at)$(srcdir)/$(_build-aux)/announce-gen			\
@@ -1535,17 +1593,22 @@ announcement: NEWS ChangeLog $(rel-files)
 	    $$(test -n "$(gpg_keyring_url)" &&				\
 	       echo --gpg-keyring-url="$(gpg_keyring_url)")		\
 	    --srcdir=$(srcdir)						\
-	    --news=$(srcdir)/NEWS					\
+	    --news=$(srcdir)/$(NEWS_file)				\
 	    --bootstrap-tools=$(bootstrap-tools)			\
-	    $$(case ,$(bootstrap-tools), in (*,gnulib,*)		\
-	       echo --gnulib-version=$(gnulib-version);; esac)		\
-	    $(addprefix --url-dir=, $(url_dir_list))
+	    "$$(case ,$(bootstrap-tools), in (*,gnulib,*)		\
+	       echo --gnulib-version=$(gnulib-version);; esac)"		\
+	    $(addprefix --url-dir=, $(url_dir_list))			\
+	    $(announce_gen_args)
 
+release_commit_args ?= \
+  --news=$(NEWS_file) \
+  --stub='$(gl_noteworthy_news_)' \
+  --stub-lines='$(news-check-lines-spec)'
 .PHONY: release-commit
 release-commit:
 	$(AM_V_GEN)cd $(srcdir)				\
 	  && $(_build-aux)/do-release-commit-and-tag	\
-	       -C $(abs_builddir) $(RELEASE)
+	       -C $(abs_builddir) $(release_commit_args) $(RELEASE)
 
 ## ---------------- ##
 ## Updating files.  ##
@@ -1573,7 +1636,7 @@ upload:
 
 define emit-commit-log
   printf '%s\n' 'maint: post-release administrivia' ''			\
-    '* NEWS: Add header line for next release.'				\
+    '* $(NEWS_file): Add header line for next release.'			\
     '* .prev-version: Record previous version.'				\
     '* cfg.mk (old_NEWS_hash): Auto-update.'
 endef
@@ -1581,6 +1644,7 @@ endef
 .PHONY: no-submodule-changes
 no-submodule-changes:
 	$(AM_V_GEN)if test -d $(srcdir)/.git				\
+		&& test -e $(srcdir)/.gitmodules			\
 		&& git --version >/dev/null 2>&1; then			\
 	  diff=$$(cd $(srcdir) && git submodule -q foreach		\
 		  git diff-index --name-only HEAD)			\
@@ -1600,6 +1664,7 @@ submodule-checks ?= no-submodule-changes public-submodule-commit
 .PHONY: public-submodule-commit
 public-submodule-commit:
 	$(AM_V_GEN)if test -d $(srcdir)/.git				\
+		&& test -e $(srcdir)/.gitmodules			\
 		&& git --version >/dev/null 2>&1; then			\
 	  cd $(srcdir) &&						\
 	  git submodule --quiet foreach					\
@@ -1640,7 +1705,10 @@ release:
 # Override this in cfg.mk if you follow different procedures.
 release-prep-hook ?= release-prep
 
-gl_noteworthy_news_ = * Noteworthy changes in release ?.? (????-??-??) [?]
+# Keep consistent with news-check-regexp and news-check-regexp-prev.
+gl_noteworthy_news_ ?= \
+  $(if $(filter %.md,$(NEWS_file)),#,*) \
+  Noteworthy changes in release ?.? (????-??-??) [?]
 .PHONY: release-prep
 release-prep:
 	$(AM_V_GEN)$(MAKE) --no-print-directory -s announcement \
@@ -1651,9 +1719,15 @@ release-prep:
 	fi
 	$(AM_V_at)echo $(VERSION) > $(prev_version_file)
 	$(AM_V_at)$(MAKE) update-NEWS-hash
-	$(AM_V_at)perl -pi						\
-	  -e '$$. == 3 and print "$(gl_noteworthy_news_)\n\n\n"'	\
-	  $(srcdir)/NEWS
+	$(AM_V_at)n=$$($(SED) -n -E				\
+	  '$(news-check-lines-spec){/'$(news-check-regexp)'/=}'	\
+	  $(srcdir)/$(NEWS_file)); test -n "$$n"		\
+	  && env gl_n=$$n gl_s='$(gl_noteworthy_news_)'		\
+	         perl -pi -e '$$. == $$ENV{gl_n} '		\
+	                  -e '  and print "$$ENV{gl_s}\n\n\n"'	\
+                      $(srcdir)/$(NEWS_file)			\
+	  || { printf '$(NEWS_file): %s failed to match\n'	\
+	              '$$(news-check-regexp)' 1>&2; exit 1; }
 	$(AM_V_at)msg=$$($(emit-commit-log)) || exit 1;		\
 	cd $(srcdir) && $(VC) commit -m "$$msg" -a
 
@@ -1684,7 +1758,7 @@ init-coverage:
 	$(MAKE) $(AM_MAKEFLAGS) clean
 	lcov --directory . --zerocounters
 
-COVERAGE_CCOPTS ?= "-g --coverage"
+COVERAGE_CCOPTS ?= "-g --coverage -Wno-error"
 COVERAGE_OUT ?= doc/coverage
 
 build-coverage:
@@ -1692,12 +1766,13 @@ build-coverage:
 	$(MAKE) $(AM_MAKEFLAGS) CFLAGS=$(COVERAGE_CCOPTS) CXXFLAGS=$(COVERAGE_CCOPTS) check
 	mkdir -p $(COVERAGE_OUT)
 	lcov --directory . --output-file $(COVERAGE_OUT)/$(PACKAGE).info \
-		--capture
+		--capture --ignore-errors negative,source
 
 gen-coverage:
 	genhtml --output-directory $(COVERAGE_OUT) \
 		$(COVERAGE_OUT)/$(PACKAGE).info \
-		--highlight --frames --legend \
+		--frames --legend \
+		--ignore-errors source --synthesize-missing \
 		--title "$(PACKAGE_NAME)"
 
 coverage:
@@ -1746,7 +1821,7 @@ refresh-po:
 
 # Indentation
 
-indent_args ?= -ppi 1
+indent_args ?= --ignore-profile --preprocessor-indentation 1
 C_SOURCES ?= $$($(VC_LIST_EXCEPT) | grep '\.[ch]\(.in\)\?$$')
 INDENT_SOURCES ?= $(C_SOURCES)
 exclude_file_name_regexp--indent ?= $(exclude_file_name_regexp--sc_indent)
@@ -1769,6 +1844,21 @@ sc_indent:
 	  test $$fail = 1 &&						\
 	    { echo 1>&2 '$(ME): code format error, try "make indent"';	\
 	      exit 1; } || :;						\
+	fi
+
+# Check code spelling.
+# Example 'cfg.mk' settings for inspiration:
+# codespell_ignore_words_list = foo
+# exclude_file_name_regexp--sc_codespell = ^po/.*.po|doc/.*.pdf$$
+# codespell_extra_args = --summary --count
+# codespell_args = --ignore-words=doc/my-codespell-ignores.txt
+codespell_args ?= --ignore-words-list $(codespell_ignore_words_list) \
+	$(codespell_extra_args)
+sc_codespell:
+	@if ! command -v codespell > /dev/null; then			\
+	   echo 1>&2 '$(ME): sc_codespell: codespell is missing';	\
+	else								\
+	   codespell $(codespell_args) $$($(VC_LIST_EXCEPT));		\
 	fi
 
 # If you want to set UPDATE_COPYRIGHT_* environment variables,
@@ -1866,7 +1956,7 @@ _gl_tight_scope: $(bin_PROGRAMS)
 	for sig in 1 2 3 13 15; do					\
 	  eval "trap 'v=`expr $$sig + 128`; (exit $$v); exit $$v' $$sig"; \
 	done;								\
-	src=`for f in $(SOURCES); do					\
+	src=`for f in $(sort $(SOURCES)); do				\
 	       test -f $$f && d= || d=$(srcdir)/; echo $$d$$f; done`;	\
 	hdr=`for f in $(_gl_TS_headers); do				\
 	       test -f $$f && d= || d=$(srcdir)/; echo $$d$$f; done`;	\

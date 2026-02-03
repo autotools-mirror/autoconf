@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2024 Free Software Foundation, Inc.
+# Copyright (C) 2003-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,9 +34,7 @@ This perl module provides various general purpose file handling functions.
 
 =cut
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
+use 5.006; use strict; use warnings;
 
 BEGIN
 {
@@ -359,7 +357,7 @@ same file).
 our %_directory_cache;
 sub dir_has_case_matching_file ($$)
 {
-  # Note that print File::Spec->case_tolerant returns 0 even on Mac OS
+  # Note that print File::Spec->case_tolerant returns 0 even on MacOS
   # X (with Perl v5.8.1-RC3 at least), so do not try to shortcut this
   # function using that.
 

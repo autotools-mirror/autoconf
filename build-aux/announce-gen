@@ -3,7 +3,7 @@
 
 # Generate a release announcement message.
 
-# Copyright (C) 2002-2024 Free Software Foundation, Inc.
+# Copyright (C) 2002-2026 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #
 # Written by Jim Meyering
 
-# This is a prologue that allows to run a perl script as an executable
+# This prologue allows running a perl script as an executable
 # on systems that are compliant to a POSIX version before POSIX:2017.
 # On such systems, the usual invocation of an executable through execlp()
 # or execvp() fails with ENOEXEC if it is a script that does not start
@@ -35,13 +35,13 @@
 eval 'exec perl -wSx "$0" "$@"'
      if 0;
 
-my $VERSION = '2023-12-29 18:26'; # UTC
+my $VERSION = '2025-11-26 21:27'; # UTC
 # The definition above must lie within the first 8 lines in order
 # for the Emacs time-stamp write hook (at end) to update it.
 # If you change this file with Emacs, please let the write hook
 # do its job.  Otherwise, update this string manually.
 
-my $copyright_year = '2022';
+(my $copyright_year = $VERSION) =~ s/^(\d*)-.*$/$1/;
 
 use strict;
 use Getopt::Long;
@@ -50,7 +50,8 @@ use POSIX qw(strftime);
 (my $ME = $0) =~ s|.*/||;
 
 my %valid_release_types = map {$_ => 1} qw (alpha beta stable);
-my @archive_suffixes = qw (tar.gz tar.bz2 tar.lz tar.lzma tar.xz);
+my @archive_suffixes = qw (tar.gz tar.bz2 tar.bz3 tar.lz tar.lzma tar.xz
+                           tar.zst zip);
 my $srcdir = '.';
 
 sub usage ($)
@@ -94,7 +95,9 @@ The following are optional:
                                 sign the tarballs
    --gpg-keyring-url=URL        URL pointing to keyring containing the key used
                                 to sign the tarballs
-   --no-print-checksums         do not emit SHA1 or SHA256 checksums
+   --no-print-checksums         do not emit SHA256 or SHA3-256 checksums
+   --cksum-checksums            emit SHA256 and SHA3-256 checksums in a form
+                                that requires cksum from coreutils or OpenBSD
    --archive-suffix=SUF         add SUF to the list of archive suffixes
    --mail-headers=HEADERS       a space-separated list of mail headers, e.g.,
                                 To: x\@example.com Cc: y-announce\@example.com,...
@@ -102,13 +105,15 @@ The following are optional:
    --help             display this help and exit
    --version          output version information and exit
 
+Send patches and bug reports to <bug-gnulib\@gnu.org>.
 EOF
     }
   exit $exit_code;
 }
 
+=over
 
-=item C<%size> = C<sizes (@file)>
+=item C<%size = sizes (@file)>
 
 Compute the sizes of the C<@file> and return them as a hash.  Return
 C<undef> if one of the computation failed.
@@ -123,7 +128,7 @@ sub sizes (@)
   my %res;
   foreach my $f (@file)
     {
-      my $cmd = "du -h $f";
+      my $cmd = "du -h -L $f";
       my $t = `$cmd`;
       # FIXME-someday: give a better diagnostic, a la $PROCESS_STATUS
       $@
@@ -135,9 +140,9 @@ sub sizes (@)
   return $fail ? undef : %res;
 }
 
-=item C<print_locations ($title, \@url, \%size, @file)
+=item C<print_locations ($title, \@url, \%size, @file)>
 
-Print a section C<$title> dedicated to the list of <@file>, which
+Print a section C<$title> dedicated to the list of C<@file>, which
 sizes are stored in C<%size>, and which are available from the C<@url>.
 
 =cut
@@ -159,42 +164,66 @@ sub print_locations ($\@\%@)
   print "\n";
 }
 
-=item C<print_checksums (@file)
+=item C<print_checksums (@file)>
 
-Print the SHA1 and SHA256 signature section for each C<@file>.
+Print the SHA256 and SHA3-256 signature section for each C<@file>.
 
 =cut
 
 # This digest function omits the "=" padding that is required by cksum,
 # so add the 0..2 bytes of padding required for each of Digest's algorithms.
+# To verify such a digest, users need
+#   - a particular command ('cksum -a sha256 --check')
+#   - and particular tools (coreutils >= 9.2 or OpenBSD's cksum since 2007).
 sub digest_file_base64_wrap ($$)
 {
   my ($file, $alg) = @_;
   my $h = digest_file_base64($file, $alg);
   $alg =~ tr{-}{}d;
-  my %pad = (MD5 => 2, SHA1 => 1, SHA256 => 1, SHA384 => 0, SHA512 => 2);
-  return $h . '=' x $pad{$alg};
+  my %pad = (MD5 => 2, SHA1 => 1, SHA256 => 1, SHA384 => 0, SHA512 => 2,
+             SHA3256 => 1, SHA3384 => 0, SHA3512 => 2);
+  (my $alg_tag = $alg) =~ s/^SHA3(\d{3})/SHA3-$1/;
+  return $alg_tag . " (" . $file . ") = " . $h . '=' x $pad{$alg};
 }
 
-sub print_checksums (@)
+sub print_checksums ($@)
 {
-  my (@file) = @_;
+  my ($prefer_cksum, @file) = @_;
 
-  print "Here are the SHA1 and SHA256 checksums:\n";
+  print "Here are the SHA256 and SHA3-256 checksums:\n";
   print "\n";
 
   use Digest::file qw(digest_file_hex digest_file_base64);
 
-  foreach my $f (@file)
+  if ($prefer_cksum)
     {
-      print '  ', digest_file_hex ($f, "SHA-1"), "  $f\n";
-      print '  ', digest_file_base64_wrap ($f, "SHA-256"), "  $f\n";
+      foreach my $f (@file)
+        {
+          print '  ', digest_file_base64_wrap ($f, "SHA-256"), "\n";
+          print '  ', digest_file_base64_wrap ($f, "SHA3-256"), "\n";
+        }
+      print "\nVerify the base64 SHA256 checksum with 'cksum -a sha256 --check'\n";
+      print "from coreutils-9.2 or OpenBSD's cksum since 2007.\n";
+      print "\nVerify the base64 SHA3-256 checksum with 'cksum -a sha3 --check'\n";
+      print "from coreutils-9.8.\n\n";
     }
-  print "\nVerify the base64 SHA256 checksum with cksum -a sha256 --check\n";
-  print "from coreutils-9.2 or OpenBSD's cksum since 2007.\n\n";
+  else
+    {
+      foreach my $f (@file)
+        {
+          print "  File: $f\n";
+          print '  SHA256 sum:   ', digest_file_hex ($f, "SHA-256"), "\n";
+          print '  SHA3-256 sum: ', digest_file_hex ($f, "SHA3-256"), "\n";
+          print "\n";
+        }
+      print "Verify the SHA256 checksum with either sha256sum, sha256, or\n";
+      print "'shasum -a 256'.\n";
+      print "\nVerify the SHA3-256 checksum with 'cksum -a sha3 -l 256 --base64'\n";
+      print "from coreutils-9.8.\n\n";
+    }
 }
 
-=item C<print_news_deltas ($news_file, $prev_version, $curr_version)
+=item C<print_news_deltas ($news_file, $prev_version, $curr_version)>
 
 Print the section of the NEWS file C<$news_file> addressing changes
 between versions C<$prev_version> and C<$curr_version>.
@@ -215,7 +244,7 @@ sub print_news_deltas ($$$)
   # the first occurrence of $prev_version.
   my $in_items;
 
-  my $re_prefix = qr/(?:\* )?(?:Noteworthy c|Major c|C)(?i:hanges)/;
+  my $re_prefix = qr/(?:[#*]+ )?(?:Noteworthy c|Major c|C)(?i:hanges)/;
 
   my $found_news;
   open NEWS, '<', $news_file
@@ -356,16 +385,16 @@ sub get_tool_versions ($$)
       # Assume that the last "word" on the first line of
       # 'tool --version' output is the version string.
       my ($first_line, undef) = split ("\n", `$t --version`);
-      if ($first_line =~ /.* (\d[\w.-]+)$/)
+      if ($first_line =~ /.* ([a-f\d][\w.-]+)$/)
         {
           $t = ucfirst $t;
           push @tool_version_pair, "$t $1";
         }
       else
         {
+          warn "$t: unexpected --version output:\n$first_line";
           defined $first_line
             and $first_line = '';
-          warn "$t: unexpected --version output\n:$first_line";
           $fail = 1;
         }
     }
@@ -424,6 +453,7 @@ sub readable_interval($)
   my $bootstrap_tools;
   my $gnulib_version;
   my $print_checksums_p = 1;
+  my $cksum_checksums_p;
   my $gpg_key_email;
   my $gpg_keyring_url;
 
@@ -452,6 +482,7 @@ sub readable_interval($)
      'bootstrap-tools=s'  => \$bootstrap_tools,
      'gnulib-version=s'   => \$gnulib_version,
      'print-checksums!'   => \$print_checksums_p,
+     'cksum-checksums'    => \$cksum_checksums_p,
      'archive-suffix=s'   => \@archive_suffixes,
 
      help => sub { usage 0 },
@@ -545,17 +576,19 @@ EOF
   my $v0 = $prev_version;
   my $v1 = $curr_version;
 
-  (my $first_name = `git config user.name|cut -d' ' -f1`)
+  (my $first_name = `git -C "$srcdir" config user.name|cut -d' ' -f1`)
     =~ m{\S} or die "no name? set user.name in ~/.gitconfig\n";
 
-  chomp (my $n_ci = `git rev-list "v$v0..v$v1" | wc -l`);
-  chomp (my $n_p = `git shortlog "v$v0..v$v1" | grep -c '^[^ ]'`);
+  chomp (my $n_ci = `git -C "$srcdir" rev-list "v$v0..v$v1" | wc -l`);
+  chomp (my $n_p = `git -C "$srcdir" shortlog "v$v0..v$v1" | grep -c '^[^ ]'`);
 
-  my $prev_release_date = `git log --pretty=%ct -1 "v$v0"`;
-  my $this_release_date = `git log --pretty=%ct -1 "v$v1"`;
+  my $this_commit_hash = `git -C "$srcdir" log --pretty=%H -1 "v$v1"`;
+  chop $this_commit_hash;
+  my $prev_release_date = `git -C "$srcdir" log --pretty=%ct -1 "v$v0"`;
+  my $this_release_date = `git -C "$srcdir" log --pretty=%ct -1 "v$v1"`;
   my $n_seconds = $this_release_date - $prev_release_date;
   my $time_since_prev = readable_interval $n_seconds;
-  my $names = `git shortlog "v$v0..v$v1"|perl -lne '/^(\\w.*):/ and print "  ".\$1'`;
+  my $names = `git -C "$srcdir" shortlog "v$v0..v$v1"|perl -lne '/^(\\w.*):/ and print "  ".\$1'`;
 
   print <<EOF;
 There have been $n_ci commits by $n_p people in the $time_since_prev since $v0.
@@ -571,11 +604,6 @@ $first_name [on behalf of the $package_name maintainers]
 
 Here is the GNU $package_name home page:
     https://gnu.org/s/$package_name/
-
-For a summary of changes and contributors, see:
-  https://git.sv.gnu.org/gitweb/?p=$package_name.git;a=shortlog;h=v$v1
-or run this command from a git-cloned $package_name directory:
-  git shortlog v$v0..v$v1
 
 EOF
 
@@ -617,7 +645,7 @@ EOF
     }
 
   $print_checksums_p
-    and print_checksums (@sizable);
+    and print_checksums ($cksum_checksums_p, @sizable);
 
   print <<EOF;
 Use a .sig file to verify that the corresponding file (without the
@@ -670,6 +698,23 @@ keyring:
   gpg --keyring gnu-keyring.gpg --verify $tarballs[0].sig
 EOF
 
+  print <<EOF;
+
+This release is based on the $package_name git repository, available as
+
+  git clone https://https.git.savannah.gnu.org/git/$package_name.git
+
+with commit $this_commit_hash tagged as v$v1.
+
+For a summary of changes and contributors, see:
+
+  https://gitweb.git.savannah.gnu.org/gitweb/?p=$package_name.git;a=shortlog;h=v$v1
+
+or run this command from a git-cloned $package_name directory:
+
+  git shortlog v$v0..v$v1
+EOF
+
   my @tool_versions = get_tool_versions (\@tool_list, $gnulib_version);
   @tool_versions
     and print "\nThis release was bootstrapped with the following tools:",
@@ -684,6 +729,10 @@ EOF
   exit 0;
 }
 
+=back
+
+=cut
+
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:
 ## mode: perl
@@ -695,10 +744,10 @@ EOF
 ## perl-label-offset: -2
 ## perl-extra-newline-before-brace: t
 ## perl-merge-trailing-else: nil
-## eval: (add-hook 'before-save-hook 'time-stamp)
+## eval: (add-hook 'before-save-hook 'time-stamp nil t)
 ## time-stamp-line-limit: 50
 ## time-stamp-start: "my $VERSION = '"
-## time-stamp-format: "%:y-%02m-%02d %02H:%02M"
+## time-stamp-format: "%Y-%02m-%02d %02H:%02M"
 ## time-stamp-time-zone: "UTC0"
 ## time-stamp-end: "'; # UTC"
 ## End:

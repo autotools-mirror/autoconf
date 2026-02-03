@@ -1,9 +1,9 @@
 #!/bin/sh
 # Sign files and upload them.
 
-scriptversion=2022-01-27.18; # UTC
+scriptversion=2025-06-28.18; # UTC
 
-# Copyright (C) 2004-2024 Free Software Foundation, Inc.
+# Copyright (C) 2004-2026 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ GPG=gpg
 # Choose the proper version of gpg, so as to avoid a
 # "gpg-agent is not available in this session" error
 # when gpg-agent is version 2 but gpg is still version 1.
-# FIXME-2020: remove, once all major distros ship gpg version 2 as /usr/bin/gpg
+# FIXME: remove, once all major distros ship gpg version 2 as /usr/bin/gpg
 gpg_agent_version=`(gpg-agent --version) 2>/dev/null | sed -e '2,$d' -e 's/^[^0-9]*//'`
 case "$gpg_agent_version" in
   2.*)
@@ -39,7 +39,7 @@ case "$gpg_agent_version" in
           # gpg2 is present.
           GPG=gpg2
         else
-          # gpg2 is missing. Ubuntu users should install the package 'gnupg2'.
+          # gpg2 is missing. Slackware users should install the package 'gnupg2'.
           echo "WARNING: Using 'gpg', which is too old. You should install 'gpg2'." 1>&2
         fi
         ;;
@@ -100,6 +100,9 @@ Options and commands are applied in order.  If the file $conffile exists
 in the current working directory, its contents are prepended to the
 actual command line options.  Use this to keep your defaults.  Comments
 (#) and empty lines in $conffile are allowed.
+
+You may need to set GPG_TTY=\$(tty) in your environment.  See the
+gpg-agent man page.
 
 <https://www.gnu.org/prep/maintain/html_node/Automated-FTP-Uploads.html>
 gives some further background.
@@ -472,9 +475,9 @@ done
 exit 0
 
 # Local variables:
-# eval: (add-hook 'before-save-hook 'time-stamp)
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
 # time-stamp-start: "scriptversion="
-# time-stamp-format: "%:y-%02m-%02d.%02H"
+# time-stamp-format: "%Y-%02m-%02d.%02H"
 # time-stamp-time-zone: "UTC0"
 # time-stamp-end: "; # UTC"
 # End:

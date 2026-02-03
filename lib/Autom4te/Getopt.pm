@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2024 Free Software Foundation, Inc.
+# Copyright (C) 2012-2025 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,9 +35,7 @@ line options in conformance to the GNU Coding standards.
 
 =cut
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
+use 5.006; use strict; use warnings;
 
 use Carp qw (confess croak);
 use Exporter ();
@@ -68,7 +66,7 @@ sub parse_options (%)
   if (@ARGV && $ARGV[0] =~ /^-./)
     {
       my %argopts;
-      for my $k (keys %option)
+      for my $k (keys %option) # sort keys not needed
 	{
 	  if ($k =~ /(.*)=s$/)
 	    {

@@ -2,9 +2,9 @@
 # gendocs.sh -- generate a GNU manual in many formats.  This script is
 #   mentioned in maintain.texi.  See the help message below for usage details.
 
-scriptversion=2024-01-27.16
+scriptversion=2026-01-01.00
 
-# Copyright 2003-2024 Free Software Foundation, Inc.
+# Copyright 2003-2026 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ texarg="-t @finalout"
 
 version="gendocs.sh $scriptversion
 
-Copyright 2024 Free Software Foundation, Inc.
+Copyright 2026 Free Software Foundation, Inc.
 There is NO warranty.  You may redistribute this software
 under the terms of the GNU General Public License.
 For more information about these matters, see the files named COPYING."
@@ -232,8 +232,8 @@ fi
 # Function to return size of $1 in something resembling kilobytes.
 calcsize()
 {
-  size=`ls -ksl $1 | awk '{print $1}'`
-  echo $size
+  set `ls -ks "$1"`
+  echo $1
 }
 
 # copy_images OUTDIR HTML-FILE...
@@ -256,8 +256,8 @@ BEGIN {
 /<img src="(.*?)"/g && ++$need{$1};
 
 END {
-  #print "$me: @{[keys %need]}\n";  # for debugging, show images found.
-  FILE: for my $f (keys %need) {
+  #print "$me: @{[sort keys %need]}\n";  # for debugging, show images found.
+  FILE: for my $f (sort keys %need) {
     for my $d (@dirs) {
       if (-f "$d/$f") {
         use File::Basename;
@@ -346,7 +346,8 @@ html_split()
   split_html_dir=$PACKAGE.html
   (
     cd ${split_html_dir} || exit 1
-    ln -sf ${PACKAGE}.html index.html
+    test -f index.html || test ! -f ${PACKAGE}.html ||
+      ln -s ${PACKAGE}.html index.html
     tar -czf "$abs_outdir/${PACKAGE}.html_$1.tar.gz" -- *.html
   )
   eval html_$1_tgz_size=`calcsize "$outdir/${PACKAGE}.html_$1.tar.gz"`
@@ -437,7 +438,7 @@ d=`dirname $srcfile`
     done
 
     # if $MAKEINFO is recent enough, use --trace-includes on the
-    # $srcfile to get the included files of the targetted manual only
+    # $srcfile to get the included files of the targeted manual only
     base=`basename "$srcfile"`
 
     cmd="$SETLANG $MAKEINFO $commonarg --trace-includes \"$base\""
@@ -555,8 +556,8 @@ $GENDOCS_TEMPLATE_DIR/gendocs_template >"$outdir/index.html"
 echo "Done, see $outdir/ subdirectory for new files."
 
 # Local variables:
-# eval: (add-hook 'before-save-hook 'time-stamp)
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
 # time-stamp-start: "scriptversion="
-# time-stamp-format: "%:y-%02m-%02d.%02H"
+# time-stamp-format: "%Y-%02m-%02d.%02H"
 # time-stamp-end: "$"
 # End:
