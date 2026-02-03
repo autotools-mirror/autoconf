@@ -1599,8 +1599,8 @@ announcement: $(NEWS_file) ChangeLog $(rel-files)
 	    --srcdir=$(srcdir)						\
 	    --news=$(srcdir)/$(NEWS_file)				\
 	    --bootstrap-tools=$(bootstrap-tools)			\
-	    "$$(case ,$(bootstrap-tools), in (*,gnulib,*)		\
-	       echo --gnulib-version=$(gnulib-version);; esac)"		\
+	    $$(case ,$(bootstrap-tools), in (*,gnulib,*)		\
+	       echo --gnulib-version=$(gnulib-version);; esac)		\
 	    $(addprefix --url-dir=, $(url_dir_list))			\
 	    $(announce_gen_args)
 
