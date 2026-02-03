@@ -58,6 +58,19 @@ GNU Autoconf NEWS - User visible changes.
 *** config.status now fails with a diagnostic if awk is missing,
   rather than misbehaving.
 
+*** autoreconf handles projects using GNU Gettext and/or gtk-doc better.
+  A variety of situations where autoreconf would try to run the
+  'autopoint' and/or 'gtkdocize' tools when it shouldn't have,
+  or *wouldn't* run them when it *should* have, have been corrected.
+  See <https://savannah.gnu.org/support/index.php?111273>,
+  <https://savannah.gnu.org/support/index.php?111272>,
+  <https://savannah.gnu.org/support/index.php?111271>,
+  <https://savannah.gnu.org/support/index.php?110503>.
+
+*** autoconf no longer installs a file named "version.m4".
+  This eliminates an annoying (but harmless) warning produced by
+  Autoconf 2.72 when projects contain their own "version.m4".
+
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 
 ** Backward incompatibilities
