@@ -1723,11 +1723,11 @@ release-prep:
 	  '$(news-check-lines-spec){/'$(news-check-regexp)'/=}'	\
 	  $(srcdir)/$(NEWS_file)); test -n "$$n"		\
 	  && env gl_n=$$n gl_s='$(gl_noteworthy_news_)'		\
-	         perl -pi -e '$$. == $$ENV{gl_n} '		\
-	                  -e '  and print "$$ENV{gl_s}\n\n\n"'	\
-                      $(srcdir)/$(NEWS_file)			\
+		 perl -pi -e '$$. == $$ENV{gl_n} '		\
+			  -e '  and print "$$ENV{gl_s}\n\n\n"'	\
+		      $(srcdir)/$(NEWS_file)			\
 	  || { printf '$(NEWS_file): %s failed to match\n'	\
-	              '$$(news-check-regexp)' 1>&2; exit 1; }
+		      '$$(news-check-regexp)' 1>&2; exit 1; }
 	$(AM_V_at)msg=$$($(emit-commit-log)) || exit 1;		\
 	cd $(srcdir) && $(VC) commit -m "$$msg" -a
 
