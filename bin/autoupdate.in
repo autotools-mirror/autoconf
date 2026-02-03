@@ -80,7 +80,8 @@ Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
 
-Report bugs to <bug-autoconf\@gnu.org>.
+Report bugs in the tracker at <https://savannah.gnu.org/projects/autoconf>
+or by email to <bug-autoconf\@gnu.org>.
 
 The full documentation for Autoconf can be read via 'info autoconf',
 or on the Web at <https://www.gnu.org/software/autoconf/manual/>.
