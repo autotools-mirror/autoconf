@@ -66,12 +66,10 @@ our %to_fetch = (
   'doc' => {
     gnulib => [
       'doc/gendocs_template',
-    ],
-    gnustandards => [
-      'gnustandards/fdl.texi',
-      'gnustandards/gnu-oids.texi',
-      'gnustandards/make-stds.texi',
-      'gnustandards/standards.texi',
+      'doc/fdl.texi',
+      'doc/gnu-oids.texi',
+      'doc/make-stds.texi',
+      'doc/standards.texi',
     ],
   },
   'lib/Autom4te' => {
@@ -132,22 +130,10 @@ sub savannah_url($$)
 {
   my ($repo, $filename) = @_;
 
-  $repo = urlquote ($repo);
-  $filename = urlquote ($filename);
+  my $cgit_base = 'https://git.savannah.gnu.org/cgit/';
+  my $cgit_op   = '.git/plain/';
 
-  # The GNU Coding Standards are still maintained in CVS.
-  if ($repo eq 'gnustandards')
-    {
-      my $cvsweb_base = 'https://cvs.savannah.gnu.org/viewvc/*checkout*/';
-      return $cvsweb_base . $repo . '/' . $filename;
-    }
-  else
-    {
-      my $cgit_base = 'https://git.savannah.gnu.org/cgit/';
-      my $cgit_op   = '.git/plain/';
-
-      return $cgit_base . $repo . $cgit_op . $filename;
-  }
+  return $cgit_base . urlquote($repo) . $cgit_op . urlquote($filename);
 }
 
 
