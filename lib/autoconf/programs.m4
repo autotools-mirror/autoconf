@@ -822,6 +822,14 @@ AS_IF([test "$ac_cv_prog_lex_root" = unknown],
    LEX=: LEXLIB=])
 AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
 
+# When compiled as C++, the test lexer declares yywrap with extern "C".
+# Solaris 10 lex (Software Generation Utilities (SGU) Solaris-ELF (4.0))'s
+# scanner skeleton will provide a conflicting declaration of yywrap,
+# *without* extern "C", unless we define this macro on the command line.
+# The %{ %} block is not early enough for the definition to be effective.
+ac_save_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS -D__EXTERN_C__=1"
+
 AS_VAR_SET_IF([LEXLIB], [], [
   AC_CACHE_CHECK([for lex library], [ac_cv_lib_lex], [
     ac_save_LIBS="$LIBS"
@@ -898,6 +906,7 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
 	     not a 'char[]'.])
 fi
 ])
+CPPFLAGS="$ac_save_CPPFLAGS"
 rm -f conftest.l $LEX_OUTPUT_ROOT.c
 ])# _AC_PROG_LEX_YYTEXT_DECL
 
