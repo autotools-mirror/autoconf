@@ -189,6 +189,10 @@ my %test_parameters = (
                         ' cxx_define_varies:__STDC_NO_VLA__' .
                         ' cxx_cv_varies:cxx_vararrays]')
   },
+  AC_C_FLEXIBLE_ARRAY_MEMBER => {
+    test_parameters => ('[cxx_define_varies:FLEXIBLE_ARRAY_MEMBER' .
+                        ' cxx_cv_varies:cxx_flexmember]')
+  },
 
   # stdbool.h is supposed to be includable from C++, per C++2011
   # [support.runtime], but the type _Bool was not added to the C++
