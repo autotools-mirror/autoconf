@@ -149,23 +149,13 @@ AC_DEFUN([AC_LANG_COMPILER(Go)],
 AN_MAKEVAR([GOC], [AC_PROG_GO])
 AN_PROGRAM([gccgo], [AC_PROG_GO])
 AC_DEFUN([AC_PROG_GO],
-[AC_LANG_PUSH(Go)dnl
+[AC_LANG_PUSH([Go])dnl
 AC_ARG_VAR([GOC],   [Go compiler command])dnl
 AC_ARG_VAR([GOFLAGS], [Go compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
-m4_ifval([$1],
-      [AC_CHECK_TOOLS(GOC, [$1])],
-[AC_CHECK_TOOL(GOC, gccgo)
-if test -z "$GOC"; then
-  if test -n "$ac_tool_prefix"; then
-    AC_CHECK_PROG(GOC, [${ac_tool_prefix}gccgo], [$ac_tool_prefix}gccgo])
-  fi
-fi
-if test -z "$GOC"; then
-  AC_CHECK_PROG(GOC, gccgo, gccgo, , , false)
-fi
-])
-
+# We only look for gccgo, not `go build`, because `go build`'s command
+# line interface is completely different.
+AC_CHECK_TOOLS([GOC], [m4_default([$1], [gccgo])])
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 set X $ac_compile
@@ -173,6 +163,7 @@ ac_compiler=$[2]
 _AC_DO_LIMIT([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
-GOFLAGS="-g -O2"
-AC_LANG_POP(Go)dnl
+# Default value for GOFLAGS
+: ${GOFLAGS:="-g -O2"}
+AC_LANG_POP([Go])dnl
 ])# AC_PROG_GO
