@@ -124,23 +124,11 @@ AC_DEFUN([AC_LANG_COMPILER(Algol 68)],
 AN_MAKEVAR([A68], [AC_PROG_A68])
 AN_PROGRAM([ga68], [AC_PROG_A68])
 AC_DEFUN([AC_PROG_A68],
-[AC_LANG_PUSH(Algol 68)dnl
+[AC_LANG_PUSH([Algol 68])dnl
 AC_ARG_VAR([A68], [Algol 68 compiler command])dnl
 AC_ARG_VAR([A68FLAGS], [Algol 68 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
-m4_ifval([$1],
-      [AC_CHECK_TOOLS(A68, [$1])],
-[AC_CHECK_TOOL(A68, ga68)
-if test -z "$A68"; then
-  if test -n "$ac_tool_prefix"; then
-    AC_CHECK_PROG(A68, [${ac_tool_prefix}ga68], [$ac_tool_prefix}ga68])
-  fi
-fi
-if test -z "$A68"; then
-  AC_CHECK_PROG(A68, ga68, ga68, , , false)
-fi
-])
-
+AC_CHECK_TOOLS([A68], [m4_default([$1], [ga68 a68])])
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 set X $ac_compile
@@ -148,6 +136,7 @@ ac_compiler=$[2]
 _AC_DO_LIMIT([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
-A68FLAGS="-g -O2"
-AC_LANG_POP(Algol 68)dnl
+# Default value for A68FLAGS
+: ${A68FLAGS:="-g -O2"}
+AC_LANG_POP([Algol 68])dnl
 ])# AC_PROG_A68
