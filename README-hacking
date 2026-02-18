@@ -14,6 +14,7 @@ requirements on anyone wishing to build from the just-checked-out sources.
 For example, you have to use recent stable versions of the maintainer
 tools we depend upon, including:
 
+- Git 1.4.4+ <https://git-scm.com/>
 - Automake 1.11+ <https://www.gnu.org/software/automake/>
 - Help2man 1.29+ <https://www.gnu.org/software/help2man/>
 - M4 1.4.16+ <https://www.gnu.org/software/m4/>
@@ -26,12 +27,6 @@ like "make dist-xz" or "make distcheck":
 - Gzip <https://www.gnu.org/software/gzip/>
 - Tar <https://www.gnu.org/software/tar/>
 - XZ Utils <https://tukaani.org/xz/>
-
-Although we try to keep the CVS mirror of the git repository usable,
-some of the tests in the testsuite will fail if git was not used to
-generate the version string.  Therefore, we recommend:
-
-- Git 1.4.4+ <https://git-scm.com/>
 
 You may find it useful to install the git-merge-changelog merge driver:
 https://git.savannah.gnu.org/cgit/gnulib.git/plain/lib/git-merge-changelog.c
@@ -46,26 +41,28 @@ then add the following to .git/config or ~/.gitconfig:
 Only building the initial full source tree will be a bit painful.
 Later, a plain 'git pull && make' should be sufficient.
 
-If you want to test Autoconf on a machine without git, it may be
-easier to first bootstrap Autoconf on a different machine with git,
-run 'make dist', and copy the tarball to the machine under test.  It
-should always be possible to create a self-contained tarball which
-does not rely on the bootstrap-only tools.
+If you want to test Autoconf on a machine without git, we recommend
+you bootstrap Autoconf on a different machine that does have git
+available, run 'make dist', and copy the tarball to the machine under
+test.  Building from a tarball requires only M4 and Perl.
 
-* First GIT checkout
+* First Git checkout
 
-You can get an anonymous copy of the source repository using any one
-of these three methods, although the CVS mirror is less tested:
+You can get an anonymous copy of the source repository using either
+of these git URLs:
 
   $ git clone git://git.sv.gnu.org/autoconf
   $ git clone https://git.sv.gnu.org/r/autoconf.git
-  $ cvs -d:pserver:anonymous@pserver.git.sv.gnu.org:/srv/git/autoconf.git \
-      co -d autoconf HEAD
 
 If you have a Savannah user name and commit rights to the Autoconf
 project, you should use this instead:
 
   $ git clone <username>@git.sv.gnu.org:/srv/git/autoconf.git
+
+Caution: you must do a full clone, not a shallow clone.  When building
+Autoconf from a Git checkout, rather than a tarball, some of the build
+steps inspect the git history, e.g. to determine Autoconf’s own version
+number and to produce the ‘ChangeLog’ file that is included in tarballs.
 
 The next step is to generate files like configure and Makefile.in:
 
@@ -84,7 +81,7 @@ You can now build and test the package:
   $ make check
 
 At this point, there should be no difference between your local copy,
-and the GIT master copy:
+and the Git master copy:
 
   $ git diff
 
@@ -115,6 +112,8 @@ In most cases, a patch should include a test case, to ensure that
 regressions do not creep back in.  Remember to add documentation and a
 NEWS entry for anything that is visible to the user.
 
+Autoconf does not use the “Developer’s Certificate of Origin” process.
+Please do not include any ‘Signed-off-by’ lines in your patch description.
 If your change is significant (i.e., if it adds more than ~10 lines),
 then you'll have to have a copyright assignment on file with the FSF.
 Since that involves first an email exchange between you and the FSF,
