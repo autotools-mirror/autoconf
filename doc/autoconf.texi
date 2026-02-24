@@ -1747,6 +1747,14 @@ to @command{autoreconf} will in turn undo any customizations to standard
 files.  Note that the macro @code{AM_INIT_AUTOMAKE} has some options
 which change the set of files considered to be standard.
 
+@item --replace-handwritten
+@itemx -R
+Replace files that @emph{could} be generated but appear to have been
+written by hand.  Currently this only affects the treatment of the
+primary configuration header template (usually @file{config.h.in};
+@pxref{Header Templates}).  In the future it may also affect
+@file{aclocal.m4} and others.
+
 @item --install
 @itemx -i
 Install any missing standard auxiliary files in the package.  By
@@ -3578,6 +3586,11 @@ Don't remove the temporary files.
 @item --force
 @itemx -f
 Remake the template file even if newer than its input files.
+
+@item --replace-handwritten
+@itemx -R
+Remake the template file even if it appears not to have been generated
+by @command{autoheader}.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
