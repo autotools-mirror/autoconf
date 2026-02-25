@@ -87,6 +87,8 @@ Operation modes:
   -i, --install            copy missing standard auxiliary files
       --no-recursive       don't rebuild sub-packages
   -s, --symlink            with -i, install symbolic links instead of copies
+  -x, --exclude=CMDS       don't run any of the commands in CMDS
+                           (comma-separated list)
   -m, --make               when applicable, re-run ./configure && make
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
                            (comma-separated list accepted)
@@ -120,17 +122,41 @@ There is NO WARRANTY, to the extent permitted by law.
 Written by David J. MacKenzie and Akim Demaille.
 ";
 
-# Lib files.
-my $autoconf    = $ENV{'AUTOCONF'}    || '@bindir@/@autoconf-name@';
-my $autoheader  = $ENV{'AUTOHEADER'}  || '@bindir@/@autoheader-name@';
-my $autom4te    = $ENV{'AUTOM4TE'}    || '@bindir@/@autom4te-name@';
-my $automake    = $ENV{'AUTOMAKE'}    || 'automake';
-my $aclocal     = $ENV{'ACLOCAL'}     || 'aclocal';
-my $libtoolize  = $ENV{'LIBTOOLIZE'}  || 'libtoolize';
-my $intltoolize = $ENV{'INTLTOOLIZE'} || 'intltoolize';
-my $gtkdocize   = $ENV{'GTKDOCIZE'}   || 'gtkdocize';
-my $autopoint   = $ENV{'AUTOPOINT'}   || 'autopoint';
-my $make        = $ENV{'MAKE'}        || 'make';
+# Programs we can run.
+my @commands = qw(
+  autoconf autoheader autom4te automake aclocal libtoolize intltoolize
+  gtkdocize autopoint make
+);
+
+# -x autoconf => don't run autoconf, no matter what
+# in this hash, 0 means don't run, 1 means do run, and 2 means
+# it can't be turned off
+my %enabled_commands = (
+  autoconf    => 1,
+  autoheader  => 1,
+  autom4te    => 2,
+  automake    => 1,
+  aclocal     => 1,
+  autopoint   => 1,
+  gtkdocize   => 1,
+  intltoolize => 1,
+  libtoolize  => 1,
+  make        => 0,
+);
+
+# For each program, the actual command to use, with options
+my %C = (
+  autoconf    => $ENV{'AUTOCONF'}    || '@bindir@/@autoconf-name@',
+  autoheader  => $ENV{'AUTOHEADER'}  || '@bindir@/@autoheader-name@',
+  autom4te    => $ENV{'AUTOM4TE'}    || '@bindir@/@autom4te-name@',
+  automake    => $ENV{'AUTOMAKE'}    || 'automake',
+  aclocal     => $ENV{'ACLOCAL'}     || 'aclocal',
+  libtoolize  => $ENV{'LIBTOOLIZE'}  || 'libtoolize',
+  intltoolize => $ENV{'INTLTOOLIZE'} || 'intltoolize',
+  gtkdocize   => $ENV{'GTKDOCIZE'}   || 'gtkdocize',
+  autopoint   => $ENV{'AUTOPOINT'}   || 'autopoint',
+  make        => $ENV{'MAKE'}        || 'make',
+);
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
@@ -139,9 +165,6 @@ my $symlink = 0;
 
 my @prepend_include;
 my @include;
-
-# Rerun './configure && make'?
-my $run_make = 0;
 
 # Recurse into subpackages
 my $recursive = 1;
@@ -153,6 +176,23 @@ my $replace_handwritten = 0;
 ## Routines.  ##
 ## ---------- ##
 
+# cmd_enabled ($cmd, $context)
+# ------------------
+# Returns true if $cmd should be run, false if it shouldn't.
+# If it shouldn't, a suitable 'verb' message is printed.
+sub cmd_enabled
+{
+  my ($cmd, $context) = @_;
+  my $flag = $enabled_commands{$cmd};
+  return 1 if $flag;
+
+  verb (($flag eq "")
+        ? "$context: not running $cmd: --install not given"
+        : "$context: not running $cmd: --exclude $cmd was given");
+
+  return 0;
+}
+
 
 # parse_args ()
 # -------------
@@ -160,6 +200,8 @@ my $replace_handwritten = 0;
 sub parse_args ()
 {
   my $srcdir;
+  my @exclude_cmds;
+  my $run_make;
 
   # List of command line warning requests.
   my @warning;
@@ -170,6 +212,7 @@ sub parse_args ()
           'i|install'             => \$install,
           'R|replace-handwritten' => \$replace_handwritten,
           's|symlink'             => \$symlink,
+          'x|exclude=s'           => \@exclude_cmds,
           'm|make'                => \$run_make,
           'recursive!'            => \$recursive);
 
@@ -179,79 +222,102 @@ sub parse_args ()
   parse_WARNINGS;
   parse_warnings @warning;
 
+  # Convert @exclude_cmds and $run_make to %enabled_commands.
+  # If you say both --make and --exclude=make, the latter wins.
+  $enabled_commands{make} = 1 if $run_make;
+  for my $excludes (@exclude_cmds)
+    {
+      for my $exclude (split(/,/, $excludes))
+        {
+          fatal "'$exclude' not recognized as a command autoreconf can run"
+            unless exists $enabled_commands{$exclude};
+          fatal "use of '$exclude' cannot be disabled"
+            if $enabled_commands{$exclude} == 2;
+          $enabled_commands{$exclude} = 0;
+        }
+    }
+
+  if ($verbose && $debug)
+    {
+      for my $prog (@commands)
+        {
+          if ($enabled_commands{$prog})
+            {
+              xsystem ("$C{$prog} --version | sed 1q >&2");
+              print STDERR "\n";
+            }
+        }
+    }
+
+  # Dispatch autoreconf's options to the tools.
+  # --include;
+  $C{aclocal}    .= join (' -I ', '', map { shell_quote ($_) } @include);
+  $C{autoconf}   .= join (' --include=', '', map { shell_quote ($_) } @include);
+  $C{autoconf}   .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
+  $C{autoheader} .= join (' --include=', '', map { shell_quote ($_) } @include);
+  $C{autoheader} .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
+
+  # --install and --symlink;
+  if ($install)
+    {
+      $C{automake}    .= ' --add-missing';
+      $C{automake}    .= ' --copy' unless $symlink;
+      $C{libtoolize}  .= ' --copy' unless $symlink;
+      $C{intltoolize} .= ' --copy' unless $symlink;
+      $C{gtkdocize}   .= ' --copy' unless $symlink;
+    }
+  else
+    {
+      # "" instead of 0 is a marker; it's still falsey but we know it
+      # was set that way because --install wasn't given, not because
+      # -x was used.  This distinction is used only for --verbose output.
+      $enabled_commands{autopoint}  = "";
+      $enabled_commands{libtoolize} = "";
+      $enabled_commands{intltool}   = "";
+      $enabled_commands{gtkdocize}  = "";
+    }
+  # --force;
+  if ($force)
+    {
+      $C{aclocal}     .= ' --force';
+      $C{autoconf}    .= ' --force';
+      $C{autoheader}  .= ' --force';
+      $C{automake}    .= ' --force-missing';
+      $C{autopoint}   .= ' --force';
+      $C{libtoolize}  .= ' --force';
+      $C{intltoolize} .= ' --force';
+    }
+  else
+    {
+      $C{automake} .= ' --no-force';
+    }
+  # --replace-handwritten (could also be applied to aclocal but that
+  # requires changes in automake as well)
+  if ($replace_handwritten)
+    {
+      $C{autoheader} .= ' --replace-handwritten';
+    }
+  # --verbose --verbose or --debug;
+  if ($verbose > 1 || $debug)
+    {
+      $C{autoconf}   .= ' --verbose';
+      $C{autoheader} .= ' --verbose';
+      $C{automake}   .= ' --verbose';
+      $C{aclocal}    .= ' --verbose';
+    }
+  if ($debug)
+    {
+      $C{autoconf}   .= ' --debug';
+      $C{autoheader} .= ' --debug';
+      $C{libtoolize} .= ' --debug';
+    }
+
   # Even if the user specified a configure.ac, trim to get the
   # directory, and look for configure.ac again.  Because (i) the code
   # is simpler, and (ii) we are still able to diagnose simultaneous
   # presence of configure.ac and configure.in.
   @ARGV = map { /configure\.(ac|in)$/ ? dirname ($_) : $_ } @ARGV;
   push @ARGV, '.' unless @ARGV;
-
-  if ($verbose && $debug)
-    {
-      for my $prog ($autoconf, $autoheader,
-		    $automake, $aclocal,
-		    $autopoint,
-		    $libtoolize,
-		    $intltoolize,
-		    $gtkdocize)
-	{
-	  xsystem ("$prog --version | sed 1q >&2");
-	  print STDERR "\n";
-	}
-    }
-
-  # Dispatch autoreconf's option to the tools.
-  # --include;
-  $aclocal    .= join (' -I ', '', map { shell_quote ($_) } @include);
-  $autoconf   .= join (' --include=', '', map { shell_quote ($_) } @include);
-  $autoconf   .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
-  $autoheader .= join (' --include=', '', map { shell_quote ($_) } @include);
-  $autoheader .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
-
-  # --install and --symlink;
-  if ($install)
-    {
-      $automake    .= ' --add-missing';
-      $automake    .= ' --copy' unless $symlink;
-      $libtoolize  .= ' --copy' unless $symlink;
-      $intltoolize .= ' --copy' unless $symlink;
-      $gtkdocize   .= ' --copy' unless $symlink;
-    }
-  # --force;
-  if ($force)
-    {
-      $aclocal     .= ' --force';
-      $autoconf    .= ' --force';
-      $autoheader  .= ' --force';
-      $automake    .= ' --force-missing';
-      $autopoint   .= ' --force';
-      $libtoolize  .= ' --force';
-      $intltoolize .= ' --force';
-    }
-  else
-    {
-      $automake .= ' --no-force';
-    }
-  # --replace-handwritten (could also be applied to aclocal but that
-  # requires changes in automake as well)
-  if ($replace_handwritten)
-    {
-      $autoheader .= ' --replace-handwritten';
-    }
-  # --verbose --verbose or --debug;
-  if ($verbose > 1 || $debug)
-    {
-      $autoconf   .= ' --verbose';
-      $autoheader .= ' --verbose';
-      $automake   .= ' --verbose';
-      $aclocal    .= ' --verbose';
-    }
-  if ($debug)
-    {
-      $autoconf   .= ' --debug';
-      $autoheader .= ' --debug';
-      $libtoolize .= ' --debug';
-    }
 
   # Pass down warnings via the WARNINGS environment variable, instead
   # of via --warnings, so that unrecognized warning categories are
@@ -513,61 +579,63 @@ sub autoreconf_current_directory ($)
 
   # Older autopoint versions fail if $configure.ac contains no
   # AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION
-  # invocation.  We need to do this check even if none of the relevant
-  # $uses_ variables are true, because we might discover later that
-  # we need to run it after all.
+  # invocation.  These variables are set here and used far below.
   my $autopoint_is_available = 0;
   my $autopoint_works_without_gtver = 0;
   my $invoked_autopoint = 0;
 
-  # This doesn't use xqx because we don't want to *fail* if
-  # there's no autopoint, we just want to not run it.  Written
-  # this way, Perl won't invoke a subshell.
-  eval
+  if (cmd_enabled ("autopoint", $configure_ac))
     {
-      no warnings 'exec';
-      my @autopoint_version_output = qx/$autopoint --version/;
-      if ($? == 0 && scalar @autopoint_version_output >= 1)
+      # We need to do this check even if none of the relevant $uses_
+      # variables are true, because we might discover later that we
+      # need to run autopoint after all.
+      #
+      # This doesn't use xqx because we don't want to *fail* if
+      # there's no autopoint, we just want to not run it.  Written
+      # this way, Perl won't invoke a subshell.
+      eval
         {
-          $autopoint_is_available = 1;
+          no warnings 'exec';
+          my @autopoint_version_output = qx/$C{autopoint} --version/;
+          if ($? == 0 && scalar @autopoint_version_output >= 1)
+            {
+              $autopoint_is_available = 1;
 
-          # Extract the version from "PROGRAM_NAME (GNU PACKAGE_NAME) VERSION".
-          my $autopoint_version = $autopoint_version_output[0];
-          $autopoint_version =~ s/^.*?\)\s+//;
-          $autopoint_works_without_gtver =
-            ($autopoint_version !~
-             /^0\.(1.*|2[0-5]|2[0-2]\..*|2[34]\.[0-1].*|25\.0.*)$/);
+              # Extract the version from
+              # "PROGRAM_NAME (GNU PACKAGE_NAME) VERSION".
+              my $autopoint_version = $autopoint_version_output[0];
+              $autopoint_version =~ s/^.*?\)\s+//;
+              $autopoint_works_without_gtver =
+                ($autopoint_version !~
+                 /^0\.(1.*|2[0-5]|2[0-2]\..*|2[34]\.[0-1].*|25\.0.*)$/);
+            }
+        };
+
+      if (!$uses_liblink && !$uses_iconv && !$uses_gettext)
+        {
+          verb "$configure_ac: no obvious need to run autopoint";
         }
-    };
+      elsif (!$autopoint_is_available)
+        {
+          verb "$configure_ac: not running autopoint because it is unavailable"
+        }
+      elsif (!$uses_gettextversion && !$autopoint_works_without_gtver)
+        {
+          verb "$configure_ac: not running autopoint because it is too old";
+        }
+      else
+        {
+          my $used =
+            $uses_gettext ? "Gettext" :
+            $uses_iconv ? "AM_ICONV" :
+            $uses_liblink ? "AC_LIB_LINKFLAGS" :
+            die ("impossible: one of \$uses_gettext, $uses_iconv, or"
+                 . " \$uses_liblink should have been true");
 
-  if (!$uses_liblink && !$uses_iconv && !$uses_gettext)
-    {
-      verb "$configure_ac: no obvious need to run autopoint";
-    }
-  elsif (!$install)
-    {
-      verb "$configure_ac: not running autopoint: --install not given";
-    }
-  elsif (!$autopoint_is_available)
-    {
-      verb "$configure_ac: not running autopoint because it is unavailable"
-    }
-  elsif (!$uses_gettextversion && !$autopoint_works_without_gtver)
-    {
-      verb "$configure_ac: not running autopoint because it is too old";
-    }
-  else
-    {
-      my $what_used =
-        $uses_gettext ? "Gettext" :
-        $uses_iconv ? "AM_ICONV" :
-        $uses_liblink ? "AC_LIB_LINKFLAGS" :
-        die ("impossible: one of \$uses_gettext, $uses_iconv, or"
-             . " \$uses_liblink should have been true");
-
-      $invoked_autopoint = 1;
-      xsystem_hint ("autopoint is needed because this package uses $what_used",
-                    $autopoint);
+          $invoked_autopoint = 1;
+          xsystem_hint ("autopoint is needed because this package uses $used",
+                        $C{autopoint});
+        }
     }
 
   # ----------------- #
@@ -613,7 +681,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using aclocal";
     }
-  else
+  elsif (cmd_enabled ("aclocal", $configure_ac))
     {
       # Some file systems have sub-second timestamps, and if so we may
       # run into trouble later, after we rerun autoconf and set the
@@ -621,11 +689,11 @@ sub autoreconf_current_directory ($)
       # because the time-stamp-setting operation (utime) has a
       # resolution of only 1 second.  Work around the problem by
       # ensuring that there is at least a one-second window before the
-      # timestamp of aclocal.m4t in which no file timestamps can
+      # timestamp of aclocal.m4 in which no file timestamps can
       # fall.
       sleep 1;
 
-      xsystem ("$aclocal $aclocal_flags");
+      xsystem ("$C{aclocal} $aclocal_flags");
     }
 
   # We might have to rerun aclocal if Libtool (or others) imports new
@@ -663,7 +731,7 @@ sub autoreconf_current_directory ($)
   {
     local $ENV{WARNINGS} = 'none';
     $traces = new Autom4te::XFile
-      ("$autoconf"
+      ($C{autoconf}
        . join (' ',
                map { ' --trace=' . $_ . ':\$n::\${::}%' }
                # If you change this list, update the
@@ -785,19 +853,15 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Libtool";
     }
-  elsif ($install)
+  elsif (cmd_enabled ("libtool", $configure_ac))
     {
       if ($uses_libltdl)
 	{
-	  $libtoolize .= " --ltdl";
+	  $C{libtoolize} .= " --ltdl";
 	}
       xsystem_hint ("libtoolize is needed because this package uses Libtool",
-		    $libtoolize);
+		    $C{libtoolize});
       $rerun_aclocal = 1;
-    }
-  else
-    {
-      verb "$configure_ac: not running libtoolize: --install not given";
     }
 
 
@@ -809,14 +873,10 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Intltool";
     }
-  elsif ($install)
+  elsif (cmd_enabled ("intltoolize", $configure_ac))
     {
       xsystem_hint ("intltoolize is needed because this package uses Intltool",
-                    $intltoolize);
-    }
-  else
-    {
-      verb "$configure_ac: not running intltool: --install not given";
+                    $C{intltoolize});
     }
 
 
@@ -828,11 +888,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Gtkdoc";
     }
-  elsif (!$install)
-    {
-      verb "$configure_ac: not running gtkdocize: --install not given";
-    }
-  else
+  elsif (cmd_enabled ("gtkdocize", $configure_ac))
     {
       my $gtkdoc_available = eval
 	{
@@ -847,7 +903,7 @@ sub autoreconf_current_directory ($)
       else
 	{
 	  xsystem_hint ("gtkdocize is needed because this package uses Gtkdoc",
-			$gtkdocize);
+			$C{gtkdocize});
 	}
     }
 
@@ -862,9 +918,13 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: no need to run autopoint (confirmed)";
     }
-  elsif (!$install)
+  elsif ($invoked_autopoint)
     {
-      verb "$configure_ac: not running autopoint: --install not given";
+      verb "$configure_ac: not running autopoint a second time";
+    }
+  elsif (!cmd_enabled ("autopoint", $configure_ac))
+    {
+      # cmd_enabled handled the verb message
     }
   elsif (!$autopoint_is_available)
     {
@@ -875,10 +935,6 @@ sub autoreconf_current_directory ($)
       # Older autopoint versions fail if $configure.ac contains no
       # AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION invocation.
       verb "$configure_ac: not running autopoint because it is too old";
-    }
-  elsif ($uses_liblink || $uses_iconv || $uses_gettext)
-    {
-      verb "$configure_ac: not running autopoint a second time";
     }
   else
     {
@@ -892,7 +948,7 @@ sub autoreconf_current_directory ($)
 
       $invoked_autopoint = 1;
       xsystem_hint ("autopoint is needed because this package uses $what_used",
-                    $autopoint);
+                    $C{autopoint});
     }
 
   # When configure.ac does not specify a macro dir, autopoint has
@@ -914,12 +970,12 @@ sub autoreconf_current_directory ($)
 	{
 	  verb "$configure_ac: not using aclocal";
 	}
-      else
+      elsif (cmd_enabled ("aclocal", $configure_ac))
 	{
 	  # When configure.ac does not specify a macro dir, autopoint has
 	  # created a directory named 'm4' and copied its *.m4 files into it.
 	  $aclocal_flags .= " -I m4" if $invoked_autopoint && !@macro_dirs;
-	  xsystem ("$aclocal $aclocal_flags");
+	  xsystem ("$C{aclocal} $aclocal_flags");
 	}
     }
 
@@ -935,7 +991,10 @@ sub autoreconf_current_directory ($)
   # latter runs the former, and (ii) autoconf is stricter than
   # autoheader.  So all in all, autoconf should give better error
   # messages.
-  xsystem ($autoconf);
+  if (cmd_enabled ("autoconf", $configure_ac))
+    {
+      xsystem ($C{autoconf});
+    }
 
 
   # -------------------- #
@@ -990,9 +1049,9 @@ sub autoreconf_current_directory ($)
           fatal "$tmpl1: $!" unless $!{ENOENT};
         }
 
-      if ($need_autoheader)
+      if ($need_autoheader && cmd_enabled ("autoheader", $configure_ac))
         {
-          xsystem ($autoheader);
+          xsystem ($C{autoheader});
         }
     }
 
@@ -1004,12 +1063,12 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Automake";
     }
-  else
+  elsif (cmd_enabled ("automake", $configure_ac))
     {
       # We should always run automake, and let it decide whether it shall
       # update the file or not.  In fact, the effect of '$force' is already
       # included in '$automake' via '--no-force'.
-      xsystem ($automake);
+      xsystem ($C{automake});
     }
 
   # ---------------------------------------------------- #
@@ -1055,7 +1114,7 @@ sub autoreconf_current_directory ($)
   # Running make.  #
   # -------------- #
 
-  if ($run_make)
+  if ($enabled_commands{make})
     {
       if (!-f "config.status")
 	{
@@ -1071,7 +1130,7 @@ sub autoreconf_current_directory ($)
 	    }
 	  else
 	    {
-	      xsystem ("$make");
+	      xsystem ($C{make});
 	    }
 	}
     }
@@ -1114,7 +1173,7 @@ parse_args;
 
 # Autoreconf all the given configure.ac.  Unless '--no-recursive' is passed,
 # AC_CONFIG_SUBDIRS will be traversed in &autoreconf_current_directory.
-$ENV{'AUTOM4TE'} = $autom4te;
+$ENV{'AUTOM4TE'} = $C{autom4te};
 for my $directory (@ARGV)
   {
     require_configure_ac ($directory);
