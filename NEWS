@@ -1,5 +1,26 @@
 GNU Autoconf NEWS - User visible changes.
 
+* Noteworthy changes in release 2.73 (????-??-??) [release]
+
+** New features
+
+*** autoreconf has a new option to exclude certain steps
+
+  autoreconf --exclude <tool>[,<tool>[,…]] tells autoreconf not to
+  run any of the listed tools, even if it appears to be necessary.
+  This is useful, for example, in situations where autoreconf’s
+  heuristics for when to run each tool are incorrect.  (All such
+  situations are considered bugs; please report them.)  It may also
+  be useful in “bootstrap” scripts that can use autoreconf for most
+  of the work but need to take manual control over execution of some
+  of the tools.
+
+  In older versions of Autoconf, it is possible to get the same effect
+  by setting TOOL=true in the environment for each tool that should not
+  be run.
+
+  Patch originally developed by the OpenEmbedded project.
+
 * Noteworthy changes in release 2.72.90 (2026-02-03) [beta]
 
 ** Backward incompatibilities

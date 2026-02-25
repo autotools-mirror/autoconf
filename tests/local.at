@@ -54,7 +54,7 @@ export MAKE
 # This also weeds out broken wrapper scripts; in the past some vendors
 # have shipped an 'automake' that didn't work without user configuration.
 : "${AUTOMAKE=automake}"
-at_automake_version="`$AUTOMAKE --version 2>&1 || echo not found`"
+at_automake_version="`$AUTOMAKE --version 2>&1 || :`"
 at_automake_version_1="`AS_ECHO(["$at_automake_version"]) | sed 1q`"
 AS_CASE([$at_automake_version_1],
   [[*GNU*\)\ [1-9]\.[0-9]*]], [],
@@ -78,7 +78,7 @@ fi
 # The same Perl and wrapper issues exist with aclocal.  Also, we
 # require a version that understands --system-acdir and configure.ac.
 : "${ACLOCAL=aclocal}"
-at_aclocal_version="`$ACLOCAL --version 2>&1 || echo not found`"
+at_aclocal_version="`$ACLOCAL --version 2>&1 || :`"
 at_aclocal_version_1="`AS_ECHO(["$at_aclocal_version"]) | sed 1q`"
 AS_CASE([$at_aclocal_version_1],
   [[*GNU*\)\ [1-9]\.[0-9]*]],
@@ -97,6 +97,60 @@ if test "$ACLOCAL" != false; then
   test -d at_empty_dir || mkdir at_empty_dir
   ACLOCAL="$ACLOCAL --system-acdir=`cd at_empty_dir && pwd`"
 fi
+
+# Similarly for the add-on programs that autoreconf can run:
+# libtoolize, intltoolize, gtkdocize, and autopoint.
+: "${LIBTOOLIZE=libtoolize}"
+at_libtoolize_version="`$LIBTOOLIZE --version 2>&1 || :`"
+at_libtoolize_version_1="`AS_ECHO(["$at_libtoolize_version"]) | sed 1q`"
+AS_CASE([$at_libtoolize_version_1],
+  [[*GNU*\)\ [1-9]\.[0-9]*]], [],
+  [LIBTOOLIZE=false])
+export LIBTOOLIZE
+
+: "${INTLTOOLIZE=intltoolize}"
+at_intltoolize_version="`$INTLTOOLIZE --version 2>&1 || :`"
+at_intltoolize_version_1="`AS_ECHO(["$at_intltoolize_version"]) | sed 1q`"
+AS_CASE([$at_intltoolize_version_1],
+  [[*GNU*\)\ [0-9]\.[0-9]*]], [],
+  [INTLTOOLIZE=false])
+export INTLTOOLIZE
+
+: "${GTKDOCIZE=gtkdocize}"
+at_gtkdocize_version="`$GTKDOCIZE --version 2>&1 || :`"
+at_gtkdocize_version_1="`AS_ECHO(["$at_gtkdocize_version"]) | sed 1q`"
+AS_CASE([$at_gtkdocize_version_1],
+  [[*gtk-doc*\)\ [1-9]\.[0-9]*]], [],
+  [GTKDOCIZE=false])
+export GTKDOCIZE
+
+: "${AUTOPOINT=autopoint}"
+at_autopoint_version="`$AUTOPOINT --version 2>&1 || :`"
+at_autopoint_version_1="`AS_ECHO(["$at_autopoint_version"]) | sed 1q`"
+AS_CASE([$at_autopoint_version_1],
+  [[*GNU*\)\ [0-9]\.[0-9]*]], [],
+  [AUTOPOINT=false])
+export AUTOPOINT
+
+# Older versions of autopoint cannot handle a configure.ac that has
+# AM_GNU_GETTEXT but doesn't have one of AM_GNU_GETTEXT_VERSION or
+# AM_GNU_GETTEXT_REQUIRE_VERSION.  The versions that *do* handle
+# this correctly are
+#  - 0.23.x, x >= 2
+#  - 0.24.x, x >= 2
+#  - 0.25.x, x >= 1
+#  - 0.26(.0) and up.
+# This logic needs to agree with the logic for $autopoint_works_without_gtver
+# in bin/autoreconf.in.
+AS_CASE(["`AS_ECHO(["$at_autopoint_version_1"]) | sed 's/^.*) *//'`"],
+  [[ [1-9][.0-9]*    | \
+     0.[3-9][0-9]*   | \
+     0.2[6-9]        | \
+     0.2[6-9][.0-9]* | \
+     0.25.[1-9]*     | \
+     0.2[34].[2-9]* ]],
+    [at_autopoint_modern=:],
+    [at_autopoint_modern=false])
 
 # Determine how long we need to delay in between operations that might
 # modify autom4te.cache.  This depends on three factors: whether the
@@ -175,7 +229,11 @@ for at_program in \
   "r sh ${CONFIG_SHELL-$SHELL}" \
   "r make $MAKE" \
   "o automake $AUTOMAKE" \
-  "o aclocal $ACLOCAL"
+  "o aclocal $ACLOCAL" \
+  "o libtoolize $LIBTOOLIZE" \
+  "o intltoolize $INTLTOOLIZE" \
+  "o gtkdocize $GTKDOCIZE" \
+  "o autopoint $AUTOPOINT"
 do
   # The first three words of $at_program are a code for whether
   # it's required (r) or optional (o); the conventional name of the
@@ -213,6 +271,16 @@ do
 done
 
 AS_ECHO(["$at_srcdir/AT_LINE: using ${at_ts_resolution}s as mtime resolution"])
+
+if test x"$AUTOPOINT" != xfalse; then
+  if $at_autopoint_modern; then
+    at_autopoint_status="supports AM_GNU_GETTEXT by itself"
+  else
+    at_autopoint_status="does not support AM_GNU_GETTEXT by itself"
+  fi
+  AS_ECHO(["$at_srcdir/AT_LINE: $AUTOPOINT $at_autopoint_status"])
+fi
+
 echo
 exit $status
 ) >&AS_MESSAGE_LOG_FD 2>&1
@@ -262,6 +330,53 @@ m4_define([AT_REQUIRE_ACLOCAL],
 m4_define([AT_SUPPRESS_ACLOCAL],
 [AT_DATA([aclocal.m4])
 ACLOCAL=true])
+
+# AT_REQUIRE_LIBTOOL
+# ------------------
+# Skip this test if libtool is unavailable or too old.
+m4_define([AT_REQUIRE_LIBTOOL],
+[AT_SKIP_IF([test "$LIBTOOLIZE" = false])])
+
+# AT_REQUIRE_AUTOPOINT
+# --------------------
+# Skip this test if autopoint is unavailable or too old.
+m4_define([AT_REQUIRE_AUTOPOINT],
+[AT_SKIP_IF([test "$AUTOPOINT" = false])])
+
+# AT_REQUIRE_INTLTOOLIZE
+# ----------------------
+# Skip this test if intltoolize is unavailable or too old.
+m4_define([AT_REQUIRE_INTLTOOLIZE],
+[AT_SKIP_IF([test "$INTLTOOLIZE" = false])])
+
+# AT_REQUIRE_GTKDOCIZE
+# --------------------
+# Skip this test if gtkdocize is unavailable or too old.
+m4_define([AT_REQUIRE_GTKDOCIZE],
+[AT_SKIP_IF([test "$GTKDOCIZE" = false])])
+
+
+
+# AT_STATE_SAVE_DIR, AT_STATE_SAVE_ENV, and AT_STATE_SAVE
+# -------------------------------------------------------
+# These are the AC_ macros of the same names, from statesave.m4,
+# renamed into the AT_ namespace.  In tests that don't use
+# AT_CHECK_CONFIGURE_AC, you can do
+#
+#    AT_STATE_SAVE_DIR([before])
+#    ... commands ...
+#    AT_CHECK_ENV
+#
+# to verify that the 'commands' did not change the contents of the
+# current working directory.
+#
+# The other two macros seem unlikely to be useful, as they record all
+# the internal variables of the test script and AT_CHECK_ENV is not
+# currently set up to deal with that, but you never know.
+m4_include([statesave.m4])
+m4_rename([AC_STATE_SAVE_DIR], [AT_STATE_SAVE_DIR])
+m4_rename([AC_STATE_SAVE_ENV], [AT_STATE_SAVE_ENV])
+m4_rename([AC_STATE_SAVE], [AT_STATE_SAVE])
 
 ## ---------------- ##
 ## Testing syntax.  ##
