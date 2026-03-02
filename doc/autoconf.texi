@@ -1687,14 +1687,23 @@ System in a fresh tree.
 @command{gtkdocize}, and @command{autopoint} (when appropriate) repeatedly
 to update the GNU Build System in the specified directories and their
 subdirectories (@pxref{Subdirectories}).  By default, it only remakes
-those files that are older than their sources.  The environment variables
-@env{AUTOM4TE}, @env{AUTOCONF}, @env{AUTOHEADER}, @env{AUTOMAKE}, @env{ACLOCAL},
-@env{AUTOPOINT}, @env{LIBTOOLIZE}, @env{INTLTOOLIZE}, @env{GTKDOCIZE}, @env{M4},
-and @env{MAKE} may be used to override the invocation of the respective tools.
+those files that are older than their sources.
 
 If you install a new version of some tool, you can make
 @command{autoreconf} remake @emph{all} of the files by giving it the
 @option{--force} option.
+
+The environment variables @env{AUTOM4TE}, @env{AUTOCONF},
+@env{AUTOHEADER}, @env{AUTOMAKE}, @env{ACLOCAL}, @env{AUTOPOINT},
+@env{LIBTOOLIZE}, @env{INTLTOOLIZE}, @env{GTKDOCIZE}, @env{M4}, and
+@env{MAKE} may be used to override the invocation of the respective
+tools.
+
+Except for @env{AUTOM4TE} and @env{M4}, setting any of these enviroment
+variables to @samp{true}, @samp{false}, @samp{:}, or the empty string
+has the same effect as passing @samp{--exclude=@var{cmd}} on the command
+line, where @var{cmd} is the lowercased version of the command's name;
+see the description of the @option{--exclude} option, below.
 
 @xref{Automatic Remaking}, for Make rules to automatically
 rebuild @command{configure} scripts when their source files change.  That
@@ -1778,6 +1787,15 @@ auxiliary files instead of copying them.
 When the directories were configured, update the configuration by
 running @samp{./config.status --recheck && ./config.status}, and then
 run @samp{make}.
+
+@item --exclude=@var{cmd}[,@var{cmd}...]
+@itemx -x @var{cmd}[,@var{cmd}...]
+Do not run any @var{cmd} in the list, even if it seems to be needed.
+@var{cmd} can be @samp{autoconf}, @samp{autoheader}, @samp{automake},
+@samp{aclocal}, @samp{autopoint}, @samp{libtoolize}, @samp{intltoolize},
+@samp{gtkdocize}, or @samp{make}.
+
+@samp{--exclude make} has priority over @samp{--make}.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
