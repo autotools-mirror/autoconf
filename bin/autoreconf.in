@@ -123,28 +123,7 @@ Written by David J. MacKenzie and Akim Demaille.
 ";
 
 # Programs we can run.
-my @commands = qw(
-  autoconf autoheader autom4te automake aclocal libtoolize intltoolize
-  gtkdocize autopoint make
-);
-
-# -x autoconf => don't run autoconf, no matter what
-# in this hash, 0 means don't run, 1 means do run, and 2 means
-# it can't be turned off
-my %enabled_commands = (
-  autoconf    => 1,
-  autoheader  => 1,
-  autom4te    => 2,
-  automake    => 1,
-  aclocal     => 1,
-  autopoint   => 1,
-  gtkdocize   => 1,
-  intltoolize => 1,
-  libtoolize  => 1,
-  make        => 0,
-);
-
-# For each program, the actual command to use, with options
+# For each program, the value is the actual command to use, with options.
 my %C = (
   autoconf    => $ENV{'AUTOCONF'}    || '@bindir@/@autoconf-name@',
   autoheader  => $ENV{'AUTOHEADER'}  || '@bindir@/@autoheader-name@',
@@ -156,7 +135,14 @@ my %C = (
   gtkdocize   => $ENV{'GTKDOCIZE'}   || 'gtkdocize',
   autopoint   => $ENV{'AUTOPOINT'}   || 'autopoint',
   make        => $ENV{'MAKE'}        || 'make',
+  m4          => $ENV{'M4'}          || 'm4',
 );
+
+# For any command $cmd in %C, if $cmd_excluded{$cmd} exists, the program
+# is not to be run.  The value of $cmd_excluded{$cmd} should be a message
+# stating *why* the program is not to be run; this is printed by may_run_cmd
+# when --verbose is given.
+my %cmd_excluded;
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
@@ -176,20 +162,21 @@ my $replace_handwritten = 0;
 ## Routines.  ##
 ## ---------- ##
 
-# cmd_enabled ($cmd, $context)
-# ------------------
-# Returns true if $cmd should be run, false if it shouldn't.
-# If it shouldn't, a suitable 'verb' message is printed.
-sub cmd_enabled
+# may_run_cmd ($cmd, $context)
+# ----------------------------
+# Returns true if $cmd may be run, and false if it isn't allowed.
+# If it isn't allowed a suitable 'verb' message is printed.
+sub may_run_cmd
 {
   my ($cmd, $context) = @_;
-  my $flag = $enabled_commands{$cmd};
-  return 1 if $flag;
+  fatal "internal error: unrecognized command '$cmd' in may_run_cmd"
+    unless exists $C{$cmd};
 
-  verb (($flag eq "")
-        ? "$context: not running $cmd: --install not given"
-        : "$context: not running $cmd: --exclude $cmd was given");
+  return 1 unless exists $cmd_excluded{$cmd};
 
+  # $cmd_excluded{$cmd} gives the reason we're not to run the command
+  $context = defined $context ? "$context: " : "";
+  verb "${context}not running $cmd: $cmd_excluded{$cmd}";
   return 0;
 }
 
@@ -222,32 +209,27 @@ sub parse_args ()
   parse_WARNINGS;
   parse_warnings @warning;
 
-  # Convert @exclude_cmds and $run_make to %enabled_commands.
+  # Convert @exclude_cmds, $run_make, and environment variable settings
+  # to disabled command markers.
   # If you say both --make and --exclude=make, the latter wins.
-  $enabled_commands{make} = 1 if $run_make;
+
+  $cmd_excluded{make} = "--make not given" unless $run_make;
+  for my $cmd (keys %C)
+    {
+      $cmd_excluded{$cmd} = (uc $cmd) . "=$C{$cmd} in environment"
+        if ($C{$cmd} =~ /\A(?:true|false|:|)\z/);
+    }
   for my $excludes (@exclude_cmds)
     {
       for my $exclude (split(/,/, $excludes))
         {
           fatal "'$exclude' not recognized as a command autoreconf can run"
-            unless exists $enabled_commands{$exclude};
-          fatal "use of '$exclude' cannot be disabled"
-            if $enabled_commands{$exclude} == 2;
-          $enabled_commands{$exclude} = 0;
+            unless exists $C{$exclude};
+          $cmd_excluded{$exclude} = "--exclude ${exclude} was given";
         }
     }
-
-  if ($verbose && $debug)
-    {
-      for my $prog (@commands)
-        {
-          if ($enabled_commands{$prog})
-            {
-              xsystem ("$C{$prog} --version | sed 1q >&2");
-              print STDERR "\n";
-            }
-        }
-    }
+  fatal "use of autom4te cannot be excluded" if exists $cmd_excluded{autom4te};
+  fatal "use of m4 cannot be excluded"       if exists $cmd_excluded{m4};
 
   # Dispatch autoreconf's options to the tools.
   # --include;
@@ -268,13 +250,10 @@ sub parse_args ()
     }
   else
     {
-      # "" instead of 0 is a marker; it's still falsey but we know it
-      # was set that way because --install wasn't given, not because
-      # -x was used.  This distinction is used only for --verbose output.
-      $enabled_commands{autopoint}  = "";
-      $enabled_commands{libtoolize} = "";
-      $enabled_commands{intltool}   = "";
-      $enabled_commands{gtkdocize}  = "";
+      $cmd_excluded{autopoint}  = "--install not given";
+      $cmd_excluded{libtoolize} = "--install not given";
+      $cmd_excluded{intltool}   = "--install not given";
+      $cmd_excluded{gtkdocize}  = "--install not given";
     }
   # --force;
   if ($force)
@@ -327,6 +306,18 @@ sub parse_args ()
   # the command line as a fatal error when -Werror is in effect.
   $ENV{WARNINGS} = merge_WARNINGS @warning;
   verb "export WARNINGS=$ENV{WARNINGS}";
+
+  if ($verbose && $debug)
+    {
+      for my $prog (sort keys %C)
+        {
+          if (may_run_cmd ($prog))
+            {
+              xsystem ("$C{$prog} --version | sed 1q >&2");
+              print STDERR "\n";
+            }
+        }
+    }
 }
 
 
@@ -584,7 +575,7 @@ sub autoreconf_current_directory ($)
   my $autopoint_works_without_gtver = 0;
   my $invoked_autopoint = 0;
 
-  if (cmd_enabled ("autopoint", $configure_ac))
+  if (may_run_cmd ("autopoint", $configure_ac))
     {
       # We need to do this check even if none of the relevant $uses_
       # variables are true, because we might discover later that we
@@ -681,7 +672,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using aclocal";
     }
-  elsif (cmd_enabled ("aclocal", $configure_ac))
+  elsif (may_run_cmd ("aclocal", $configure_ac))
     {
       # Some file systems have sub-second timestamps, and if so we may
       # run into trouble later, after we rerun autoconf and set the
@@ -853,7 +844,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Libtool";
     }
-  elsif (cmd_enabled ("libtool", $configure_ac))
+  elsif (may_run_cmd ("libtool", $configure_ac))
     {
       if ($uses_libltdl)
 	{
@@ -873,7 +864,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Intltool";
     }
-  elsif (cmd_enabled ("intltoolize", $configure_ac))
+  elsif (may_run_cmd ("intltoolize", $configure_ac))
     {
       xsystem_hint ("intltoolize is needed because this package uses Intltool",
                     $C{intltoolize});
@@ -888,7 +879,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Gtkdoc";
     }
-  elsif (cmd_enabled ("gtkdocize", $configure_ac))
+  elsif (may_run_cmd ("gtkdocize", $configure_ac))
     {
       my $gtkdoc_available = eval
 	{
@@ -922,9 +913,9 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not running autopoint a second time";
     }
-  elsif (!cmd_enabled ("autopoint", $configure_ac))
+  elsif (!may_run_cmd ("autopoint", $configure_ac))
     {
-      # cmd_enabled handled the verb message
+      # may_run_cmd handled the verb message
     }
   elsif (!$autopoint_is_available)
     {
@@ -970,7 +961,7 @@ sub autoreconf_current_directory ($)
 	{
 	  verb "$configure_ac: not using aclocal";
 	}
-      elsif (cmd_enabled ("aclocal", $configure_ac))
+      elsif (may_run_cmd ("aclocal", $configure_ac))
 	{
 	  # When configure.ac does not specify a macro dir, autopoint has
 	  # created a directory named 'm4' and copied its *.m4 files into it.
@@ -991,7 +982,7 @@ sub autoreconf_current_directory ($)
   # latter runs the former, and (ii) autoconf is stricter than
   # autoheader.  So all in all, autoconf should give better error
   # messages.
-  if (cmd_enabled ("autoconf", $configure_ac))
+  if (may_run_cmd ("autoconf", $configure_ac))
     {
       xsystem ($C{autoconf});
     }
@@ -1049,7 +1040,7 @@ sub autoreconf_current_directory ($)
           fatal "$tmpl1: $!" unless $!{ENOENT};
         }
 
-      if ($need_autoheader && cmd_enabled ("autoheader", $configure_ac))
+      if ($need_autoheader && may_run_cmd ("autoheader", $configure_ac))
         {
           xsystem ($C{autoheader});
         }
@@ -1063,7 +1054,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Automake";
     }
-  elsif (cmd_enabled ("automake", $configure_ac))
+  elsif (may_run_cmd ("automake", $configure_ac))
     {
       # We should always run automake, and let it decide whether it shall
       # update the file or not.  In fact, the effect of '$force' is already
@@ -1114,7 +1105,7 @@ sub autoreconf_current_directory ($)
   # Running make.  #
   # -------------- #
 
-  if ($enabled_commands{make})
+  if (may_run_cmd ("make", $configure_ac))
     {
       if (!-f "config.status")
 	{
