@@ -1,4 +1,4 @@
-# statesave.m4 serial 2
+# statesave.m4 serial 3
 
 # Copyright (C) 2000-2017, 2020-2026 Free Software Foundation, Inc.
 
@@ -15,18 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# AC_STATE_SAVE(FILE)
-# -------------------
-# Save the shell variables and directory listing.  AT_CHECK_ENV uses these to
-# confirm that no test modifies variables outside the Autoconf namespace or
-# leaves temporary files.  AT_CONFIG_CMP uses the variable dumps to confirm
-# that tests have the same side effects regardless of caching.
+
+# AC_STATE_SAVE_ENV(FILE)
+# -----------------------
+# Save all shell variables' current settings into 'state-env.FILE'.
+# Shell variables whose values contain newlines may cause problems.
+m4_defun([AC_STATE_SAVE_ENV],
+[(set) 2>&1 | sort >state-env.$1
+])
+
+
+# AC_STATE_SAVE_DIR(FILE)
+# -----------------------
+# Save the current directory listing into 'state-ls.FILE'.
+# Files whose names begin with 'at-' or 'state-' are skipped.
+# Files whose names contain newlines may cause problems.
 #
 # The sed script duplicates uniq functionality (thanks to 'info sed
 # uniq' for the recipe), in order to avoid a Mac OS 10.5 bug where
 # readdir can list a file multiple times in a rapidly changing
 # directory, while avoiding yet another fork.
-m4_defun([AC_STATE_SAVE],
+m4_defun([AC_STATE_SAVE_DIR],
 [(set) 2>&1 | sort >state-env.$1
 ls | sed '/^at-/d;/^state-/d;/^config\./d
   h
@@ -40,4 +49,14 @@ ls | sed '/^at-/d;/^state-/d;/^config\./d
   $b
   P
   D' >state-ls.$1
-])# AC_STATE_SAVE
+])
+
+
+# AC_STATE_SAVE(FILE)
+# -------------------
+# Save the shell variables and directory listing.  AT_CHECK_ENV uses these to
+# confirm that no test modifies variables outside the Autoconf namespace or
+# leaves temporary files.  AT_CONFIG_CMP uses the variable dumps to confirm
+# that tests have the same side effects regardless of caching.
+m4_defun([AC_STATE_SAVE],
+[AC_STATE_SAVE_ENV($@)AC_STATE_SAVE_DIR($@)])
