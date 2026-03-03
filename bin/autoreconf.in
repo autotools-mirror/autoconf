@@ -596,9 +596,14 @@ sub autoreconf_current_directory ($)
               # "PROGRAM_NAME (GNU PACKAGE_NAME) VERSION".
               my $autopoint_version = $autopoint_version_output[0];
               $autopoint_version =~ s/^.*?\)\s+//;
-              $autopoint_works_without_gtver =
-                ($autopoint_version !~
-                 /^0\.(1.*|2[0-5]|2[0-2]\..*|2[34]\.[0-1].*|25\.0.*)$/);
+              $autopoint_version =~ s/\s+\z//;
+              # The first version of autopoint that can handle AM_GNU_GETTEXT
+              # without the version requirement macros is 0.25.1.  This regex
+              # matches every released version up to and including 0.25.0.
+              $autopoint_works_without_gtver = ($autopoint_version !~ /\A
+                0\. (?:     25                        (?: \.0 )?
+                      | (?: 2[0-4] | 1[0-9] | [0-9] ) (?: \. [0-9][0-9.]* )?
+                     )\z/x);
             }
         };
 
@@ -844,7 +849,7 @@ sub autoreconf_current_directory ($)
     {
       verb "$configure_ac: not using Libtool";
     }
-  elsif (may_run_cmd ("libtool", $configure_ac))
+  elsif (may_run_cmd ("libtoolize", $configure_ac))
     {
       if ($uses_libltdl)
 	{
@@ -1006,7 +1011,7 @@ sub autoreconf_current_directory ($)
   # only update the first template file mentioned in AC_CONFIG_HEADERS.
   if (!@header_templates)
     {
-      verb "$configure_ac: not running autoheader, no config headers"
+      verb "$configure_ac: not running autoheader: no config headers"
     }
   else
     {
