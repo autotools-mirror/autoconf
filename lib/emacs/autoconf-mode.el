@@ -1,4 +1,4 @@
-;;; autoconf-mode.el --- autoconf code editing commands for Emacs
+;;; autoconf-mode.el - Edit autoconf for Emacs -*- lexical-binding: t -*-
 
 ;; Author: Martin Buchholz (martin@xemacs.org)
 ;; Maintainer: Martin Buchholz

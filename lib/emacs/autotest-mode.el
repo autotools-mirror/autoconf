@@ -1,4 +1,4 @@
-;;; autotest-mode.el --- autotest code editing commands for Emacs
+;;; autotest-mode.el - Edit autotest for Emacs -*- lexical-binding: t -*-
 
 ;; Author: Akim Demaille (akim@freefriends.org)
 ;; Keywords: languages, faces, m4, Autotest
