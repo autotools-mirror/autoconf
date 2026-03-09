@@ -1253,7 +1253,14 @@ m4_ifvaln([$2$3],
 # Produce config.status, config.h, and links; and configure subdirs.
 #
 m4_define([AC_OUTPUT],
-[dnl Dispatch the extra arguments to their native macros.
+[dnl Dispatch historical arguments to their native macros.
+dnl Modified versions of Autoconf exist that take more than three
+dnl arguments to AC_OUTPUT; attempting to regenerate a configure
+dnl script that uses the extra arguments, with this Autoconf, is
+dnl likely to produce a broken script.
+m4_if(m4_eval([$# >= 4]), [1],
+      [m4_fatal([$0 takes at most three arguments.
+This configure script cannot be compiled by this version of Autoconf.])])dnl
 m4_ifvaln([$1],
 	  [AC_CONFIG_FILES([$1])])dnl
 m4_ifvaln([$2$3],

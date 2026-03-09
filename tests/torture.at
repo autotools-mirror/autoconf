@@ -404,6 +404,110 @@ AT_CHECK_CONFIGURE
 
 AT_CLEANUP
 
+## ----------------------------- ##
+## AC_OUTPUT with one argument.  ##
+## ----------------------------- ##
+
+AT_SETUP([AC_OUTPUT with one argument])
+
+AT_DATA([Makefile.in],
+[[VARIABLE = @VARIABLE@
+]])
+
+AT_DATA_AUTOCONF([configure.ac],
+[[AC_INIT
+AC_SUBST([VARIABLE], [value])
+AC_OUTPUT([Makefile])
+]])
+
+AT_CHECK_AUTOCONF([], [0], [],
+[configure.ac:3: warning: AC_OUTPUT should be used without arguments.
+configure.ac:3: You should run autoupdate.
+])
+
+AT_CHECK_CONFIGURE
+
+AT_CHECK([test x"`cat Makefile || echo Makefile not found`" \
+    = x"VARIABLE = value"])
+
+AT_CHECK_AUTOUPDATE
+
+AT_CHECK([[$EGREP '^AC_OUTPUT$' configure.ac]],
+         [0], [ignore])
+AT_CHECK([[$EGREP '^AC_CONFIG_FILES\(\[Makefile\]\)$' configure.ac]],
+         [0], [ignore])
+
+AT_CLEANUP
+
+
+## -------------------------------- ##
+## AC_OUTPUT with three arguments.  ##
+## -------------------------------- ##
+
+AT_SETUP([AC_OUTPUT with three arguments])
+
+AT_DATA([Makefile.in],
+[[VARIABLE = @VARIABLE@
+]])
+
+AT_DATA([strange.in],
+[[VARIABLE = %VARIABLE%
+]])
+
+AT_DATA_AUTOCONF([configure.ac],
+[[AC_INIT
+AC_SUBST([VARIABLE], [value])
+AC_OUTPUT([Makefile],
+  [sed -e "s/%VARIABLE%/${VARIABLE}/g" < strange.in > strange],
+  [VARIABLE=$VARIABLE])
+]])
+
+AT_CHECK_AUTOCONF([], [0], [],
+[configure.ac:3: warning: AC_OUTPUT should be used without arguments.
+configure.ac:3: You should run autoupdate.
+])
+
+AT_CHECK_CONFIGURE
+
+AT_CHECK([test x"`cat Makefile || echo Makefile not found`" \
+    = x"VARIABLE = value"])
+AT_CHECK([test x"`cat strange || echo strange not found`" \
+    = x"VARIABLE = value"])
+
+AT_CHECK_AUTOUPDATE
+
+AT_CHECK([[$EGREP '^AC_''OUTPUT$' configure.ac]],
+         [0], [ignore])
+AT_CHECK([[$EGREP '^AC_''CONFIG_FILES\(\[Makefile\]\)$' configure.ac]],
+         [0], [ignore])
+AT_CHECK([[$EGREP '^AC_''CONFIG_COMMANDS\(\[default\]' configure.ac]],
+         [0], [ignore])
+
+AT_CLEANUP
+
+## ----------------------------------- ##
+## AC_OUTPUT with too many arguments.  ##
+## ----------------------------------- ##
+
+AT_SETUP([AC_OUTPUT with too many arguments])
+
+AT_DATA_AUTOCONF([configure.ac],
+[[AC_INIT
+AC_SUBST([VARIABLE], [value])
+AC_OUTPUT([Makefile],
+  [sed -e "s/%VARIABLE%/${VARIABLE}/g" < strange.in > strange],
+  [VARIABLE=$VARIABLE],
+  [needs-something-extra])
+]])
+
+AT_CHECK_AUTOCONF([], [1], [],
+[configure.ac:3: error: AC_OUTPUT takes at most three arguments.
+This configure script cannot be compiled by this version of Autoconf.
+configure.ac:3: the top level
+autom4te: error: m4 failed with exit status: 1
+])
+
+AT_CLEANUP
 
 
 ## ------------------- ##
