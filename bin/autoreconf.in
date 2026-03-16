@@ -568,7 +568,7 @@ sub autoreconf_current_directory ($)
   # '^AM_GNU_GETTEXT_(REQUIRE_)?VERSION('.  We did this above, while
   # scanning configure.ac.
 
-  # Older autopoint versions fail if $configure.ac contains no
+  # Older autopoint versions fail if $configure_ac contains no
   # AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION
   # invocation.  These variables are set here and used far below.
   my $autopoint_is_available = 0;
@@ -583,27 +583,42 @@ sub autoreconf_current_directory ($)
       #
       # This doesn't use xqx because we don't want to *fail* if
       # there's no autopoint, we just want to not run it.  Written
-      # this way, Perl won't invoke a subshell.
+      # this way, Perl should only invoke a subshell if $C{autopoint}
+      # contains shell metacharacters, which hopefully it does not
+      # (weaning all these tools off scalar exec is a "hopefully
+      # someday" project).
       eval
         {
           no warnings 'exec';
-          my @autopoint_version_output = qx/$C{autopoint} --version/;
-          if ($? == 0 && scalar @autopoint_version_output >= 1)
+          my @ap_ver = qx/$C{autopoint} --version/;
+
+          if ($? == 0 && scalar @ap_ver >= 1)
             {
               $autopoint_is_available = 1;
 
-              # Extract the version from
-              # "PROGRAM_NAME (GNU PACKAGE_NAME) VERSION".
-              my $autopoint_version = $autopoint_version_output[0];
-              $autopoint_version =~ s/^.*?\)\s+//;
-              $autopoint_version =~ s/\s+\z//;
-              # The first version of autopoint that can handle AM_GNU_GETTEXT
-              # without the version requirement macros is 0.25.1.  This regex
-              # matches every released version up to and including 0.25.0.
-              $autopoint_works_without_gtver = ($autopoint_version !~ /\A
-                0\. (?:     25                        (?: \.0 )?
-                      | (?: 2[0-4] | 1[0-9] | [0-9] ) (?: \. [0-9][0-9.]* )?
-                     )\z/x);
+              # The first line of autopoint --version output should
+              # have the form
+              # "PROGRAM_NAME (GNU PACKAGE_NAME) MAJ.MIN[.PTC][ETC]"
+              # where MAJ, MIN, and PTC are sequences of digits,
+              # and [...] indicates an optional component.
+              if ($ap_ver[0] =~ /^ .*?\) \s+ (\d+) \. (\d+) (?:\.(\d+)) /x)
+                {
+                  my $maj = $1;
+                  my $min = $2;
+                  my $ptc = ($3 || 0);
+
+                  # The autopoint versions that can handle AM_GNU_GETTEXT
+                  # without the version requirement macros are:
+                  #  - 0.23.x, x >= 2
+                  #  - 0.24.x, x >= 2
+                  #  - 0.25.x, x >= 1
+                  #  - 0.26(.0) and up.
+                  $autopoint_works_without_gtver =
+                    $maj >= 1
+                    || $min >= 26
+                    || ($min == 25 && $ptc >= 1)
+                    || ($min >= 23 && $ptc >= 2);
+                }
             }
         };
 
@@ -625,7 +640,7 @@ sub autoreconf_current_directory ($)
             $uses_gettext ? "Gettext" :
             $uses_iconv ? "AM_ICONV" :
             $uses_liblink ? "AC_LIB_LINKFLAGS" :
-            die ("impossible: one of \$uses_gettext, $uses_iconv, or"
+            die ("impossible: one of \$uses_gettext, \$uses_iconv, or"
                  . " \$uses_liblink should have been true");
 
           $invoked_autopoint = 1;
