@@ -601,7 +601,7 @@ sub autoreconf_current_directory ($)
               # "PROGRAM_NAME (GNU PACKAGE_NAME) MAJ.MIN[.PTC][ETC]"
               # where MAJ, MIN, and PTC are sequences of digits,
               # and [...] indicates an optional component.
-              if ($ap_ver[0] =~ /^ .*?\) \s+ (\d+) \. (\d+) (?:\.(\d+)) /x)
+              if ($ap_ver[0] =~ /^ .*?\) \s+ (\d+) \. (\d+) (?:\.(\d+))? /x)
                 {
                   my $maj = $1;
                   my $min = $2;
