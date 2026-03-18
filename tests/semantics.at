@@ -953,6 +953,47 @@ AT_CAPTURE_FILE([config.log])
 AT_CHECK([./configure $configure_options || exit 77], [0], [ignore], [])
 ])
 
+
+AT_SETUP([AC_SYS_YEAR2038_RECOMMENDED config.site override])
+
+AT_CONFIGURE_AC([AC_SYS_YEAR2038_RECOMMENDED])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER([], [ignore])
+
+AT_DATA([config.site],
+[enable_year2038=no
+])
+CONFIG_SITE=`pwd`/config.site
+export CONFIG_SITE
+
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+
+AT_CHECK([$EGREP -e '#undef _TIME_BITS' config.h], [0], [ignore])
+AT_CHECK([$EGREP -e '#undef __MINGW_USE_VC2005_COMPAT' config.h], [0], [ignore])
+
+AT_CLEANUP
+
+
+AT_SETUP([AC_SYS_YEAR2038_RECOMMENDED environment override])
+
+AT_CONFIGURE_AC([AC_SYS_YEAR2038_RECOMMENDED])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER([], [ignore])
+
+enable_year2038=no
+export enable_year2038
+
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+
+AT_CHECK([$EGREP -e '#undef _TIME_BITS' config.h], [0], [ignore])
+AT_CHECK([$EGREP -e '#undef __MINGW_USE_VC2005_COMPAT' config.h], [0], [ignore])
+
+AT_CLEANUP
+
 ## ------------------------------- ##
 ## Obsolete non-updatable macros.  ##
 ## ------------------------------- ##

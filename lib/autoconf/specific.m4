@@ -184,8 +184,8 @@ AS_CASE([$ac_cv_sys_year2038_opts],
 m4_define([_AC_SYS_YEAR2038_ENABLE],
 [m4_divert_text([DEFAULTS],
   m4_provide_if([AC_SYS_YEAR2038],
-    [enable_year2038=yes],
-    [enable_year2038=no]))]dnl
+    [: ${enable_year2038:=yes}],
+    [: ${enable_year2038:=no}]))]dnl
 [AC_ARG_ENABLE([year2038],
   m4_provide_if([AC_SYS_YEAR2038],
     [AS_HELP_STRING([--disable-year2038],
