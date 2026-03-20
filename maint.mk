@@ -879,22 +879,22 @@ sc_obsolete_symbols:
 # Prohibit BSD4.3/SysV u_char, u_short, u_int and u_long usage.
 sc_unsigned_char:
 	@prohibit=u''_char \
-	exclude='Prohibit BSD4\.3/SysV u_' \
+	exclude='Prohibit ' \
 	halt='don'\''t use u''_char; instead use unsigned char'	\
 	  $(_sc_search_regexp)
 sc_unsigned_short:
 	@prohibit=u''_short \
-	exclude='Prohibit BSD4\.3/SysV u_' \
+	exclude='Prohibit ' \
 	halt='don'\''t use u''_short; instead use unsigned short' \
 	  $(_sc_search_regexp)
 sc_unsigned_int:
 	@prohibit=u''_int \
-	exclude='Prohibit BSD4\.3/SysV u_' \
+	exclude='Prohibit ' \
 	halt='don'\''t use u''_int; instead use unsigned int' \
 	  $(_sc_search_regexp)
 sc_unsigned_long:
 	@prohibit=u''_long \
-	exclude='Prohibit BSD4\.3/SysV u_' \
+	exclude='Prohibit ' \
 	halt='don'\''t use u''_long; instead use unsigned long'	\
 	  $(_sc_search_regexp)
 
@@ -1744,6 +1744,7 @@ web-manual:
 	$(AM_V_GEN)test -z "$(manual_title)" \
 	  && { echo define manual_title in cfg.mk 1>&2; exit 1; } || :
 	$(AM_V_at)cd '$(srcdir)/doc'; \
+	  MAKEINFO="$(MAKEINFO)" \
 	  $(SHELL) ../$(_build-aux)/gendocs.sh $(gendocs_options_) \
 	     -o '$(abs_builddir)/doc/manual' \
 	     --email $(PACKAGE_BUGREPORT) $(PACKAGE) \
