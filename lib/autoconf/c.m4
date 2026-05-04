@@ -2206,7 +2206,7 @@ AC_DEFUN([AC_C_RESTRICT],
  AH_VERBATIM([restrict],
 [/* Define to the equivalent of the C99 'restrict' keyword, or to
    nothing if this is not supported.  Do not define if restrict is
-   supported only directly.  */
+   supported directly.  */
 #if ! (defined __STDC_VERSION__ && 199901L <= __STDC_VERSION__)
 #undef restrict
 #endif

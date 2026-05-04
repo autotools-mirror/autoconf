@@ -7599,7 +7599,8 @@ If the C compiler supports C11-style generic selection using the
 @caindex c_restrict
 If the C compiler recognizes a variant spelling for the @code{restrict}
 keyword (@code{__restrict}, @code{__restrict__}, or @code{_Restrict}),
-then define @code{restrict} to that; this is more likely to do the right
+then define @code{restrict} to that for both C++ and pre-C99 C;
+this is more likely to do the right
 thing with compilers that support language variants where plain
 @code{restrict} is not a keyword.  Otherwise, if the C compiler
 recognizes the @code{restrict} keyword, don't do anything.
