@@ -2172,10 +2172,10 @@ fi
 #
 # Determine whether the C/C++ compiler supports the "restrict" keyword
 # introduced in ANSI C99, or an equivalent.  Define "restrict" to the alternate
-# spelling, if any; these are more likely to work in both C and C++ compilers of
+# spelling, if any, in pre-C99 C and in C++; this should work in compilers of
 # the same family, and in the presence of varying compiler options.  If only
 # plain "restrict" works, do nothing.  Here are some variants:
-# - GCC supports both __restrict and __restrict__
+# - GCC-compatible compilers support both __restrict and __restrict__
 # - older DEC Alpha C compilers support only __restrict
 # - _Restrict is the only spelling accepted by Sun WorkShop 6 update 2 C
 # Otherwise, define "restrict" to be empty.
@@ -2207,7 +2207,9 @@ AC_DEFUN([AC_C_RESTRICT],
 [/* Define to the equivalent of the C99 'restrict' keyword, or to
    nothing if this is not supported.  Do not define if restrict is
    supported only directly.  */
+#if ! (defined __STDC_VERSION__ && 199901L <= __STDC_VERSION__)
 #undef restrict
+#endif
 /* Work around a bug in older versions of Sun C++, which did not
    #define __restrict__ or support _Restrict or __restrict__
    even though the corresponding Sun C compiler ended up with

@@ -2,6 +2,9 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Notable bug fixes
+
+*** AC_C_RESTRICT no longer triggers -Wkeyword-macro warnings from GCC 16.
 
 * Noteworthy changes in release 2.73 (2026-03-20) [release]
 
