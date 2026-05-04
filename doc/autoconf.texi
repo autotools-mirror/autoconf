@@ -19338,6 +19338,8 @@ not work on long input lines.  To work around these problems, invoke
 Portable extended regular expressions should use @samp{\} only to escape
 characters in the string @samp{$()*+.?[\^@{|}.  For example, @samp{\@}}
 is not portable, even though it typically matches @samp{@}}.
+In particular, even though POSIX.1-2024 says @samp{\]} matches @samp{]},
+earlier editions of POSIX say that the meaning of @samp{\]} is undefined.
 
 The empty alternative is not portable.  Use @samp{?} instead.  For
 instance with Digital Unix v5.0:
@@ -19609,6 +19611,8 @@ portable scripts.  Solaris and HP-UX @command{grep} do not support it.
 Similarly, the following escape sequences should also be avoided:
 @samp{\<}, @samp{\>}, @samp{\+}, @samp{\?}, @samp{\`}, @samp{\'},
 @samp{\B}, @samp{\b}, @samp{\S}, @samp{\s}, @samp{\W}, and @samp{\w}.
+Also, even though POSIX.1-2024 says @samp{\]} matches @samp{]},
+earlier editions of POSIX say that the meaning of @samp{\]} is undefined.
 For more information about what can appear in portable regular expressions,
 @pxref{Problematic Expressions,,, grep, GNU Grep}.
 

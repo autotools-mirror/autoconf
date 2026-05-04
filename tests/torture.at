@@ -434,7 +434,7 @@ AT_CHECK_AUTOUPDATE
 
 AT_CHECK([[$EGREP '^AC_OUTPUT$' configure.ac]],
          [0], [ignore])
-AT_CHECK([[$EGREP '^AC_CONFIG_FILES\(\[Makefile\]\)$' configure.ac]],
+AT_CHECK([[$EGREP '^AC_CONFIG_FILES\(\[Makefile]\)$' configure.ac]],
          [0], [ignore])
 
 AT_CLEANUP
@@ -478,9 +478,9 @@ AT_CHECK_AUTOUPDATE
 
 AT_CHECK([[$EGREP '^AC_''OUTPUT$' configure.ac]],
          [0], [ignore])
-AT_CHECK([[$EGREP '^AC_''CONFIG_FILES\(\[Makefile\]\)$' configure.ac]],
+AT_CHECK([[$EGREP '^AC_''CONFIG_FILES\(\[Makefile]\)$' configure.ac]],
          [0], [ignore])
-AT_CHECK([[$EGREP '^AC_''CONFIG_COMMANDS\(\[default\]' configure.ac]],
+AT_CHECK([[$EGREP '^AC_''CONFIG_COMMANDS\(\[default]' configure.ac]],
          [0], [ignore])
 
 AT_CLEANUP

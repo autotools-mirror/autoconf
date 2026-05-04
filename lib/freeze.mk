@@ -104,16 +104,16 @@ autoconf_m4f_dependencies =			\
 
 ETAGS_FOR_M4 = \
   --lang=none \
-  --regex='/\(m4_define\|define\)(\[\([^]]*\)\]/\2/'
+  --regex='/\(m4_define\|define\)(\[\([^]]*\)]/\2/'
 
 ETAGS_FOR_M4SUGAR = \
   $(ETAGS_FOR_M4) \
-  --regex='/m4_defun(\[\([^]]*\)\]/\1/'
+  --regex='/m4_defun(\[\([^]]*\)]/\1/'
 
 ETAGS_FOR_AUTOCONF = \
   $(ETAGS_FOR_M4SUGAR) \
-  --regex='/\(A[CU]_DEFUN\|AU_ALIAS\)(\[\([^]]*\)\]/\2/' \
-  --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'
+  --regex='/\(A[CU]_DEFUN\|AU_ALIAS\)(\[\([^]]*\)]/\2/' \
+  --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)]/\2/'
 
 
 ## -------------------------------- ##

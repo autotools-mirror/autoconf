@@ -213,7 +213,7 @@ m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 # -----------------------------------
 # Return '1' if STRING looks like a C/C++ type.
 m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
-[m4_bmatch([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$],
+[m4_bmatch([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|]\)*$],
 	  1, 0)dnl
 ])# _AC_CHECK_TYPE_MAYBE_TYPE_P
 
