@@ -2095,9 +2095,8 @@ AT_DATA([configure.ac],
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE
 AM_GNU_GETTEXT([external])
-# This is the oldest version of gettext.m4 that defines the
-# AM_GNU_GETTEXT_VERSION macro.
-AM_GNU_GETTEXT_VERSION([0.11.4])
+# This is the oldest version of gettext that does not assume egrep.
+AM_GNU_GETTEXT_VERSION([0.13])
 
 AC_CONFIG_FILES([Makefile po/Makefile.in])
 AC_OUTPUT
@@ -2443,9 +2442,8 @@ AT_DATA([configure.ac],
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE
 AM_GNU_GETTEXT([external])
-# This is the oldest version of gettext.m4 that defines the
-# AM_GNU_GETTEXT_VERSION macro.
-AM_GNU_GETTEXT_VERSION([0.11.4])
+# This is the oldest version of gettext that does not assume egrep.
+AM_GNU_GETTEXT_VERSION([0.13])
 
 AC_CONFIG_FILES([Makefile po/Makefile.in])
 AC_OUTPUT
