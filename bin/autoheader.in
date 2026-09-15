@@ -241,6 +241,7 @@ if ($final_out ne $config_h_in)
 elsif (open (my $fh, "<", $config_h_in))
   {
     my $firstline = readline($fh);
+    close($fh);
     # If the file is empty, $firstline will be undef.  We _do_ want to
     # go ahead and update it in that case.
     if (defined $firstline
