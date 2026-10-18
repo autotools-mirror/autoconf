@@ -6956,6 +6956,9 @@ Define @code{size_t} to a suitable type, if standard headers do not
 define it.
 
 This macro caches its result in the @code{ac_cv_type_size_t} variable.
+
+This macro is obsolescent, nowadays it is safe to assume the facilities of C89
+exist.
 @end defmac
 
 @defmac AC_TYPE_SSIZE_T

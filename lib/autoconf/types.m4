@@ -623,12 +623,13 @@ AC_CHECK_TYPE([gid_t], [],
   [AC_DEFINE([gid_t], [int],
     [Define as 'int' if <sys/types.h> doesn't define.])])])
 
-# This should be obsoleted, size_t is in C90.
 AN_IDENTIFIER([size_t], [AC_TYPE_SIZE_T])
 AC_DEFUN([AC_TYPE_SIZE_T],
 [AC_CHECK_TYPE([size_t], [],
   [AC_DEFINE([size_t], [unsigned int],
-    [Define as 'unsigned int' if <stddef.h> doesn't define.])])])
+    [Define as 'unsigned int' if <stddef.h> doesn't define.],
+     [The macro 'AC_TYPE_SIZE_T' is obsolete, as size_t is in ISO C90.]
+  )])])
 
 AN_IDENTIFIER([ssize_t], [AC_TYPE_SSIZE_T])
 AC_DEFUN([AC_TYPE_SSIZE_T],

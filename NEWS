@@ -10,6 +10,12 @@ GNU Autoconf NEWS - User visible changes.
   This feature was added for internal testing purposes but may be
   generally useful.
 
+** Newly obsolete macros
+   The following macro has been marked obsolete. We have no current
+   plans to remove it.
+
+       AC_TYPE_SIZE_T
+
 ** Notable bug fixes
 
 *** autoreconf now writes the generated template file to standard output
