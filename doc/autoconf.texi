@@ -6947,20 +6947,6 @@ define it.
 This macro caches its result in the @code{ac_cv_type_pid_t} variable.
 @end defmac
 
-@anchor{AC_TYPE_SIZE_T}
-@defmac AC_TYPE_SIZE_T
-@acindex{TYPE_SIZE_T}
-@cvindex size_t
-@caindex type_size_t
-Define @code{size_t} to a suitable type, if standard headers do not
-define it.
-
-This macro caches its result in the @code{ac_cv_type_size_t} variable.
-
-This macro is obsolescent, nowadays it is safe to assume the facilities of C89
-exist.
-@end defmac
-
 @defmac AC_TYPE_SSIZE_T
 @acindex{TYPE_SSIZE_T}
 @cvindex ssize_t
@@ -24537,6 +24523,16 @@ function returning @code{void}, define @code{RETSIGTYPE} to be
 @code{void}; otherwise, define it to be @code{int}.  These days, it is
 portable to assume C89, and that signal handlers return @code{void},
 without needing to use this macro or @code{RETSIGTYPE}.
+@end defmac
+
+@anchor{AC_TYPE_SIZE_T}
+@defmac AC_TYPE_SIZE_T
+@acindex{TYPE_SIZE_T}
+@cvindex size_t
+@caindex type_size_t
+Define @code{size_t} to a suitable type, if standard headers do not define it.
+Cache the result in the @code{ac_cv_type_size_t} variable.
+These days it is portable to assume C89 without using this macro.
 @end defmac
 
 @defmac AC_UID_T

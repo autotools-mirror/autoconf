@@ -11,8 +11,7 @@ GNU Autoconf NEWS - User visible changes.
   generally useful.
 
 ** Newly obsolete macros
-   The following macro has been marked obsolete. We have no current
-   plans to remove it.
+  The following macro has been marked obsolete, though it still works.
 
        AC_TYPE_SIZE_T
 
