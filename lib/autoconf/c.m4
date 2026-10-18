@@ -161,9 +161,19 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 
 /* System header to define __stub macros and hopefully few prototypes,
    which can conflict with char $1 (void); below.  */
-
 #include <limits.h>
 #undef $1
+
+/* Tell Clang to allow disagreement with declaration of builtin $1.  */
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wincompatible-library-redeclaration"
+#endif
+
+/* Tell MSVC to forget about builtin $1.  */
+#ifdef _MSC_VER
+__pragma (warning (disable : 4163))
+__pragma (function ($1))
+#endif
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
