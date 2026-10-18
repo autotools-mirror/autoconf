@@ -27,10 +27,10 @@ GNU Autoconf NEWS - User visible changes.
 
 *** AC_C_RESTRICT no longer triggers -Wkeyword-macro warnings from GCC 16.
 
-*** AC_CHECK_FUNC and related macros now work better with Clang and MSVC.
+*** AC_CHECK_FUNC and related macros now work better with Clang.
 
   Arguments like CFLAGS="-Wno-incompatible-library-redeclaration" are
-  no longer needed when configuring with Clang, and similarly with MSVC.
+  no longer needed when configuring with Clang in pedantic mode.
 
 * Noteworthy changes in release 2.73 (2026-03-20) [release]
 
