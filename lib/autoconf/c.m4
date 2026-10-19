@@ -169,13 +169,26 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 # pragma clang diagnostic ignored "-Wincompatible-library-redeclaration"
 #endif
 
+#ifdef _MSC_VER
+
+/* Tell MSVC to link the function without checking its type.  */
+# ifdef _M_IX86
+#  pragma comment (linker, "/include:_$1")
+# else
+#  pragma comment (linker, "/include:$1")
+# endif
+
+#else
+
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
    builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
+# ifdef __cplusplus
 extern "C"
-#endif
+# endif
 char $1 (void);
+#endif
+
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
