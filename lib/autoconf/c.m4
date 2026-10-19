@@ -172,9 +172,9 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 #ifdef _MSC_VER
 
 /* Tell MSVC to link the function without checking its type.  */
-# ifdef _M_IX86
+# ifdef _M_IX86 /* x86 */
 #  pragma comment (linker, "/include:_$1")
-# else
+# else /* x86_64, arm, arm64 */
 #  pragma comment (linker, "/include:$1")
 # endif
 
@@ -187,15 +187,19 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 extern "C"
 # endif
 char $1 (void);
-#endif
-
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined __stub_$1 || defined __stub___$1
+# if defined __stub_$1 || defined __stub___$1
 choke me
+# endif
+
 #endif
-], [return $1 ();])])
+], [
+#ifndef _MSC_VER
+return $1 ();
+#endif
+])])
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)
