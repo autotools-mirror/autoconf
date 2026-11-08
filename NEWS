@@ -803,6 +803,13 @@ GNU Autoconf NEWS - User visible changes.
   closed, or $TMPDIR not being an absolute path, or the root directory
   being mentioned in $PATH.
 
+*** Correct ‘config.status’ generation even if ‘autom4te.cache’ is outdated.
+
+  In previous releases, after changing the ‘configure.ac’ file, a
+  previously generated ‘autom4te.cache’ directory could lead to a
+  broken ‘config.status’ file, which in turn, after running ‘automake’,
+  would lead to a broken ‘Makefile.in’.
+
 *** AC_CHECK_FUNCS_ONCE and AC_CHECK_HEADERS_ONCE now support multiple
     programming languages.  They no longer perform all checks in the
     language active upon the first use of the macro.
